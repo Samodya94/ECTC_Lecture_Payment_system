@@ -1,4 +1,3 @@
-const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const asyncHandler = require('express-async-handler');
 const User = require('../model/userModel');
@@ -67,8 +66,9 @@ const loginUser = asyncHandler (async (req,res) => {
     }
 });
 
-const getMe = asyncHandler (async (req,res) => {
-    res.json({ message: 'User Fetched' });
+const getUser = asyncHandler(async (req, res) => {
+    const user = await User.find();
+    res.status(200).json(user);
 });
 
 const deleteUser = asyncHandler(async (req, res) => {
@@ -87,6 +87,6 @@ const deleteUser = asyncHandler(async (req, res) => {
 module.exports = {
     createUser,
     loginUser,
-    getMe,
+    getUser,
     deleteUser,
 };

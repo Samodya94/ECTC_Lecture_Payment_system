@@ -1,49 +1,80 @@
 const asyncHandler = require('express-async-handler');
-const Courses = require('../model/courseModel');
+const Course = require('../model/courseModel');
 
+const getCourse = asyncHandler(async (req, res) => {
+    const course = await Course.find();
+    res.status(200).json(course);
+});
 
-const getCourses = ( req , res ) => {
-    res.send(Courses) ;
+const createCourse = asyncHandler(async (req,res) => {
+    const { courseName, courseFee, courseDuration } = req.body;
+    console.log(courseName, courseFee, courseDuration);
 
-};
+    if(!courseName || !courseFee || !courseDuration) {
+        res.status(400);
+        throw new Error('Please Fill All Fields');
+    }
 
-const createCourse = ( req , res ) => {
-    const course = req.body ;
+    const courseNameExists = await Course.findOne({ courseName });
 
-    Courses.push( {...course , id : uuid() }) ;
-    res.send( "Course added successfully!") ; 
-};
+    if(courseNameExists) {
+        res.status(400);
+        throw new Error('Course Already Exists');
+    }
 
- const getCourse = ( req , res ) =>{
-    const singleCourse = Courses.filter((course) => course.id === req.params.id) ;
+    const course = await Course.create({
+        courseName,
+        courseFee,
+        courseDuration,
+    });
 
-    res.send(singleCourse) ;
+    if(course) {
+        res.status(200).json({
+            _id: course.id,
+            courseName: course.courseName,
+            courseFee: course.courseFee,
+            courseDuration: course.courseDuration,
+        });
+    } else {
+            res.status(400);
+            throw new Error('Invalid Course Details');
+    }
 
-};
+    res.json({ message: 'New Course Created' });
+});
 
- const deleteCourse = ( req , res ) =>{
-    Courses = Courses.filter((course) => course.id !== req.params.id) ;
+const deleteCourse = asyncHandler(async (req, res) => {
+    const course = await Course.findById(req.params.id);
 
-    res.send("Course Deleted Successfully!") ;
+    if (!course) {
+        res.status(404);
+        throw new Error('Course not found');
+    }
 
-};
+    await course.deleteOne();
 
- const updateCourse = (req , res ) => {
+    res.status(200).json({ id: req.params.id });
+});
 
-    const course = Courses.find((course) => course.id === req.params.id ) ;
+const putCourse = asyncHandler(async (req, res) => {
+    const course = await Course.findById(req.params.id);
 
-    course.cname = req.body.name ;
-    course.fee = req.body.fee ;
-    course.duration = req.body.duration ;
+    if (!course) {
+        res.status(404);
+        throw new Error('Course not found');
+    }
 
-    res.send( "Course Updated Sucsessfully!" ) ;
-};
+    const updatedCourse = await Course.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+    });
+
+    res.status(200).json(updatedCourse);
+});
 
 module.exports = {
-    getCourses,
-    createCourse,
     getCourse,
+    createCourse,
+    putCourse,
     deleteCourse,
-    updateCourse,
 };
 

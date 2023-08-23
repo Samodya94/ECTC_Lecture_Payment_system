@@ -13,6 +13,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/branch', require('./routes/branchRoutes'));
 app.use('/api/batch', require('./routes/batchRoutes'));
+app.use('/api/course', require('./routes/courseRoutes'));
+app.use('/api/lecturer', require('./routes/lecturerRoutes'));
 
 app.use(errorHandler);
 

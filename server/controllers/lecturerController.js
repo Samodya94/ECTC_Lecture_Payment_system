@@ -1,54 +1,93 @@
 const asyncHandler = require('express-async-handler');
-const Lecturers = require('../model/lecturerModel');
+const Lecturer = require('../model/lecturerModel');
+const bcrypt = require('bcryptjs');
 
-  const getLecturers = ( req , res ) => {
-    res.send(Lecturersecturers) ;
+const getLecturer = asyncHandler(async (req, res) => {
+    const lecturer = await Lecturer.find();
+    res.status(200).json(lecturer);
+});
 
-};
+const createLecturer = asyncHandler(async (req,res) => {
+    const { nic, username, firstName, lastName, email, phone, branch, password } = req.body;
+    console.log(nic, username, firstName, lastName, email, phone, branch, password);
 
- const createLecturer = ( req , res ) => {
-    const lecturer = req.body ;
+    if(!nic || !username || !firstName || !lastName || !email || !phone || !branch || !password) {
+        res.status(400);
+        throw new Error('Please Fill All Fields');
+    }
 
-    Lecturersecturers.push( {...lecturer , id : uuid() }) ;
-    res.send( "Lecturer added successfully!") ;
-};
+    const LecturerExists = await Lecturer.findOne({ nic });
 
- const getLecturer = ( req , res ) =>{
-    const singleLecturer = Lecturers.filter((lecturer) => lecturer.id === req.params.id) ;
+    if(LecturerExists) {
+        res.status(400);
+        throw new Error('Lecturer Already Exists');
+    }
 
-    res.send(singleLecturer) ;
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
-};
+    const lecturer = await Lecturer.create({
+        nic, 
+        username, 
+        firstName, 
+        lastName, 
+        email, 
+        phone, 
+        branch,
+        password: hashedPassword,
+    });
 
- const deleteLecturer = ( req , res ) =>{
-    Lecturers = Lecturers.filter((lecturer) => lecturer.id !== req.params.id) ;
+    if(lecturer) {
+        res.status(200).json({
+            _id: lecturer.id,
+            nic: lecturer.nic,
+            username: lecturer.username,
+            firstName: lecturer.firstName,
+            lastName: lecturer.lastName,
+            email: lecturer.email,
+            phone: lecturer.phone,
+            branch: lecturer.branch,
+        });
+    } else {
+            res.status(400);
+            throw new Error('Invalid Lecturer Data');
+    }
 
-    res.send("Lecturer Deleted Successfully!") ;
+    res.json({ message: 'Lecturer Registered' });
+});
 
-};
+const deleteLecturer = asyncHandler(async (req, res) => {
+    const lecturer = await Lecturer.findById(req.params.id);
 
- const updateLecturer = (req , res ) => {
+    if (!lecturer) {
+        res.status(404);
+        throw new Error('Lecturer not found');
+    }
 
-    const lecturer = Lecturers.find((lecturer) => lecturer.id === req.params.id ) ;
+    await lecturer.deleteOne();
 
-    lecturer.nic = req.body.nic ;
-    lecturer.uname = req.body.uname ;
-    lecturer.fname = req.body.fname ;
-    lecturer.lname = req.body.lname ;
-    lecturer.email = req.body.email ;
-    lecturer.phone = req.body.phone ;
-    lecturer.branch = req.body.branch ;
-    lecturer.rdate = req.body.rdate ;
-    lecturer.ectc = req.body.ectc ;
+    res.status(200).json({ id: req.params.id });
+});
 
-    res.send( "Lecturer Details Updated Sucsessfully!" ) ;
-};
+const putLecturer = asyncHandler(async (req, res) => {
+    const lecturer = await Lecturer.findById(req.params.id);
+
+    if (!lecturer) {
+        res.status(404);
+        throw new Error('Lecturer not found');
+    }
+
+    const updatedLecturer = await Lecturer.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+    });
+
+    res.status(200).json(updatedLecturer);
+});
 
 module.exports = {
     getLecturer,
     createLecturer,
-    getLecturers,
+    putLecturer,
     deleteLecturer,
-    updateLecturer,
 };
 

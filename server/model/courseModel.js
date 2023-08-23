@@ -2,15 +2,16 @@ const mongoose = require('mongoose');
 
 const courseSchema = mongoose.Schema({
     
-    cname: {
+    courseName: {
         type: String,
         required: [true, 'Please Enter Course Name'],
+        unique: true,
     },
-    fee: {
+    courseFee: {
         type: String,
         required: [true, 'Please Enter Course Fee'],
     },
-    duration: {
+    courseDuration: {
         type: String,
         required: [true, 'Please select a coursr Duration'],
     },

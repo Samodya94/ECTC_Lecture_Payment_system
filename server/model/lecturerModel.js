@@ -5,16 +5,18 @@ const lecturerSchema = mongoose.Schema({
     nic: {
         type: String,
         required: [true, 'Please Enter NIC'],
+        unique: true,
     },
-    uname: {
+    username: {
         type: String,
         required: [true, 'Please Enter the User Name'],
+        unique: true,
     },
-    fname: {
+    firstName: {
         type: String,
         required: [true, 'Please Enter the First Name'],
     },
-    lname: {
+    lastName: {
         type: String,
         required: [true, 'Please Enter the Last Name'],
     },
@@ -30,16 +32,11 @@ const lecturerSchema = mongoose.Schema({
         type: String,
         required: [true, 'Please select a branch'],
     },
-    rDate: {
-        type: Date,
-        required: [true, 'Please enter the Registered date'],
-    },
-    ectc: {
+    password: {
         type: String,
         required: [true, 'Please enter a value'],
     },
 },
-
 {
     timestamps: true,
 });

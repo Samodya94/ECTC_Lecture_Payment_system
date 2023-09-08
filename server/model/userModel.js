@@ -20,7 +20,8 @@ const userSchema = mongoose.Schema({
     },
     userLevel: {
         type: String,
-        required: [true, 'Please Enter the User Level'],
+        enum: ['Admin', 'Manager', 'Finance'],
+        default: 'Admin',
     },
     password: {
         type: String,

@@ -6,6 +6,11 @@ const getCourse = asyncHandler(async (req, res) => {
     res.status(200).json(course);
 });
 
+const getCourseNames = asyncHandler(async (req, res) => {
+    const courseName = await Course.find({}, 'courseName');
+    res.status(200).json(courseName);
+});
+
 const createCourse = asyncHandler(async (req,res) => {
     const { courseName, courseFee, courseDuration } = req.body;
     console.log(courseName, courseFee, courseDuration);
@@ -76,5 +81,6 @@ module.exports = {
     createCourse,
     putCourse,
     deleteCourse,
+    getCourseNames,
 };
 

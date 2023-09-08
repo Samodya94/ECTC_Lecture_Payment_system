@@ -1,6 +1,11 @@
 const asyncHandler = require('express-async-handler');
 const Batch = require('../model/batchModel');
 
+const getBatch = asyncHandler(async (req, res) => {
+    const batch = await Batch.find();
+    res.status(200).json(batch);
+});
+
 const createBatch = asyncHandler(async (req,res) => {
     const { batchCode, course, branch, startDate, endDate, batchState } = req.body;
     console.log(batchCode, course, branch, startDate, endDate, batchState);
@@ -76,4 +81,5 @@ module.exports = {
     createBatch,
     putBatch,
     deleteBatch,
+    getBatch,
 };

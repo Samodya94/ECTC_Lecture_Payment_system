@@ -5,7 +5,7 @@ import {Link, useNavigate} from 'react-router-dom';
 import img from '../../assets/logo.jpg'
 import { login } from "../../redux/authSlice";
 
-const Login = () => {
+const Lec_Login = () => {
 
     const [username,setUsername] = useState("");
     const [password,setPassword] = useState("");
@@ -18,7 +18,7 @@ const Login = () => {
 
          try {
 
-            const res = await fetch(`http://localhost:8000/users/login`,{
+            const res = await fetch(`http://localhost:8000/lec_login`,{
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -28,7 +28,7 @@ const Login = () => {
 
             const data = await res.json()
             dispatch(login(data))  //{userInfo,token}
-            navigate("/")
+            navigate("/lec")
             
          } catch (error) {
             setError(true);
@@ -50,7 +50,7 @@ const Login = () => {
                     <input type="username" placeholder="Type username" onChange={(e) => setUsername(e.target.value)}/>
                     <input type="password" placeholder="Type password" onChange={(e) => setPassword(e.target.value)}/>
                     <button className={classes.submitBtn}>Login</button>
-                    <p><Link to="/lec_login">Lecturer Login</Link></p>
+                    <p><Link to="/">Admin Login</Link></p>
                 </form>
                 {
                     error && <div className={classes.errorMessage}>
@@ -63,4 +63,4 @@ const Login = () => {
     )
 }
 
-export default Login
+export default Lec_Login

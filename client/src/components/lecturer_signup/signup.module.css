@@ -1,29 +1,26 @@
-.loginContainer{
+.signUpContainer{
     height: 100vh;
     width: 100vw;
     display: flex;
-    justify-content: center;
     align-items: center;
-    background-color: rgb(56, 163, 171);
+    justify-content: center;
+    background-color: #f22a2a;
     position: absolute;
     top: 0;
     left: 0;
     z-index: 999999;
 }
 
-/* 6 9s */
-
-.loginWrapper{
+.signUpWrapper{
     border-radius: 20px;
     width: 45vw;
     height: 70vh;
     display: flex;
-    flex-direction: row-reverse;
     align-items: center;
     justify-content: center;
 }
-/* left */
-.loginLeftSide{
+
+.signUpLeftSide{
     flex: 1;
     width: 50%;
     height: 100%;
@@ -32,12 +29,10 @@
 .leftImg{
     width: 100%;
     height: 100%;
-  
+   
 }
 
-/* right */
-
-.loginRightSide{
+.signUpRightSide{
     margin: 0;
     flex: 1;
     background-color: #fff;
@@ -46,29 +41,24 @@
     overflow: hidden;
 }
 
-.loginRightSide > h2{
+.signUpRightSide > h2{
     text-align: center;
     font-size: 36px;
     color: #f22a2a;
-    margin: 2.5rem 0;
+    margin-top: 2.5rem;
 }
 
-.loginRightSide > .loginForm{
+.signUpRightSide > .signUpForm{
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
-}
-
-.loginForm{
-    margin-top: 5rem;
-    display: flex;
+    margin-top: 2.5rem;
     flex-direction: column;
-    justify-content: center;
     gap: 32px;
 }
 
-.loginForm > input{
+.signUpForm > input{
     outline: none;
     border: none;
     border-bottom: 1px solid #333;
@@ -78,11 +68,11 @@
     transition: 150ms all ease-in-out;
 }
 
-.loginForm >input:focus{
+.signUpForm > input:focus{
     padding-left: 0.75rem;
 }
 
-.loginForm>.submitBtn{
+.signUpForm > .submitBtn{
     margin-top: 2.5rem;
     outline: none;
     border: 1px solid transparent;
@@ -95,13 +85,13 @@
     cursor: pointer;
 }
 
-.loginForm > .submitBtn:hover{
+.signUpForm > .submitBtn:hover{
     border-color: #f22a2a;
     color: #f22a2a;
     background-color: #fff;
 }
 
-.loginForm>p{
+.signUpForm > p{
     text-align: center;
     color: black;
     display: flex;
@@ -109,7 +99,7 @@
     justify-content: center;
 }
 
-.loginForm > p > a{
+.signUpForm > p >a{
     text-decoration: none;
     font-size: 17px;
     color: #888;
@@ -128,5 +118,4 @@
     position: absolute;
     top: 5rem;
     right: 5rem;
-    font-weight: 500;
 }

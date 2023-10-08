@@ -1,10 +1,11 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+
+import AdminLogin from "./Pages/Admin/loginPage/adminLogin";
 
 function App() {
   return (
     <div className="App">
-      <h1>Head</h1>
+      <AdminLogin />
     </div>
   );
 }

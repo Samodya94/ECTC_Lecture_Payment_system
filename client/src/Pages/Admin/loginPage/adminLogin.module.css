@@ -1,0 +1,14 @@
+body {
+  /* fallback for old browsers */
+  background: #2b5876;
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: -webkit-linear-gradient(to right, #4e4376, #2b5876);
+  background: linear-gradient(to right, #4e4376, #2b5876);
+}
+
+.container {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

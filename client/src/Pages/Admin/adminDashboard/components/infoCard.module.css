@@ -1,0 +1,48 @@
+@import url("../../../../constants/fonts.css");
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 250px;
+  height: auto;
+  margin: 10px;
+  padding: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  border-right: 1px solid #2b5876;
+}
+
+.cardHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.icon {
+  margin-right: 10px;
+  color: #2b5876cc;
+}
+
+.label {
+  font-family: var(--heading);
+  font-size: var(--small);
+  font-weight: 700;
+  color: #2b5876cc;
+  margin: 0;
+}
+
+.count {
+  color: #2b5876;
+  font-family: var(--heading);
+  font-size: var(--large);
+  font-weight: bolder;
+  margin: 0;
+  width: fit-content;
+}
+
+@media screen and (max-width: 768px) {
+  .container {
+    border-right: none;
+    border-bottom: 1px solid #2b5876;
+  }
+}

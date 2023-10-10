@@ -1,33 +1,37 @@
 import { React, useState, useEffect } from "react";
-import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
+import { useNavigate } from "react-router-dom";
 
+// Styles
 import styles from "../adminSideNav.module.css";
 
 // MUI icons
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import LaptopOutlinedIcon from "@mui/icons-material/LaptopOutlined";
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
+import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 
 const AdminNav = ({ expanded, setExpanded }) => {
-  const [profileExpanded, setProfileExpanded] = useState(false);
+  const [configurationExpanded, setConfigurationExpanded] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!expanded) {
-      setProfileExpanded(false);
+      setConfigurationExpanded(false);
     }
   }, [expanded]);
 
-  const toggleProfile = () => {
+  const toggleConfiguration = () => {
     if (!expanded) {
       setExpanded(!expanded);
     }
-    setProfileExpanded(!profileExpanded);
+    setConfigurationExpanded(!configurationExpanded);
   };
 
   return (
     <>
       <ul className={styles.ul}>
-        <li className={styles.li}>
+        <li className={styles.li} onClick={() => navigate("dashboard")}>
           <span className={styles.liContainer}>
             {/* Icon */}
             <HomeOutlinedIcon />
@@ -35,7 +39,7 @@ const AdminNav = ({ expanded, setExpanded }) => {
             {expanded && <span className={styles.span}>Home</span>}
           </span>
         </li>
-        <li className={styles.li}>
+        <li className={styles.li} onClick={() => navigate("approve-lectures")}>
           <span className={styles.liContainer}>
             <LaptopOutlinedIcon />
             {expanded ? (
@@ -45,34 +49,76 @@ const AdminNav = ({ expanded, setExpanded }) => {
             ) : null}
           </span>
         </li>
-        <li className={styles.li} onClick={toggleProfile}>
+        <li className={styles.li} onClick={toggleConfiguration}>
           <span className={styles.liContainer}>
             <AdminPanelSettingsOutlinedIcon />
             {expanded && <span className={styles.span}>Configurations</span>}
           </span>
-          {profileExpanded
+          {configurationExpanded
             ? expanded && <span className={styles.span}>&#9650;</span>
             : expanded && <span className={styles.span}>&#9660;</span>}
         </li>
         {/* Sub-links for configurations */}
-        {profileExpanded && (
+        {configurationExpanded && (
           <ul className={`${styles.subMenu}`}>
-            <li className={styles.li} style={{ whiteSpace: "nowrap" }}>
+            <li
+              className={styles.li}
+              style={{ whiteSpace: "nowrap" }}
+              onClick={() => {
+                setConfigurationExpanded(!configurationExpanded);
+                navigate("approve-lectures");
+              }}
+            >
               - Manage Courses
             </li>
-            <li className={styles.li} style={{ whiteSpace: "nowrap" }}>
+            <li
+              className={styles.li}
+              style={{ whiteSpace: "nowrap" }}
+              onClick={() => {
+                setConfigurationExpanded(!configurationExpanded);
+                navigate("approve-lectures");
+              }}
+            >
               - Manage Lecturers
             </li>
-            <li className={styles.li} style={{ whiteSpace: "nowrap" }}>
+            <li
+              className={styles.li}
+              style={{ whiteSpace: "nowrap" }}
+              onClick={() => {
+                setConfigurationExpanded(!configurationExpanded);
+                navigate("approve-lectures");
+              }}
+            >
               - Manage Batches
             </li>
-            <li className={styles.li} style={{ whiteSpace: "nowrap" }}>
+            <li
+              className={styles.li}
+              style={{ whiteSpace: "nowrap" }}
+              onClick={() => {
+                setConfigurationExpanded(!configurationExpanded);
+                navigate("approve-lectures");
+              }}
+            >
               - Manage Students
             </li>
-            <li className={styles.li} style={{ whiteSpace: "nowrap" }}>
+            <li
+              className={styles.li}
+              style={{ whiteSpace: "nowrap" }}
+              onClick={() => {
+                setConfigurationExpanded(!configurationExpanded);
+                navigate("approve-lectures");
+              }}
+            >
               - Manage Branches
             </li>
-            <li className={styles.li} style={{ whiteSpace: "nowrap" }}>
+            <li
+              className={styles.li}
+              style={{ whiteSpace: "nowrap" }}
+              onClick={() => {
+                setConfigurationExpanded(!configurationExpanded);
+                navigate("approve-lectures");
+              }}
+            >
               - Manage Users
             </li>
           </ul>

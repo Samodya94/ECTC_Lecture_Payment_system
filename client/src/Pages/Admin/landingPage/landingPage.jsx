@@ -2,13 +2,16 @@ import { React, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 
 // Styles
-import styles from "./adminLandingPage.module.css";
+import styles from "./landingPage.module.css";
 
 import Header from "../adminHeader/header";
 import AdminSideNav from "../adminSideNav/adminSideNav";
 import AdminDashboard from "../adminDashboard/adminDashboard";
 
-const AdminLandingPage = () => {
+// User Level == admin routes
+import ApproveLectures from "../approveLecturesAdmin/approveLectures";
+
+const LandingPage = () => {
   const [expanded, setExpanded] = useState(true);
   const userLevel = "admin";
 
@@ -34,10 +37,11 @@ const AdminLandingPage = () => {
           />
 
           <Route path="dashboard" element={<AdminDashboard />} />
+          <Route path="approve-lectures" element={<ApproveLectures />} />
         </Routes>
       </div>
     </div>
   );
 };
 
-export default AdminLandingPage;
+export default LandingPage;

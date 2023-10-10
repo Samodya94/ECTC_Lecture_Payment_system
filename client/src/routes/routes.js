@@ -8,7 +8,7 @@ import App from "../App";
 import AdminLogin from "../Pages/Admin/loginPage/adminLogin";
 import AdminDashboard from "../Pages/Admin/adminDashboard/adminDashboard";
 
-import AdminLandingPage from "../Pages/Admin/adminLandingPage/adminLandingPage";
+import LandingPage from "../Pages/Admin/landingPage/landingPage";
 
 const AllRoutes = () => {
   return (
@@ -19,7 +19,7 @@ const AllRoutes = () => {
 
         {/* Protected Routes */}
         <Route path="/" element={<App />}>
-          <Route path="/admin/*" element={<AdminLandingPage />} />
+          <Route path="/admin/*" element={<LandingPage />} />
         </Route>
       </Routes>
     </Router>

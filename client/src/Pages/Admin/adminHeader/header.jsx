@@ -37,6 +37,19 @@ const Header = ({ setExpanded, expanded }) => {
             <span className={styles.span}>&#9660;</span>
           )}
         </div>
+        <div
+          className={styles.logStatusMobile}
+          onClick={() => setProfileExpanded(!profileExpanded)}
+        >
+          <div className={styles.profileImageContainer}>
+            <img src="https://i.pravatar.cc/300" alt="User Profile Image" />
+          </div>
+          {profileExpanded ? (
+            <span className={styles.span1}>&#9650;</span>
+          ) : (
+            <span className={styles.span1}>&#9660;</span>
+          )}
+        </div>
       </div>
 
       {profileExpanded && <DropdownCard />}

@@ -126,7 +126,11 @@ const AdminNav = ({ expanded, setExpanded }) => {
         <li className={styles.li}>
           <span className={styles.liContainer}>
             <PersonOutlineOutlinedIcon />
-            {expanded && <span className={styles.span}>View Logins</span>}
+            {expanded && (
+              <span className={styles.span} style={{ whiteSpace: "nowrap" }}>
+                View Logins
+              </span>
+            )}
           </span>
         </li>
       </ul>

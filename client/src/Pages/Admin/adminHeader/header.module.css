@@ -33,6 +33,18 @@
   opacity: 0.7;
 }
 
+.logStatusMobile {
+  display: none;
+  flex-direction: row;
+  align-items: center;
+  margin-right: 20px;
+  cursor: pointer;
+}
+
+.logStatusMobile:hover p {
+  opacity: 0.7;
+}
+
 .profileImageContainer {
   width: 30px;
   height: 30px;
@@ -59,4 +71,19 @@
   font-size: small;
   margin-left: 10px;
   color: #293e56;
+}
+
+.span1 {
+  font-size: small;
+  color: #293e56;
+}
+
+@media screen and (max-width: 768px) {
+  .logStatus {
+    display: none;
+  }
+
+  .logStatusMobile {
+    display: flex;
+  }
 }

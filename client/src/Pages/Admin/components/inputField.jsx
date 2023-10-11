@@ -7,9 +7,7 @@ const InputField = ({ lable, placeholder, setValue, style }) => {
   return (
     <>
       <div className={styles.container}>
-        <label htmlFor="courseName" className={styles.lable}>
-          {lable}:
-        </label>
+        <label className={styles.lable}>{lable}:</label>
         <input
           type="text"
           className={styles.inputField}

@@ -8,6 +8,7 @@ import TableComponent from "./components/lecturerTable";
 import InputField from "../../components/inputField";
 import PrimaryButton from "../../components/primaryButton";
 import SearchField from "../../components/searchField";
+import DropdownField from "../../components/dropdownField";
 
 // Sample data for table
 import data from "./sampleData";
@@ -35,9 +36,19 @@ const ManageLecturers = () => {
 
   const [search, setSearch] = useState("");
 
+  const branchList = [
+    { _id: "1", name: "Malabe" },
+    { _id: "2", name: "Metro" },
+    { _id: "3", name: "Kandy" },
+  ];
+
   const handleSearch = (e) => {
     setSearch(e.target.value);
     console.log(search);
+  };
+
+  const handleBranchChange = (e) => {
+    setBranch(e.target.value);
   };
 
   const handleSubmit = (e) => {
@@ -98,11 +109,12 @@ const ManageLecturers = () => {
               setValue={setPhoneNumber}
               style={{ width: "300px" }}
             />
-            <InputField
+            <DropdownField
               lable={"Branch"}
-              placeholder={"Enter Branch"}
-              setValue={setBranch}
-              style={{ width: "300px" }}
+              list={branchList}
+              handleOptionChange={handleBranchChange}
+              selectedBranch={branch}
+              style={{ width: "318px" }}
             />
             <div className={styles.inputFieldContainer}>
               <label htmlFor="courseName" className={styles.lable}>

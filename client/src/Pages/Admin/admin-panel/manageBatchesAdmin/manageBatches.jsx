@@ -8,6 +8,7 @@ import TableComponent from "./components/batchTable";
 import InputField from "../../components/inputField";
 import PrimaryButton from "../../components/primaryButton";
 import SearchField from "../../components/searchField";
+import DropdownField from "../../components/dropdownField";
 
 import data from "./sampleData";
 
@@ -31,10 +32,42 @@ const ManageBatches = () => {
 
   const [search, setSearch] = useState("");
 
+  const courseList = [
+    { _id: "1", name: "Software Engineering" },
+    { _id: "2", name: "Cyber Security" },
+    { _id: "3", name: "Data Science" },
+  ];
+
+  const branchList = [
+    { _id: "1", name: "Malabe" },
+    { _id: "2", name: "Metro" },
+    { _id: "3", name: "Kandy" },
+  ];
+
+  const stateList = [
+    { _id: "1", name: "Active" },
+    { _id: "2", name: "Inactive" },
+  ];
+
   const handleSearch = (e) => {
     setSearch(e.target.value);
     console.log(search);
   };
+
+  // Handling the dropdown fields
+  const handleBranchChange = (e) => {
+    setBranch(e.target.value);
+  };
+
+  const handleCourseChange = (e) => {
+    setCourse(e.target.value);
+  };
+
+  const handleStateChange = (e) => {
+    setState(e.target.value);
+  };
+
+  // End
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -54,17 +87,31 @@ const ManageBatches = () => {
               setValue={setBatchCode}
               style={{ width: "300px" }}
             />
-            <InputField
+            {/* <InputField
               lable={"Course"}
               placeholder={"Enter Course"}
               setValue={setCourse}
               style={{ width: "300px" }}
-            />
-            <InputField
+            /> */}
+            {/* <InputField
               lable={"Branch"}
               placeholder={"Enter Branch"}
               setValue={setBranch}
               style={{ width: "300px" }}
+            /> */}
+            <DropdownField
+              lable={"Course"}
+              list={courseList}
+              handleOptionChange={handleCourseChange}
+              selectedBranch={course}
+              style={{ width: "318px" }}
+            />
+            <DropdownField
+              lable={"Branch"}
+              list={branchList}
+              handleOptionChange={handleBranchChange}
+              selectedBranch={branch}
+              style={{ width: "318px" }}
             />
             <InputField
               lable={"Start Date"}
@@ -76,11 +123,18 @@ const ManageBatches = () => {
               placeholder={"Enter End Date"}
               style={{ width: "300px" }}
             />
-            <InputField
+            {/* <InputField
               lable={"Batch State"}
               placeholder={"Enter Batch State"}
               setValue={setState}
               style={{ width: "300px" }}
+            /> */}
+            <DropdownField
+              lable={"Batch State"}
+              list={stateList}
+              handleOptionChange={handleStateChange}
+              selectedBranch={state}
+              style={{ width: "318px" }}
             />
             <div style={{ display: "flex", justifyContent: "center" }}>
               <PrimaryButton

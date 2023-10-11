@@ -1,8 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { useTheme } from "@mui/material/styles";
+import { useNavigate } from "react-router-dom";
 
-// MUI Table components
+// MUI components
+import { useTheme } from "@mui/material/styles";
 import {
   Box,
   Table,
@@ -98,6 +99,8 @@ TablePaginationActions.propTypes = {
 const TableComponent = ({ rows, columns }) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+  const navigate = useNavigate();
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -198,7 +201,16 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="center"
                 >
-                  <button className={styles.removeBtn}> Remove </button>
+                  <div className={styles.btnContainer}>
+                    <button
+                      className={styles.editBtn}
+                      onClick={() => navigate("edit/id")}
+                    >
+                      {" "}
+                      Edit{" "}
+                    </button>
+                    <button className={styles.removeBtn}> Remove </button>
+                  </div>
                 </TableCell>
               </TableRow>
             ))}

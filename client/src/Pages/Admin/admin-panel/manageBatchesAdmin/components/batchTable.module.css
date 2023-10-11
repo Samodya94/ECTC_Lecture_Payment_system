@@ -5,10 +5,26 @@
   margin: 0;
 }
 
+.btnContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
 .removeBtn {
   background-color: #f20c0c;
   border: none;
   padding: 8px 20px;
+  margin: 0 5px;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.editBtn {
+  background-color: #5a84ae;
+  border: none;
+  padding: 8px 20px;
+  margin: 0 5px;
   border-radius: 5px;
   color: #fff;
   cursor: pointer;

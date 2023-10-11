@@ -66,7 +66,7 @@ const AdminNav = ({ expanded, setExpanded }) => {
               style={{ whiteSpace: "nowrap" }}
               onClick={() => {
                 setConfigurationExpanded(!configurationExpanded);
-                navigate("approve-lectures");
+                navigate("manage-courses");
               }}
             >
               - Manage Courses

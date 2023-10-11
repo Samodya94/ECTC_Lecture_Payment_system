@@ -1,0 +1,29 @@
+@import url("../../../../constants/fonts.css");
+
+.container {
+  font-family: var(--heading);
+  padding: 1.5rem 1rem;
+}
+
+.subContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 50px;
+}
+
+.heading {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #293e56;
+  margin: 0;
+  margin-bottom: 1.5rem;
+}
+
+.subHeading {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #293e56;
+  margin: 0;
+  margin-bottom: 1.5rem;
+}

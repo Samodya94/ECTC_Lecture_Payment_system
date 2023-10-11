@@ -1,8 +1,8 @@
 import { useState } from "react";
 
 // Import common components
-import InputField from "../../../../Components/admin/inputField";
-import PrimaryButton from "../../../../Components/admin/primaryButton";
+import InputField from "../../components/inputField";
+import PrimaryButton from "../../components/primaryButton";
 
 // Styles
 import styles from "./loginCard.module.css";
@@ -29,7 +29,7 @@ const LoginCard = () => {
   return (
     <>
       <div className={styles.container}>
-        <img className={styles.logo} src={logo} />
+        <img className={styles.logo} src={logo} alt="ECTC logo" />
         <div className={styles.innerContainer}>
           <form onSubmit={handleSubmit}>
             {/* Input Fields */}

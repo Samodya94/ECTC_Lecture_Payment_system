@@ -1,0 +1,14 @@
+@import url("../../../../constants/fonts.css");
+
+.container {
+  font-family: var(--heading);
+  padding: 1.5rem 1rem;
+}
+
+.heading {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #293e56;
+  margin: 0;
+  margin-bottom: 2rem;
+}

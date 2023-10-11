@@ -9,7 +9,8 @@ import AdminSideNav from "../adminSideNav/adminSideNav";
 import AdminDashboard from "../adminDashboard/adminDashboard";
 
 // User Level == admin routes
-import ApproveLectures from "../approveLecturesAdmin/approveLectures";
+import ApproveLectures from "../admin-panel/approveLecturesAdmin/approveLectures";
+import ManageCourses from "../admin-panel/manageCoursesAdmin/manageCourses";
 
 const LandingPage = () => {
   const [expanded, setExpanded] = useState(true);
@@ -38,6 +39,7 @@ const LandingPage = () => {
 
           <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="approve-lectures" element={<ApproveLectures />} />
+          <Route path="manage-courses" element={<ManageCourses />} />
         </Routes>
       </div>
     </div>

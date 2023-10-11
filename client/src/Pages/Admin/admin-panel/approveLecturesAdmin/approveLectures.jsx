@@ -1,10 +1,11 @@
-import React from "react";
+import { React, useState } from "react";
 
 // Styles
 import styles from "./approveLectures.module.css";
 
 // Components
 import TableComponent from "./components/coverageTable";
+import SearchField from "../../components/searchField";
 
 // Sample data for table
 import data from "./sampleData";
@@ -22,10 +23,21 @@ const tableColumns = [
 ];
 
 const ApproveLectures = () => {
+  const [search, setSearch] = useState("");
+
+  const handleSearch = (e) => {
+    setSearch(e.target.value);
+    console.log(search);
+  };
+
   return (
     <>
       <div className={styles.container}>
         <p className={styles.heading}>Approve Payments for Lecture Coverages</p>
+        <SearchField
+          lable={"Search by Lecturer Name"}
+          handleChange={handleSearch}
+        />
         <div>
           <TableComponent columns={tableColumns} rows={data} />
         </div>

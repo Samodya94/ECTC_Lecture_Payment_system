@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 // Import common components
-import InputField from "../../components/inputField";
+import InputField from "../../components/placeholderIntput";
 import PrimaryButton from "../../components/primaryButton";
 
 // Styles
@@ -38,7 +38,8 @@ const LoginCard = () => {
               type="text"
               style={{
                 color: "white",
-                marginBottom: "5px",
+                marginBottom: "15px",
+                marginTop: "20px",
                 backgroundColor: "#0000004D",
               }}
               handleChange={handleUsernameChange}

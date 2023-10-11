@@ -11,6 +11,8 @@ import AdminDashboard from "../adminDashboard/adminDashboard";
 // User Level == admin routes
 import ApproveLectures from "../admin-panel/approveLecturesAdmin/approveLectures";
 import ManageCourses from "../admin-panel/manageCoursesAdmin/manageCourses";
+import ManageLecturers from "../admin-panel/manageLecturersAdmin/manageLecturers";
+import ManageBatches from "../admin-panel/manageBatchesAdmin/manageBatches";
 
 const LandingPage = () => {
   const [expanded, setExpanded] = useState(true);
@@ -40,6 +42,8 @@ const LandingPage = () => {
           <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="approve-lectures" element={<ApproveLectures />} />
           <Route path="manage-courses" element={<ManageCourses />} />
+          <Route path="manage-lecturers" element={<ManageLecturers />} />
+          <Route path="manage-batches" element={<ManageBatches />} />
         </Routes>
       </div>
     </div>

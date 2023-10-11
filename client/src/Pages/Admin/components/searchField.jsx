@@ -3,8 +3,18 @@ import React from "react";
 // Styles
 import styles from "./styles/searchField.module.css";
 
-const SearchField = () => {
-  return <div>SearchField</div>;
+const SearchField = ({ lable, handleChange }) => {
+  return (
+    <>
+      <div className={styles.container}>
+        <input
+          placeholder={lable}
+          className={styles.input}
+          onChange={handleChange}
+        />
+      </div>
+    </>
+  );
 };
 
 export default SearchField;

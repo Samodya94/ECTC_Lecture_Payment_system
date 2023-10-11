@@ -1,16 +1,22 @@
 import React from "react";
+
+// Styles
 import styles from "./styles/inputField.module.css";
 
-const InputField = ({ label, style, type, handleChange }) => {
+const InputField = ({ lable, placeholder, setValue, style }) => {
   return (
     <>
       <div className={styles.container}>
+        <label htmlFor="courseName" className={styles.lable}>
+          {lable}:
+        </label>
         <input
-          placeholder={label}
-          className={styles.input}
+          type="text"
+          className={styles.inputField}
+          id="courseName"
+          placeholder={placeholder}
+          onChange={(e) => setValue(e.target.value)}
           style={style}
-          type={type}
-          onChange={handleChange}
         />
       </div>
     </>

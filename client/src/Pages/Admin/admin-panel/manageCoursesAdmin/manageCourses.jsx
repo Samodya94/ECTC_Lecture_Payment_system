@@ -5,7 +5,7 @@ import styles from "./manageCourses.module.css";
 
 // Components
 import TableComponent from "./components/coursesTable";
-import InputField from "./components/inputField";
+import InputField from "../../components/inputField";
 import PrimaryButton from "../../components/primaryButton";
 import SearchField from "../../components/searchField";
 
@@ -18,6 +18,12 @@ const ManageCourses = () => {
   const [courseName, setCourseName] = useState("");
   const [courseFee, setCourseFee] = useState("");
   const [courseDuration, setCourseDuration] = useState("");
+  const [search, setSearch] = useState("");
+
+  const handleSearch = (e) => {
+    setSearch(e.target.value);
+    console.log(search);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -67,7 +73,7 @@ const ManageCourses = () => {
         </div>
         <div>
           <p className={styles.subHeading}>Course Details</p>
-          <SearchField />
+          <SearchField lable={"Search By Name"} handleChange={handleSearch} />
           <div>
             <TableComponent columns={tableColumns} rows={data} />
           </div>

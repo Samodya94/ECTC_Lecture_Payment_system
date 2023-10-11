@@ -76,7 +76,7 @@ const AdminNav = ({ expanded, setExpanded }) => {
               style={{ whiteSpace: "nowrap" }}
               onClick={() => {
                 setConfigurationExpanded(!configurationExpanded);
-                navigate("approve-lectures");
+                navigate("manage-lecturers");
               }}
             >
               - Manage Lecturers
@@ -86,7 +86,7 @@ const AdminNav = ({ expanded, setExpanded }) => {
               style={{ whiteSpace: "nowrap" }}
               onClick={() => {
                 setConfigurationExpanded(!configurationExpanded);
-                navigate("approve-lectures");
+                navigate("manage-batches");
               }}
             >
               - Manage Batches

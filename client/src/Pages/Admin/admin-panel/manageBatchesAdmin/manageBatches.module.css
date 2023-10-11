@@ -27,3 +27,28 @@
   margin: 0;
   margin-bottom: 0.3rem;
 }
+
+.inputFieldContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--heading);
+  padding: 0.5rem 0;
+}
+
+.lable {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #545454;
+  margin: 0;
+}
+
+.inputField {
+  border: 1px solid #d3d3d3;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  margin-left: 20px;
+  width: 300px;
+  color: #f20c0c;
+  outline: none;
+}

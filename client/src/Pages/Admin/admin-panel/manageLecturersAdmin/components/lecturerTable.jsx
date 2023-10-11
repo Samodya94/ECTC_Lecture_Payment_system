@@ -24,7 +24,7 @@ import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
 
 // Styles
-import styles from "./coursesTable.module.css";
+import styles from "./lecturerTable.module.css";
 
 function TablePaginationActions(props) {
   const theme = useTheme();
@@ -133,8 +133,8 @@ const TableComponent = ({ rows, columns }) => {
             {(rowsPerPage > 0
               ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               : rows
-            ).map((row) => (
-              <TableRow key={row.name} style={{ border: "1px solid #ccc" }}>
+            ).map((row, index) => (
+              <TableRow key={index} style={{ border: "1px solid #ccc" }}>
                 <TableCell
                   component="th"
                   scope="row"
@@ -143,7 +143,7 @@ const TableComponent = ({ rows, columns }) => {
                     padding: "5px 16px",
                   }}
                 >
-                  {row.courseName}
+                  {row.firstName} {row.lastName}
                 </TableCell>
                 <TableCell
                   style={{
@@ -152,7 +152,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {row.courseFee}
+                  {row.username}
                 </TableCell>
                 <TableCell
                   style={{
@@ -161,7 +161,43 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {row.courseDuration}
+                  {row.nic}
+                </TableCell>
+                <TableCell
+                  style={{
+                    border: "1px solid #ccc",
+                    padding: "5px 16px",
+                  }}
+                  align="left"
+                >
+                  {row.email}
+                </TableCell>
+                <TableCell
+                  style={{
+                    border: "1px solid #ccc",
+                    padding: "5px 16px",
+                  }}
+                  align="left"
+                >
+                  {row.phoneNumber}
+                </TableCell>
+                <TableCell
+                  style={{
+                    border: "1px solid #ccc",
+                    padding: "5px 16px",
+                  }}
+                  align="left"
+                >
+                  {row.branch}
+                </TableCell>
+                <TableCell
+                  style={{
+                    border: "1px solid #ccc",
+                    padding: "5px 16px",
+                  }}
+                  align="left"
+                >
+                  {row.registeredDate}
                 </TableCell>
                 <TableCell
                   style={{

@@ -1,5 +1,4 @@
 import { React, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 // Styles
 import styles from "./header.module.css";
@@ -28,7 +27,7 @@ const Header = ({ setExpanded, expanded }) => {
           onClick={() => setProfileExpanded(!profileExpanded)}
         >
           <div className={styles.profileImageContainer}>
-            <img src="https://i.pravatar.cc/300" alt="User Profile Image" />
+            <img src="https://i.pravatar.cc/300" alt="User Profile" />
           </div>
           <p className={styles.usernameTxt}>Manuja Somarathne (Admin)</p>
           {profileExpanded ? (
@@ -42,7 +41,7 @@ const Header = ({ setExpanded, expanded }) => {
           onClick={() => setProfileExpanded(!profileExpanded)}
         >
           <div className={styles.profileImageContainer}>
-            <img src="https://i.pravatar.cc/300" alt="User Profile Image" />
+            <img src="https://i.pravatar.cc/300" alt="User Profile" />
           </div>
           {profileExpanded ? (
             <span className={styles.span1}>&#9650;</span>

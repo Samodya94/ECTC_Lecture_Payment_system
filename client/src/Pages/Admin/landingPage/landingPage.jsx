@@ -4,19 +4,30 @@ import { Routes, Route } from "react-router-dom";
 // Styles
 import styles from "./landingPage.module.css";
 
-import Header from "../adminHeader/header";
-import AdminSideNav from "../adminSideNav/adminSideNav";
-import AdminDashboard from "../adminDashboard/adminDashboard";
+import Header from "../header/header";
+import AdminSideNav from "../sidenav/adminSideNav";
+import AdminDashboard from "../dashboard/adminDashboard";
 
-// User Level == admin routes
-import ApproveLectures from "../admin-panel/approveLecturesAdmin/approveLectures";
+// Common routes for Admin & Manager
 import ManageCourses from "../admin-panel/manageCoursesAdmin/manageCourses";
 import ManageLecturers from "../admin-panel/manageLecturersAdmin/manageLecturers";
 import ManageBatches from "../admin-panel/manageBatchesAdmin/manageBatches";
+import UpdateBatches from "../admin-panel/manageBatchesAdmin/updateBatches";
+import AddBranches from "../admin-panel/manageBranchesAdmin/addBranches";
+
+// User Level == admin routes
+import ApprovePayments from "../admin-panel/approvePaymentsAdmin/approvePayments";
+import ManageUsers from "../admin-panel/manageUsersAdmin/manageUsers";
+
+// User Level == manager routes
+import ApproveLectures from "../manager-panel/approveLecturesManager/approveLectures";
+import ApprovedLectures from "../manager-panel/approveLecturesManager/approvedLectures";
 
 const LandingPage = () => {
   const [expanded, setExpanded] = useState(true);
-  const userLevel = "admin";
+  // Change the userLevel between 'admin', 'manager', 'accounts', 'finance'
+  // to see different side nav links unique to each userLevel
+  const userLevel = "manager";
 
   return (
     <div className={styles.container}>
@@ -34,16 +45,26 @@ const LandingPage = () => {
             element={
               <div className="text-center mt-5">
                 <h1>Select the page you want to access!</h1>
-                <p>Use the right side nav</p>
+                <p>Use the side nav</p>
               </div>
             }
           />
 
+          {/* Common Routes */}
           <Route path="dashboard" element={<AdminDashboard />} />
-          <Route path="approve-lectures" element={<ApproveLectures />} />
+
+          {/* Admin Routes */}
+          <Route path="approve-payments" element={<ApprovePayments />} />
           <Route path="manage-courses" element={<ManageCourses />} />
           <Route path="manage-lecturers" element={<ManageLecturers />} />
           <Route path="manage-batches" element={<ManageBatches />} />
+          <Route path="manage-batches/update" element={<UpdateBatches />} />
+          <Route path="manage-branches" element={<AddBranches />} />
+          <Route path="manage-users" element={<ManageUsers />} />
+
+          {/* Manager Routes */}
+          <Route path="approve-lectures" element={<ApproveLectures />} />
+          <Route path="approved-lectures" element={<ApprovedLectures />} />
         </Routes>
       </div>
     </div>

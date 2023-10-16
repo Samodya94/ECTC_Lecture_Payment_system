@@ -6,8 +6,6 @@ import App from "../App";
 
 // Admin Pages
 import AdminLogin from "../Pages/Admin/loginPage/adminLogin";
-import AdminDashboard from "../Pages/Admin/adminDashboard/adminDashboard";
-
 import LandingPage from "../Pages/Admin/landingPage/landingPage";
 
 const AllRoutes = () => {

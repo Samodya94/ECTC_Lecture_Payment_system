@@ -1,9 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { useNavigate } from "react-router-dom";
-
-// MUI components
 import { useTheme } from "@mui/material/styles";
+
+// MUI Table components
 import {
   Box,
   Table,
@@ -25,7 +24,7 @@ import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
 
 // Styles
-import styles from "./batchTable.module.css";
+import styles from "./coverageTable.module.css";
 
 function TablePaginationActions(props) {
   const theme = useTheme();
@@ -98,9 +97,7 @@ TablePaginationActions.propTypes = {
 
 const TableComponent = ({ rows, columns }) => {
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
-  const navigate = useNavigate();
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -127,7 +124,7 @@ const TableComponent = ({ rows, columns }) => {
                 <TableCell
                   style={{ border: "1px solid #ccc", padding: "8px 16px" }}
                 >
-                  <span className={styles.tHead}>{column}</span>
+                  <spna className={styles.tHead}>{column}</spna>
                 </TableCell>
               ))}
             </TableRow>
@@ -136,8 +133,8 @@ const TableComponent = ({ rows, columns }) => {
             {(rowsPerPage > 0
               ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               : rows
-            ).map((row, index) => (
-              <TableRow key={index} style={{ border: "1px solid #ccc" }}>
+            ).map((row) => (
+              <TableRow key={row.name} style={{ border: "1px solid #ccc" }}>
                 <TableCell
                   component="th"
                   scope="row"
@@ -146,52 +143,77 @@ const TableComponent = ({ rows, columns }) => {
                     padding: "5px 16px",
                   }}
                 >
+                  {row.lecturerName}
+                </TableCell>
+                <TableCell
+                  style={{
+                    width: 140,
+                    border: "1px solid #ccc",
+                    padding: "5px 16px",
+                  }}
+                  align="left"
+                >
+                  {row.courseName}
+                </TableCell>
+                <TableCell
+                  style={{
+                    width: 140,
+                    border: "1px solid #ccc",
+                    padding: "5px 16px",
+                  }}
+                  align="left"
+                >
                   {row.batchCode}
                 </TableCell>
                 <TableCell
                   style={{
+                    width: 140,
                     border: "1px solid #ccc",
                     padding: "5px 16px",
                   }}
                   align="left"
                 >
-                  {row.course}
+                  {row.date}
                 </TableCell>
                 <TableCell
                   style={{
+                    width: 140,
                     border: "1px solid #ccc",
                     padding: "5px 16px",
                   }}
                   align="left"
                 >
-                  {row.branch}
+                  {row.startTime}
                 </TableCell>
                 <TableCell
                   style={{
+                    width: 140,
                     border: "1px solid #ccc",
                     padding: "5px 16px",
                   }}
                   align="left"
                 >
-                  {row.startDate}
+                  {row.endTime}
                 </TableCell>
                 <TableCell
                   style={{
+                    width: 140,
                     border: "1px solid #ccc",
                     padding: "5px 16px",
                   }}
                   align="left"
                 >
-                  {row.endDate}
+                  {row.totalHours}
                 </TableCell>
                 <TableCell
                   style={{
+                    width: 140,
                     border: "1px solid #ccc",
                     padding: "5px 16px",
                   }}
                   align="left"
                 >
-                  {row.state}
+                  {row.lectureCoverage}
                 </TableCell>
                 <TableCell
                   style={{
@@ -201,16 +223,8 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="center"
                 >
-                  <div className={styles.btnContainer}>
-                    <button
-                      className={styles.editBtn}
-                      onClick={() => navigate("update")}
-                    >
-                      {" "}
-                      Edit{" "}
-                    </button>
-                    <button className={styles.removeBtn}> Remove </button>
-                  </div>
+                  <button className={styles.approveBtn}> Approve </button>
+                  <button className={styles.regectBtn}> Decline </button>
                 </TableCell>
               </TableRow>
             ))}

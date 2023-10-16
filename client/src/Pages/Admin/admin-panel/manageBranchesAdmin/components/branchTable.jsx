@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { useNavigate } from "react-router-dom";
 
 // MUI components
 import { useTheme } from "@mui/material/styles";
@@ -25,7 +24,7 @@ import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
 
 // Styles
-import styles from "./batchTable.module.css";
+import styles from "./branchTable.module.css";
 
 function TablePaginationActions(props) {
   const theme = useTheme();
@@ -100,8 +99,6 @@ const TableComponent = ({ rows, columns }) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-  const navigate = useNavigate();
-
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
@@ -146,52 +143,7 @@ const TableComponent = ({ rows, columns }) => {
                     padding: "5px 16px",
                   }}
                 >
-                  {row.batchCode}
-                </TableCell>
-                <TableCell
-                  style={{
-                    border: "1px solid #ccc",
-                    padding: "5px 16px",
-                  }}
-                  align="left"
-                >
-                  {row.course}
-                </TableCell>
-                <TableCell
-                  style={{
-                    border: "1px solid #ccc",
-                    padding: "5px 16px",
-                  }}
-                  align="left"
-                >
-                  {row.branch}
-                </TableCell>
-                <TableCell
-                  style={{
-                    border: "1px solid #ccc",
-                    padding: "5px 16px",
-                  }}
-                  align="left"
-                >
-                  {row.startDate}
-                </TableCell>
-                <TableCell
-                  style={{
-                    border: "1px solid #ccc",
-                    padding: "5px 16px",
-                  }}
-                  align="left"
-                >
-                  {row.endDate}
-                </TableCell>
-                <TableCell
-                  style={{
-                    border: "1px solid #ccc",
-                    padding: "5px 16px",
-                  }}
-                  align="left"
-                >
-                  {row.state}
+                  {row.branchName}
                 </TableCell>
                 <TableCell
                   style={{
@@ -201,16 +153,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="center"
                 >
-                  <div className={styles.btnContainer}>
-                    <button
-                      className={styles.editBtn}
-                      onClick={() => navigate("update")}
-                    >
-                      {" "}
-                      Edit{" "}
-                    </button>
-                    <button className={styles.removeBtn}> Remove </button>
-                  </div>
+                  <button className={styles.removeBtn}> Remove </button>
                 </TableCell>
               </TableRow>
             ))}

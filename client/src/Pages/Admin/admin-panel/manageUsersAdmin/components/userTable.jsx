@@ -25,7 +25,7 @@ import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
 
 // Styles
-import styles from "./batchTable.module.css";
+import styles from "./userTable.module.css";
 
 function TablePaginationActions(props) {
   const theme = useTheme();
@@ -144,9 +144,15 @@ const TableComponent = ({ rows, columns }) => {
                   style={{
                     border: "1px solid #ccc",
                     padding: "5px 16px",
+                    width: "80px",
                   }}
+                  align="center"
                 >
-                  {row.batchCode}
+                  <img
+                    src={row.profileImage}
+                    alt="User Profile"
+                    style={{ width: "45px" }}
+                  />
                 </TableCell>
                 <TableCell
                   style={{
@@ -155,7 +161,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {row.course}
+                  {row.fullName}
                 </TableCell>
                 <TableCell
                   style={{
@@ -164,7 +170,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {row.branch}
+                  {row.username}
                 </TableCell>
                 <TableCell
                   style={{
@@ -173,25 +179,17 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {row.startDate}
+                  {row.email}
                 </TableCell>
                 <TableCell
                   style={{
                     border: "1px solid #ccc",
                     padding: "5px 16px",
+                    width: "100px",
                   }}
                   align="left"
                 >
-                  {row.endDate}
-                </TableCell>
-                <TableCell
-                  style={{
-                    border: "1px solid #ccc",
-                    padding: "5px 16px",
-                  }}
-                  align="left"
-                >
-                  {row.state}
+                  {row.userLevel}
                 </TableCell>
                 <TableCell
                   style={{
@@ -201,16 +199,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="center"
                 >
-                  <div className={styles.btnContainer}>
-                    <button
-                      className={styles.editBtn}
-                      onClick={() => navigate("update")}
-                    >
-                      {" "}
-                      Edit{" "}
-                    </button>
-                    <button className={styles.removeBtn}> Remove </button>
-                  </div>
+                  <button className={styles.removeBtn}> Remove </button>
                 </TableCell>
               </TableRow>
             ))}

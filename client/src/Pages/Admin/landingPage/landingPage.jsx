@@ -4,24 +4,27 @@ import { Routes, Route } from "react-router-dom";
 // Styles
 import styles from "./landingPage.module.css";
 
+// Common components for all userLevels
 import Header from "../header/header";
 import AdminSideNav from "../sidenav/adminSideNav";
 import AdminDashboard from "../dashboard/adminDashboard";
 
-// Common routes for Admin & Manager
+// Common components for Admin & Manager
 import ManageCourses from "../admin-panel/manageCoursesAdmin/manageCourses";
 import ManageLecturers from "../admin-panel/manageLecturersAdmin/manageLecturers";
 import ManageBatches from "../admin-panel/manageBatchesAdmin/manageBatches";
 import UpdateBatches from "../admin-panel/manageBatchesAdmin/updateBatches";
 import AddBranches from "../admin-panel/manageBranchesAdmin/addBranches";
 
-// User Level == admin routes
+// User Level == admin components
 import ApprovePayments from "../admin-panel/approvePaymentsAdmin/approvePayments";
 import ManageUsers from "../admin-panel/manageUsersAdmin/manageUsers";
 
-// User Level == manager routes
+// User Level == manager components
 import ApproveLectures from "../manager-panel/approveLecturesManager/approveLectures";
 import ApprovedLectures from "../manager-panel/approveLecturesManager/approvedLectures";
+import AssignLecturers from "../manager-panel/assignLecturersManager/assignLecturers";
+import ViewAssignedLecturers from "../manager-panel/assignLecturersManager/viewAssignedLecturers";
 
 const LandingPage = () => {
   const [expanded, setExpanded] = useState(true);
@@ -65,6 +68,11 @@ const LandingPage = () => {
           {/* Manager Routes */}
           <Route path="approve-lectures" element={<ApproveLectures />} />
           <Route path="approved-lectures" element={<ApprovedLectures />} />
+          <Route path="assign-batches" element={<AssignLecturers />} />
+          <Route
+            path="assign-batches/view-assigned"
+            element={<ViewAssignedLecturers />}
+          />
         </Routes>
       </div>
     </div>

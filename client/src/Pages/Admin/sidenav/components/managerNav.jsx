@@ -39,7 +39,11 @@ const AdminNav = ({ expanded, setExpanded }) => {
   return (
     <>
       <ul className={styles.ul}>
-        <li className={styles.li} onClick={() => navigate("dashboard")}>
+        <li
+          className={styles.li}
+          style={{ whiteSpace: "nowrap" }}
+          onClick={() => navigate("dashboard")}
+        >
           <span className={styles.liContainer}>
             {/* Icon */}
             <HomeOutlinedIcon />
@@ -47,7 +51,11 @@ const AdminNav = ({ expanded, setExpanded }) => {
             {expanded && <span className={styles.span}>Home</span>}
           </span>
         </li>
-        <li className={styles.li} onClick={toggleLecCoverage}>
+        <li
+          className={styles.li}
+          style={{ whiteSpace: "nowrap" }}
+          onClick={toggleLecCoverage}
+        >
           <span className={styles.liContainer}>
             <AutoStoriesOutlinedIcon />
             {expanded && <span className={styles.span}>Lecture Coverages</span>}
@@ -64,7 +72,7 @@ const AdminNav = ({ expanded, setExpanded }) => {
               style={{ whiteSpace: "nowrap" }}
               onClick={() => {
                 setLecCovarageExpanded(!lecCovarageExpanded);
-                navigate("");
+                navigate("assign-batches");
               }}
             >
               - Assign Batches
@@ -91,7 +99,11 @@ const AdminNav = ({ expanded, setExpanded }) => {
             </li>
           </ul>
         )}
-        <li className={styles.li} onClick={toggleConfiguration}>
+        <li
+          className={styles.li}
+          style={{ whiteSpace: "nowrap" }}
+          onClick={toggleConfiguration}
+        >
           <span className={styles.liContainer}>
             <AdminPanelSettingsOutlinedIcon />
             {expanded && <span className={styles.span}>Configurations</span>}

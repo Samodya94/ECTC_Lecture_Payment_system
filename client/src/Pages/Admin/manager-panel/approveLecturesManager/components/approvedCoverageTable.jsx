@@ -215,17 +215,6 @@ const TableComponent = ({ rows, columns }) => {
                 >
                   {row.lectureCoverage}
                 </TableCell>
-                <TableCell
-                  style={{
-                    width: 140,
-                    border: "1px solid #ccc",
-                    padding: "5px 16px",
-                  }}
-                  align="center"
-                >
-                  <button className={styles.approveBtn}> Approve </button>
-                  <button className={styles.regectBtn}> Decline </button>
-                </TableCell>
               </TableRow>
             ))}
             {emptyRows > 0 && (

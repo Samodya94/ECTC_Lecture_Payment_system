@@ -26,11 +26,18 @@ import ApprovedLectures from "../manager-panel/approveLecturesManager/approvedLe
 import AssignLecturers from "../manager-panel/assignLecturersManager/assignLecturers";
 import ViewAssignedLecturers from "../manager-panel/assignLecturersManager/viewAssignedLecturers";
 
+// Common components for Admin & Manager
+import ConfirmedPayments from "../accounts-panel/confirmedPayments/confirmedPayments";
+
+// User Level == accounts components
+import AddPayments from "../accounts-panel/addPayments/addPayments";
+import FinalizedPayments from "../accounts-panel/finalizedPayments/finalizedPayments";
+
 const LandingPage = () => {
   const [expanded, setExpanded] = useState(true);
   // Change the userLevel between 'admin', 'manager', 'accounts', 'finance'
   // to see different side nav links unique to each userLevel
-  const userLevel = "manager";
+  const userLevel = "accounts";
 
   return (
     <div className={styles.container}>
@@ -73,6 +80,11 @@ const LandingPage = () => {
             path="assign-batches/view-assigned"
             element={<ViewAssignedLecturers />}
           />
+
+          {/* Accounts Routes */}
+          <Route path="add-payments" element={<AddPayments />} />
+          <Route path="confirmed-payments" element={<ConfirmedPayments />} />
+          <Route path="finalized-payments" element={<FinalizedPayments />} />
         </Routes>
       </div>
     </div>

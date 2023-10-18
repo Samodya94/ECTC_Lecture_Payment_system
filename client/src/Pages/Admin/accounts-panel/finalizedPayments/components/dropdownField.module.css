@@ -1,4 +1,4 @@
-@import url("../../../../constants/fonts.css");
+@import url("../../../../../constants/fonts.css");
 
 .container {
   display: flex;
@@ -6,13 +6,6 @@
   align-items: center;
   font-family: var(--heading);
   padding: 0.5rem 0;
-}
-
-.lable {
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: #545454;
-  margin: 0;
 }
 
 .dropdown {

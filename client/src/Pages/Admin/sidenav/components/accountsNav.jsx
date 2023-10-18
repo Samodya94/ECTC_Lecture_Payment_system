@@ -32,7 +32,7 @@ const AccountsNav = ({ expanded }) => {
         <li
           className={styles.li}
           style={{ whiteSpace: "nowrap" }}
-          onClick={() => navigate("")}
+          onClick={() => navigate("add-payments")}
         >
           <span className={styles.liContainer}>
             {/* Icon */}
@@ -46,7 +46,7 @@ const AccountsNav = ({ expanded }) => {
         <li
           className={styles.li}
           style={{ whiteSpace: "nowrap" }}
-          onClick={() => navigate("")}
+          onClick={() => navigate("approved-lectures")}
         >
           <span className={styles.liContainer}>
             {/* Icon */}
@@ -58,7 +58,7 @@ const AccountsNav = ({ expanded }) => {
         <li
           className={styles.li}
           style={{ whiteSpace: "nowrap" }}
-          onClick={() => navigate("")}
+          onClick={() => navigate("finalized-payments")}
         >
           <span className={styles.liContainer}>
             {/* Icon */}
@@ -72,7 +72,7 @@ const AccountsNav = ({ expanded }) => {
         <li
           className={styles.li}
           style={{ whiteSpace: "nowrap" }}
-          onClick={() => navigate("")}
+          onClick={() => navigate("confirmed-payments")}
         >
           <span className={styles.liContainer}>
             {/* Icon */}

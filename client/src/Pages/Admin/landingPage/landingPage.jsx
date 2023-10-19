@@ -37,7 +37,7 @@ const LandingPage = () => {
   const [expanded, setExpanded] = useState(true);
   // Change the userLevel between 'admin', 'manager', 'accounts', 'finance'
   // to see different side nav links unique to each userLevel
-  const userLevel = "accounts";
+  const userLevel = "finance";
 
   return (
     <div className={styles.container}>

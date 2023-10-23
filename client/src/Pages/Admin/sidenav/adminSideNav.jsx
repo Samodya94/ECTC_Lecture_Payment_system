@@ -27,11 +27,11 @@ const AdminSideNav = ({ userLevel, expanded, setExpanded }) => {
       {userLevel === "admin" ? (
         <AdminNav expanded={expanded} setExpanded={setExpanded} />
       ) : userLevel === "manager" ? (
-        <ManagerNav expanded={expanded} />
+        <ManagerNav expanded={expanded} setExpanded={setExpanded} />
       ) : userLevel === "finance" ? (
-        <FinanceNav expanded={expanded} />
+        <FinanceNav expanded={expanded} setExpanded={setExpanded} />
       ) : userLevel === "accounts" ? (
-        <AccountsNav expanded={expanded} />
+        <AccountsNav expanded={expanded} setExpanded={setExpanded} />
       ) : null}
     </div>
   );

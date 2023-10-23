@@ -72,7 +72,7 @@ const FinanceNav = ({ expanded, setExpanded }) => {
               style={{ whiteSpace: "nowrap" }}
               onClick={() => {
                 setPaymentApprovalExpanded(!paymentApprovalExpanded);
-                navigate("");
+                navigate("approve-payments-finance");
               }}
             >
               - Approve Payments
@@ -82,10 +82,10 @@ const FinanceNav = ({ expanded, setExpanded }) => {
               style={{ whiteSpace: "nowrap" }}
               onClick={() => {
                 setPaymentApprovalExpanded(!paymentApprovalExpanded);
-                navigate("approve-lectures");
+                navigate("rollback-payments");
               }}
             >
-              - Rollback Approved Payments
+              - Rollback Payments
             </li>
           </ul>
         )}
@@ -110,7 +110,7 @@ const FinanceNav = ({ expanded, setExpanded }) => {
               style={{ whiteSpace: "nowrap" }}
               onClick={() => {
                 setPayReportsExpanded(!payReportsExpanded);
-                navigate("manage-courses");
+                navigate("finalized-payments");
               }}
             >
               - Finalized Payments
@@ -120,7 +120,7 @@ const FinanceNav = ({ expanded, setExpanded }) => {
               style={{ whiteSpace: "nowrap" }}
               onClick={() => {
                 setPayReportsExpanded(!payReportsExpanded);
-                navigate("manage-lecturers");
+                navigate("confirmed-payments");
               }}
             >
               - Generate Reports

@@ -33,6 +33,10 @@ import ConfirmedPayments from "../accounts-panel/confirmedPayments/confirmedPaym
 import AddPayments from "../accounts-panel/addPayments/addPayments";
 import FinalizedPayments from "../accounts-panel/finalizedPayments/finalizedPayments";
 
+// User Level == finance components
+import ApprovePaymentsFinance from "../finance-panel/approvePayments/approvePayments";
+import RollbackPayments from "../finance-panel/rollbackPayments/rollbackPayments";
+
 const LandingPage = () => {
   const [expanded, setExpanded] = useState(true);
   // Change the userLevel between 'admin', 'manager', 'accounts', 'finance'
@@ -85,6 +89,13 @@ const LandingPage = () => {
           <Route path="add-payments" element={<AddPayments />} />
           <Route path="confirmed-payments" element={<ConfirmedPayments />} />
           <Route path="finalized-payments" element={<FinalizedPayments />} />
+
+          {/* Finance Routes */}
+          <Route
+            path="approve-payments-finance"
+            element={<ApprovePaymentsFinance />}
+          />
+          <Route path="rollback-payments" element={<RollbackPayments />} />
         </Routes>
       </div>
     </div>

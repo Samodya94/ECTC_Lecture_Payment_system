@@ -1,8 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-const token = Cookies.get('token')
-
-let refresh = localStorage.getItem("refreshToken");
+const token = Cookies.get('token');
 
 const headers = {
     Accept: "application/json",

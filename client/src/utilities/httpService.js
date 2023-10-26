@@ -8,8 +8,6 @@ const headers = {
     Accept: "application/json",
     "Content-Type": "application/json",
     "Authorization": `Bearer ${token}`,
-    "x-access-token": token,
-
 };
 
 const axiosInstance = axios.create({

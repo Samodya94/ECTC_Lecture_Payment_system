@@ -1,6 +1,8 @@
 import { React, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 
+import Cookies from "js-cookie";
+
 // Styles
 import styles from "./landingPage.module.css";
 
@@ -41,7 +43,7 @@ const LandingPage = () => {
   const [expanded, setExpanded] = useState(true);
   // Change the userLevel between 'admin', 'manager', 'accounts', 'finance'
   // to see different side nav links unique to each userLevel
-  const userLevel = "finance";
+  const userLevel = Cookies.get("userLevel");
 
   return (
     <div className={styles.container}>

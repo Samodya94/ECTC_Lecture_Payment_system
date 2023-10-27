@@ -161,7 +161,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {row.fullName}
+                  {row.fullname}
                 </TableCell>
                 <TableCell
                   style={{
@@ -189,7 +189,18 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {row.userLevel}
+                  {row.userLevel
+                    ? row.userLevel === "Admin"
+                      ? "0"
+                      : row.userLevel === "Manager"
+                        ? "1"
+                        : row.userLevel === "Finance"
+                          ? "2"
+                          : row.userLevel === "Accounts"
+                            ? "3"
+                            : ""
+                    : ""
+                  }
                 </TableCell>
                 <TableCell
                   style={{

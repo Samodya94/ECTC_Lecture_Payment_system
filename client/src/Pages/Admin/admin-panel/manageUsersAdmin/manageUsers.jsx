@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useEffect, useState } from "react";
 
 import styles from "./manageUsers.module.css";
 
@@ -10,7 +10,7 @@ import PrimaryButton from "../../components/primaryButton";
 import SearchField from "../../components/searchField";
 import PhotoUploadCard from "./components/photoUploadCard";
 
-import data from "./sampleData";
+import Service from "../../../../utilities/httpService";
 
 const tableColumns = [
   "Profile Image",
@@ -30,6 +30,9 @@ const ManageUsers = () => {
   const [profileImage, setProfileImage] = useState(null);
 
   const [search, setSearch] = useState("");
+  const [users, setUsers] = useState([]);
+
+  const service = new Service();
 
   const courseList = [
     { _id: "1", name: "Software Engineering" },
@@ -50,10 +53,27 @@ const ManageUsers = () => {
     { _id: "3", name: "Accounts" },
   ];
 
+  useEffect(() => {
+    getUsers();
+  }, []);
+
+
+  function getUsers() {
+    const respone = service.get(`users/all`)
+    respone.then((res) => {
+      setUsers(res.data);
+    })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  }
+
+
   const handleSearch = (e) => {
     setSearch(e.target.value);
-    console.log(search);
+    console.log(e.target.value);
   };
+
 
   // Handling the dropdown fields
   const handleBranchChange = (e) => {
@@ -157,7 +177,7 @@ const ManageUsers = () => {
           <p className={styles.subHeading}>Manage Users</p>
           <SearchField lable={"Search By Name"} handleChange={handleSearch} />
           <div>
-            <TableComponent columns={tableColumns} rows={data} />
+            <TableComponent columns={tableColumns} rows={users} />
           </div>
         </div>
       </div>

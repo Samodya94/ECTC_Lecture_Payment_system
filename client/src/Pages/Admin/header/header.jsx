@@ -1,5 +1,5 @@
 import { React, useState } from "react";
-
+import Cookies from "js-cookie";
 // Styles
 import styles from "./header.module.css";
 
@@ -16,6 +16,9 @@ const Header = ({ setExpanded, expanded }) => {
     setExpanded(!expanded);
   };
 
+  const username = Cookies.get("username");
+  const userLevel = Cookies.get("userLevel");
+
   return (
     <>
       <div className={styles.container}>
@@ -29,7 +32,7 @@ const Header = ({ setExpanded, expanded }) => {
           <div className={styles.profileImageContainer}>
             <img src="https://i.pravatar.cc/300" alt="User Profile" />
           </div>
-          <p className={styles.usernameTxt}>Manuja Somarathne (Admin)</p>
+          <p className={styles.usernameTxt}>{username} ({userLevel})</p>
           {profileExpanded ? (
             <span className={styles.span}>&#9650;</span>
           ) : (

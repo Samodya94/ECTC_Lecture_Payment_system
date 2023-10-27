@@ -1,0 +1,15 @@
+.tHead {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #293e56;
+  margin: 0;
+}
+
+.removeBtn {
+  background-color: #f20c0c;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+}

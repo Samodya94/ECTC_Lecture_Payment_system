@@ -1,0 +1,26 @@
+@import url("../../../../../constants//fonts.css");
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: var(--heading);
+  padding: 0.5rem 0;
+}
+
+.lable {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #545454;
+  margin: 0;
+  margin-bottom: 10px;
+}
+
+.inputField {
+  border: 1px solid #d3d3d3;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  margin-left: 20px;
+  color: #545454;
+  outline: none;
+}

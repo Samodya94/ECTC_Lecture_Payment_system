@@ -1,10 +1,18 @@
-import logo from './logo.svg';
+import { BrowserRouter,Routes, Route} from "react-router-dom";
+
+import LecHome from "./Pages/Lecturer/lecHome";
+
 import './App.css';
 
 function App() {
   return (
     <div className="App">
-      <h1>Head</h1>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/lecindex" element=<LecHome/>></Route>
+          
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }

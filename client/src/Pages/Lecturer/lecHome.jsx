@@ -1,11 +1,20 @@
 import React from 'react'
 
-function lecHome() {
+import LecSideNav from '../../Components/Navigation/Lecturer/LecSideNav';
+
+import './lec.css';
+import LectureDashCard from '../../Components/Dashboards/lecturedashcard';
+
+function LecHome() {
   return (
     <div>
-      <h1>Home</h1>
+      <div className='content'>
+        <div className='sideNav' ><LecSideNav/></div>
+        <div className='pgContent'><div className='cards'><LectureDashCard /></div></div>
+        lec
+      </div>
     </div>
   )
 }
 
-export default lecHome
+export default LecHome

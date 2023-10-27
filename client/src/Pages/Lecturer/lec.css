@@ -1,0 +1,36 @@
+.content{
+    display: flex;
+}
+
+.sideNav{
+    flex:1;
+    height: 100vh;
+    background: #2A3F54;
+    
+}
+
+.pgContent{
+    flex:5;
+    padding: 2rem;
+}
+
+.cards{
+    display: flex;
+
+}
+
+
+
+
+@media (max-width: 1400px){
+        
+    .sideNav{
+        flex:2;
+        height: 100vh;
+        background: #2A3F54;
+    }
+
+    .pgContent{
+        flex:5;
+    }
+}

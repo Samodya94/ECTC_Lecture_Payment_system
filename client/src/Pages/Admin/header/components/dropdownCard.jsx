@@ -6,8 +6,6 @@ import { useLogout } from "../../../../hooks/useLogout";
 // Styles
 import styles from "./dropdownCard.module.css";
 
-import Cookies from "js-cookie";
-
 // MUI icons
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -20,9 +18,6 @@ const DropdownCard = () => {
   const handleLogout = () => {
 
     logout()
-    // alert('Logged out');
-    navigate('/admin-login')
-
   }
 
   return (

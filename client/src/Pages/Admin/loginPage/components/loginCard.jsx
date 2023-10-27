@@ -1,5 +1,8 @@
 import { useState } from "react";
 
+import { useLogin } from "../../../../hooks/useLogin";
+import Cookies from "js-cookie";
+
 // Import common components
 import InputField from "../../components/placeholderIntput";
 import PrimaryButton from "../../components/primaryButton";
@@ -13,10 +16,13 @@ import logo from "../../../../assets/logo.jpg";
 const LoginCard = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const { login } = useLogin();
 
-  const handleSubmit = (e) => {
-    alert(username + " and PW is " + password);
-  };
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+
+    await login(username, password)
+  }
 
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);

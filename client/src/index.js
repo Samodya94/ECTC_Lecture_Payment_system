@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
+import { AuthContextProvider } from "./context/AuthContext";
 
 // Routes page
 import AllRoutes from "./routes/routes";
@@ -8,7 +9,9 @@ import AllRoutes from "./routes/routes";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <AllRoutes />
+    <AuthContextProvider>
+      <AllRoutes />
+    </AuthContextProvider>
   </React.StrictMode>
 );
 

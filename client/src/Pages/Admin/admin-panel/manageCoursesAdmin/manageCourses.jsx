@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 
 // Styles
 import styles from "./manageCourses.module.css";
@@ -8,6 +8,7 @@ import TableComponent from "./components/coursesTable";
 import InputField from "../../components/inputField";
 import PrimaryButton from "../../components/primaryButton";
 import SearchField from "../../components/searchField";
+import Service from "../../../../utilities/httpService";
 
 // Sample data for table
 import data from "./sampleData";
@@ -19,6 +20,8 @@ const ManageCourses = () => {
   const [courseFee, setCourseFee] = useState("");
   const [courseDuration, setCourseDuration] = useState("");
   const [search, setSearch] = useState("");
+  const[courses, setCourses] = useState([]);
+  const service = new Service();
 
   const handleSearch = (e) => {
     setSearch(e.target.value);
@@ -31,6 +34,23 @@ const ManageCourses = () => {
     console.log(courseName, courseFee, courseDuration);
     alert("Check console for values");
   };
+
+  useEffect(() => {
+    getCourses();
+  }, []);
+
+
+  function getCourses() {
+    const respone = service.get(`course/all`)
+    respone.then((res) => {
+      setCourses(res.data);
+    })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  }
+
+
 
   return (
     <>
@@ -75,7 +95,7 @@ const ManageCourses = () => {
           <p className={styles.subHeading}>Course Details</p>
           <SearchField lable={"Search By Name"} handleChange={handleSearch} />
           <div>
-            <TableComponent columns={tableColumns} rows={data} />
+            <TableComponent columns={tableColumns} rows={courses} />
           </div>
         </div>
       </div>

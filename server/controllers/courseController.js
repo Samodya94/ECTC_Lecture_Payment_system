@@ -76,11 +76,17 @@ const putCourse = asyncHandler(async (req, res) => {
     res.status(200).json(updatedCourse);
 });
 
+const getallCourses = asyncHandler(async (req, res) => {
+    const course = await Course.find();
+    res.status(200).json(course);
+});
+
 module.exports = {
     getCourse,
     createCourse,
     putCourse,
     deleteCourse,
     getCourseNames,
+    getallCourses
 };
 

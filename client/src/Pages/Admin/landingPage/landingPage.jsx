@@ -74,7 +74,7 @@ const LandingPage = () => {
           <Route path="manage-courses" element={<ManageCourses />} />
           <Route path="manage-lecturers" element={<ManageLecturers />} />
           <Route path="manage-batches" element={<ManageBatches />} />
-          <Route path="manage-batches/update" element={<UpdateBatches />} />
+          <Route path="manage-batches/update/:id" element={<UpdateBatches />} />
           <Route path="manage-branches" element={<AddBranches />} />
           <Route path="manage-users" element={<ManageUsers />} />
 

@@ -27,6 +27,7 @@ import LastPageIcon from "@mui/icons-material/LastPage";
 // Styles
 import styles from "./batchTable.module.css";
 
+import Service from "../../../../../utilities/httpService";
 function TablePaginationActions(props) {
   const theme = useTheme();
   const { count, page, rowsPerPage, onPageChange } = props;
@@ -101,6 +102,14 @@ const TableComponent = ({ rows, columns }) => {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const navigate = useNavigate();
+
+  const service = React.useMemo(() => new Service(), []);
+
+  //delete batch by getting the row id
+  const deleteBatch = (id) => {
+    service.delete(`batch/${id}`);
+  };
+
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -213,7 +222,13 @@ const TableComponent = ({ rows, columns }) => {
                     </button>
                     <button
                       className={styles.removeBtn}
-                    //onClick={() => navigate(`remove/${row._id}`)}
+                      //pass the _id value and pop up a confirmation modal to confirm delete
+                      onClick={() => {
+                        if (window.confirm("Are you sure you want to delete this batch?")) {
+                          deleteBatch(row._id);
+                          window.location.reload();
+                        }
+                      }}
                     > Remove </button>
                   </div>
                 </TableCell>

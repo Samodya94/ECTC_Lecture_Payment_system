@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { useNavigate } from "react-router-dom";
+//import { useNavigate } from "react-router-dom";
 
 // MUI components
 import { useTheme } from "@mui/material/styles";
@@ -99,8 +99,24 @@ TablePaginationActions.propTypes = {
 const TableComponent = ({ rows, columns }) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [sortOrder, setSortOrder] = React.useState("asc"); // "asc" or "desc"
+  const [sortedColumn, setSortedColumn] = React.useState("userLevel");
 
-  const navigate = useNavigate();
+  const handleSort = (column) => {
+    setSortedColumn(column);
+    setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+  };
+
+  // Sorting function based on userLevel
+  const compareUserLevel = (a, b) => {
+    const levelA = a.userLevel || "";
+    const levelB = b.userLevel || "";
+    return sortOrder === "asc" ? levelA.localeCompare(levelB) : levelB.localeCompare(levelA);
+  };
+
+  const sortedRows = [...rows].sort(compareUserLevel);
+
+  //const navigate = useNavigate();
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -125,19 +141,24 @@ const TableComponent = ({ rows, columns }) => {
             <TableRow className={styles.tHead}>
               {columns.map((column, index) => (
                 <TableCell
-                  style={{ border: "1px solid #ccc", padding: "8px 16px" }}
+                  key={index}
+                  style={{ border: "1px solid #ccc", padding: "8px 16px", cursor: "pointer" }}
+                  onClick={() => handleSort(column)}
                 >
                   <span className={styles.tHead}>{column}</span>
+                  {sortedColumn === column && (
+                    <span>{sortOrder === "asc" ? " ▲" : " ▼"}</span>
+                  )}
                 </TableCell>
               ))}
             </TableRow>
           </TableHead>
           <TableBody>
             {(rowsPerPage > 0
-              ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              : rows
-            ).map((row, index) => (
-              <TableRow key={index} style={{ border: "1px solid #ccc" }}>
+              ? sortedRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              : sortedRows
+            ).map((row, _id) => (
+              <TableRow key={row._id} style={{ border: "1px solid #ccc" }}>
                 <TableCell
                   component="th"
                   scope="row"

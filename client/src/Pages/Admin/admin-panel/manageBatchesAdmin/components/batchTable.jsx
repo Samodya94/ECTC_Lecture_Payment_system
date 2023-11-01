@@ -125,6 +125,7 @@ const TableComponent = ({ rows, columns }) => {
             <TableRow className={styles.tHead}>
               {columns.map((column, index) => (
                 <TableCell
+                  key={index}
                   style={{ border: "1px solid #ccc", padding: "8px 16px" }}
                 >
                   <span className={styles.tHead}>{column}</span>
@@ -210,7 +211,10 @@ const TableComponent = ({ rows, columns }) => {
                       {" "}
                       Edit{" "}
                     </button>
-                    <button className={styles.removeBtn}> Remove </button>
+                    <button
+                      className={styles.removeBtn}
+                    //onClick={() => navigate(`remove/${row._id}`)}
+                    > Remove </button>
                   </div>
                 </TableCell>
               </TableRow>

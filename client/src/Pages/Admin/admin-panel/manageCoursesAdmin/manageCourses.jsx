@@ -1,4 +1,4 @@
-import { React, useState, useEffect,useMemo } from "react";
+import { React, useState, useEffect, useMemo, useCallback } from "react";
 
 // Styles
 import styles from "./manageCourses.module.css";
@@ -17,7 +17,7 @@ const ManageCourses = () => {
   const [courseFee, setCourseFee] = useState("");
   const [courseDuration, setCourseDuration] = useState("");
   const [search, setSearch] = useState("");
-  const[courses, setCourses] = useState([]);
+  const [courses, setCourses] = useState([]);
   //const service = new Service();
   const service = useMemo(() => new Service(), []);
 
@@ -39,40 +39,56 @@ const ManageCourses = () => {
     }
   };
 
-  
-    function getCourses() {
-      const respone = service.get(`course/all`)
-      respone.then((res) => {
+
+  //   function getCourses() {
+  //     const respone = service.get(`course/all`)
+  //     respone.then((res) => {
+  //       setCourses(res.data);
+  //     })
+  //       .catch((error) => {
+  //         console.error('Error fetching data:', error);
+  //       });
+  //   }
+
+  //   useEffect(() => {
+  //   getCourses();
+  // }, [service]);
+
+  const getCourses = useCallback(() => {
+    const response = service.get(`course/all`);
+    response
+      .then((res) => {
         setCourses(res.data);
       })
-        .catch((error) => {
-          console.error('Error fetching data:', error);
-        });
-    }
-
-    useEffect(() => {
-    getCourses();
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
   }, [service]);
 
-//new course 
-const newCourse = {
- courseName:courseName,
-  courseFee: courseFee,
-     courseDuration:  courseDuration,
-  
-};
+  useEffect(() => {
+    getCourses();
 
-//create new course function
-function createCourse(e) {
-  e.preventDefault();
-  const response = service.post(`course/`, newCourse);
-  response.then((res) => {
-    alert("New Course Added");
-    window.location.reload();
-  }).catch((err) => {
-    console.log(err);
-  })
-}
+  }, [getCourses]);
+
+  //new course 
+  const newCourse = {
+    courseName: courseName,
+    courseFee: courseFee,
+    courseDuration: courseDuration,
+
+  };
+
+  //create new course function
+  function createCourse(e) {
+    e.preventDefault();
+    const response = service.post(`course/`, newCourse);
+    response.then((res) => {
+      alert("New Course Added");
+      window.location.reload();
+    }).catch((err) => {
+      console.log(err);
+    })
+  }
 
 
   return (

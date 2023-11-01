@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from "react";
+import { React, useState, useEffect,useMemo } from "react";
 
 // Styles
 import styles from "./manageCourses.module.css";
@@ -10,9 +10,6 @@ import PrimaryButton from "../../components/primaryButton";
 import SearchField from "../../components/searchField";
 import Service from "../../../../utilities/httpService";
 
-// Sample data for table
-import data from "./sampleData";
-
 const tableColumns = ["Course Name", "Course Fee", "Course Duration", "Action"];
 
 const ManageCourses = () => {
@@ -21,35 +18,61 @@ const ManageCourses = () => {
   const [courseDuration, setCourseDuration] = useState("");
   const [search, setSearch] = useState("");
   const[courses, setCourses] = useState([]);
-  const service = new Service();
+  //const service = new Service();
+  const service = useMemo(() => new Service(), []);
+
+
+  // const handleSearch = (e) => {
+  //   setSearch(e.target.value);
+  //   console.log(search);
+  // };
 
   const handleSearch = (e) => {
     setSearch(e.target.value);
-    console.log(search);
+    if (e.target.value === "") {
+      getCourses();
+    } else {
+      const filteredCourses = courses.filter((course) =>
+        course.courseName.toLowerCase().includes(e.target.value.toLowerCase())
+      );
+      setCourses(filteredCourses);
+    }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form Submitted, and values are:");
-    console.log(courseName, courseFee, courseDuration);
-    alert("Check console for values");
-  };
+  
+    function getCourses() {
+      const respone = service.get(`course/all`)
+      respone.then((res) => {
+        setCourses(res.data);
+      })
+        .catch((error) => {
+          console.error('Error fetching data:', error);
+        });
+    }
 
-  useEffect(() => {
+    useEffect(() => {
     getCourses();
-  }, []);
+  }, [service]);
 
+//new course 
+const newCourse = {
+ courseName:courseName,
+  courseFee: courseFee,
+     courseDuration:  courseDuration,
+  
+};
 
-  function getCourses() {
-    const respone = service.get(`course/all`)
-    respone.then((res) => {
-      setCourses(res.data);
-    })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-      });
-  }
-
+//create new course function
+function createCourse(e) {
+  e.preventDefault();
+  const response = service.post(`course/`, newCourse);
+  response.then((res) => {
+    alert("New Course Added");
+    window.location.reload();
+  }).catch((err) => {
+    console.log(err);
+  })
+}
 
 
   return (
@@ -57,7 +80,7 @@ const ManageCourses = () => {
       <div className={styles.container}>
         <div className={styles.subContainer}>
           <p className={styles.heading}>Manage Courses</p>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={createCourse}>
             <InputField
               lable={"Course Name"}
               placeholder={"Enter Course Name"}

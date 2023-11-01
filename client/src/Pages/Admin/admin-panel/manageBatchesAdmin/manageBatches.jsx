@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from "react";
+import { React, useState, useEffect, useMemo } from "react";
 
 // Styles
 import styles from "./manageBatches.module.css";
@@ -29,28 +29,48 @@ const ManageBatches = () => {
   const [branch, setBranch] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [state, setState] = useState("");
+  const [batchState, setBatchState] = useState("");
 
   const [search, setSearch] = useState("");
   const [batches, setBatches] = useState([]);
 
-  const service = new Service();
+  const service = useMemo(() => new Service(), []);
 
-  const courseList = [
-    { _id: "1", name: "Software Engineering" },
-    { _id: "2", name: "Cyber Security" },
-    { _id: "3", name: "Data Science" },
-  ];
+  //get all courses and list them in the dropdown id:courseName name:courseName
+  useEffect(() => {
+    const respone = service.get(`course/all`)
+    respone.then((res) => {
+      setCourseList(res.data);
+    }).catch((err) => {
+      alert(err);
+    })
+  }, [service]);
 
-  const branchList = [
-    { _id: "1", name: "Malabe" },
-    { _id: "2", name: "Metro" },
-    { _id: "3", name: "Kandy" },
-  ];
+  const [courseList, setCourseList] = useState([]);
+
+  const courseListAll = courseList.map((item) => {
+    return { _id: item.courseName, name: item.courseName };
+  });
+
+  //get all branches and list them in the dropdown id:branchName name:branchName
+  useEffect(() => {
+    const respone = service.get(`branch/all`)
+    respone.then((res) => {
+      setBranchList(res.data);
+    }).catch((err) => {
+      alert(err);
+    })
+  }, [service]);
+
+  const [branchList, setBranchList] = useState([]);
+
+  const branchListAll = branchList.map((item) => {
+    return { _id: item.branchName, name: item.branchName };
+  });
 
   const stateList = [
-    { _id: "1", name: "Active" },
-    { _id: "2", name: "Inactive" },
+    { _id: "Active", name: "Active" },
+    { _id: "Inactive", name: "Inactive" },
   ];
 
   const handleSearch = (e) => {
@@ -68,66 +88,68 @@ const ManageBatches = () => {
   };
 
   const handleStateChange = (e) => {
-    setState(e.target.value);
+    setBatchState(e.target.value);
   };
 
   useEffect(() => {
+    function getBatches() {
+      const respone = service.get(`batch/all`)
+      respone.then((res) => {
+        setBatches(res.data);
+      })
+        .catch((error) => {
+          console.error('Error fetching data:', error);
+        });
+    }
+
     getBatches();
-  }, []);
+  }, [service]);
 
+  //new batch 
+  const newBatch = {
+    batchCode: batchCode,
+    course: course,
+    branch: branch,
+    startDate: startDate,
+    endDate: endDate,
+    batchState: batchState,
+  };
 
-  function getBatches() {
-    const respone = service.get(`batch/all`)
-    respone.then((res) => {
-      setBatches(res.data);
+  //create new batch function
+  function createBatch(e) {
+    e.preventDefault();
+    const response = service.post(`batch/`, newBatch);
+    response.then((res) => {
+      alert("New Batch Added");
+      window.location.reload();
+    }).catch((err) => {
+      console.log(err);
     })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-      });
   }
 
-  // End
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form Submitted, and values are:");
-    console.log(batchCode, course, branch, startDate, endDate, state);
-    alert("Check console for values");
-  };
   return (
     <>
       <div className={styles.container}>
         <div className={styles.subContainer}>
           <p className={styles.heading}>Create New Batch</p>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={createBatch}>
             <InputField
               lable={"Batch Code"}
               placeholder={"Enter Batch Code"}
               setValue={setBatchCode}
               style={{ width: "300px" }}
             />
-            {/* <InputField
-              lable={"Course"}
-              placeholder={"Enter Course"}
-              setValue={setCourse}
-              style={{ width: "300px" }}
-            /> */}
-            {/* <InputField
-              lable={"Branch"}
-              placeholder={"Enter Branch"}
-              setValue={setBranch}
-              style={{ width: "300px" }}
-            /> */}
+
             <DropdownField
               lable={"Course"}
-              list={courseList}
+              list={courseListAll}
               handleOptionChange={handleCourseChange}
               selectedBranch={course}
               style={{ width: "318px" }}
             />
             <DropdownField
               lable={"Branch"}
-              list={branchList}
+              list={branchListAll}
               handleOptionChange={handleBranchChange}
               selectedBranch={branch}
               style={{ width: "318px" }}
@@ -135,24 +157,21 @@ const ManageBatches = () => {
             <InputField
               lable={"Start Date"}
               placeholder={"Enter Start Date"}
+              setValue={setStartDate}
               style={{ width: "300px" }}
             />
             <InputField
               lable={"End Date"}
               placeholder={"Enter End Date"}
+              setValue={setEndDate}
               style={{ width: "300px" }}
             />
-            {/* <InputField
-              lable={"Batch State"}
-              placeholder={"Enter Batch State"}
-              setValue={setState}
-              style={{ width: "300px" }}
-            /> */}
+
             <DropdownField
               lable={"Batch State"}
               list={stateList}
               handleOptionChange={handleStateChange}
-              selectedBranch={state}
+              selectedBranch={batchState}
               style={{ width: "318px" }}
             />
             <div style={{ display: "flex", justifyContent: "center" }}>

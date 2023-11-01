@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from "react";
+import { React, useState, useEffect, useMemo } from "react";
 import { useNavigate, useParams } from 'react-router-dom'
 
 import Service from "../../../../utilities/httpService";
@@ -16,28 +16,44 @@ const UpdateBatches = () => {
   const Param = useParams();
   const id = Param.id;
 
-  const service = new Service();
+  const service = useMemo(() => new Service(), []);
 
-  const courseList = [
-    { _id: "Software Engineering", name: "Software Engineering" },
-    { _id: "Cyber Security", name: "Cyber Security" },
-    { _id: "Data Science", name: "Data Science" },
-  ];
+  //get all courses and list them in the dropdown id:courseName name:courseName
+  useEffect(() => {
+    const respone = service.get(`course/all`)
+    respone.then((res) => {
+      setCourseList(res.data);
+    }).catch((err) => {
+      alert(err);
+    })
+  }, [service]);
 
-  const branchList = [
-    { _id: "Malabe", name: "Malabe" },
-    { _id: "Metro", name: "Metro" },
-    { _id: "Kandy", name: "Kandy" },
-  ];
+  const [courseList, setCourseList] = useState([]);
+
+  const courseListAll = courseList.map((item) => {
+    return { _id: item.courseName, name: item.courseName };
+  });
+
+  //get all branches and list them in the dropdown id:branchName name:branchName
+  useEffect(() => {
+    const respone = service.get(`branch/all`)
+    respone.then((res) => {
+      setBranchList(res.data);
+    }).catch((err) => {
+      alert(err);
+    })
+  }, [service]);
+
+  const [branchList, setBranchList] = useState([]);
+
+  const branchListAll = branchList.map((item) => {
+    return { _id: item.branchName, name: item.branchName };
+  });
 
   const stateList = [
     { _id: "Active", name: "Active" },
     { _id: "Inactive", name: "Inactive" },
   ];
-
-  useEffect(() => {
-    loadBatch();
-  }, []);
 
   const [batchCode, setBatchCode] = useState("");
   const [course, setCourse] = useState("");
@@ -46,22 +62,26 @@ const UpdateBatches = () => {
   const [endDate, setEndDate] = useState("");
   const [batchState, setBatchState] = useState("");
 
+  //get all batch details and set them to the fields
+  useEffect(() => {
+    function loadBatch() {
+      const response = service.get(`batch/${id}`);
+      response.then((res) => {
+        setBatchCode(res.data.batchCode);
+        setCourse(res.data.course);
+        setBranch(res.data.branch);
+        setStartDate(res.data.startDate);
+        setEndDate(res.data.endDate);
+        setBatchState(res.data.batchState);
+      }).catch((err) => {
+        alert(err);
+      });
+    }
 
-  function loadBatch() {
-    const respone = service.get(`batch/${id}`)
-    respone.then((res) => {
-      setBatchCode(res.data.batchCode);
-      setCourse(res.data.course);
-      setBranch(res.data.branch);
-      setStartDate(res.data.startDate);
-      setEndDate(res.data.endDate);
-      setBatchState(res.data.batchState);
+    loadBatch();
+  }, [id, service]);
 
-    }).catch((err) => {
-      alert(err);
-    })
-  };
-
+  //update batch details
   const data = {
     batchCode: batchCode,
     course: course,
@@ -71,6 +91,7 @@ const UpdateBatches = () => {
     batchState: batchState,
   };
 
+  //update batch details function
   function editBatch(e) {
     const respone = service.put(`batch`, id, data)
     respone.then((res) => {
@@ -111,13 +132,13 @@ const UpdateBatches = () => {
             />
             <DropdownField
               lable={"Course"}
-              list={courseList}
+              list={courseListAll}
               handleOptionChange={handleCourseChange}
               style={{ width: "318px" }}
             />
             <DropdownField
               lable={"Branch"}
-              list={branchList}
+              list={branchListAll}
               selectedBranch={branch}
               handleOptionChange={handleBranchChange}
               style={{ width: "318px" }}

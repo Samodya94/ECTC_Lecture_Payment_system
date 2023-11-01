@@ -1,4 +1,4 @@
-import { React, useState, useEffect, useMemo } from "react";
+import { React, useState, useEffect, useMemo, useCallback } from "react";
 
 // Styles
 import styles from "./manageBatches.module.css";
@@ -75,7 +75,14 @@ const ManageBatches = () => {
 
   const handleSearch = (e) => {
     setSearch(e.target.value);
-    console.log(search);
+    if (e.target.value === "") {
+      getBatches();
+    } else {
+      const filteredBatches = batches.filter((batch) =>
+        batch.batchCode.toLowerCase().includes(e.target.value.toLowerCase())
+      );
+      setBatches(filteredBatches);
+    }
   };
 
   // Handling the dropdown fields
@@ -91,19 +98,20 @@ const ManageBatches = () => {
     setBatchState(e.target.value);
   };
 
-  useEffect(() => {
-    function getBatches() {
-      const respone = service.get(`batch/all`)
-      respone.then((res) => {
+  const getBatches = useCallback(() => {
+    const response = service.get(`batch/all`);
+    response
+      .then((res) => {
         setBatches(res.data);
       })
-        .catch((error) => {
-          console.error('Error fetching data:', error);
-        });
-    }
-
-    getBatches();
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
   }, [service]);
+
+  useEffect(() => {
+    getBatches();
+  }, [getBatches]);
 
   //new batch 
   const newBatch = {

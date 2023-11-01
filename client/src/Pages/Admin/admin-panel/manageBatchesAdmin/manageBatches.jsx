@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 
 // Styles
 import styles from "./manageBatches.module.css";
@@ -10,7 +10,8 @@ import PrimaryButton from "../../components/primaryButton";
 import SearchField from "../../components/searchField";
 import DropdownField from "../../components/dropdownField";
 
-import data from "./sampleData";
+import Service from "../../../../utilities/httpService";
+
 
 const tableColumns = [
   "Batch Code",
@@ -31,6 +32,9 @@ const ManageBatches = () => {
   const [state, setState] = useState("");
 
   const [search, setSearch] = useState("");
+  const [batches, setBatches] = useState([]);
+
+  const service = new Service();
 
   const courseList = [
     { _id: "1", name: "Software Engineering" },
@@ -66,6 +70,21 @@ const ManageBatches = () => {
   const handleStateChange = (e) => {
     setState(e.target.value);
   };
+
+  useEffect(() => {
+    getBatches();
+  }, []);
+
+
+  function getBatches() {
+    const respone = service.get(`batch/all`)
+    respone.then((res) => {
+      setBatches(res.data);
+    })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  }
 
   // End
 
@@ -155,7 +174,7 @@ const ManageBatches = () => {
           <p className={styles.subHeading}>Manage Batches</p>
           <SearchField lable={"Search By Name"} handleChange={handleSearch} />
           <div>
-            <TableComponent columns={tableColumns} rows={data} />
+            <TableComponent columns={tableColumns} rows={batches} />
           </div>
         </div>
       </div>

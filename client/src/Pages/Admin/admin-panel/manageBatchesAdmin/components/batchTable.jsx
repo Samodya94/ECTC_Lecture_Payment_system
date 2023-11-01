@@ -136,8 +136,8 @@ const TableComponent = ({ rows, columns }) => {
             {(rowsPerPage > 0
               ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               : rows
-            ).map((row, index) => (
-              <TableRow key={index} style={{ border: "1px solid #ccc" }}>
+            ).map((row, _id) => (
+              <TableRow key={row._id} style={{ border: "1px solid #ccc" }}>
                 <TableCell
                   component="th"
                   scope="row"
@@ -173,7 +173,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {row.startDate}
+                  {row.startDate.slice(0, 10)}
                 </TableCell>
                 <TableCell
                   style={{
@@ -182,7 +182,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {row.endDate}
+                  {row.endDate.slice(0, 10)}
                 </TableCell>
                 <TableCell
                   style={{
@@ -191,7 +191,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {row.state}
+                  {row.batchState}
                 </TableCell>
                 <TableCell
                   style={{
@@ -204,7 +204,8 @@ const TableComponent = ({ rows, columns }) => {
                   <div className={styles.btnContainer}>
                     <button
                       className={styles.editBtn}
-                      onClick={() => navigate("update")}
+                      //pass the _id value and navigate update
+                      onClick={() => navigate(`update/${row._id}`)}
                     >
                       {" "}
                       Edit{" "}

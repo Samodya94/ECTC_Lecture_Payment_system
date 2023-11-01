@@ -82,10 +82,24 @@ const deleteBatch = asyncHandler(async (req, res) => {
     res.status(200).json({ id: req.params.id });
 });
 
+//get batch by id
+const getBatchById = asyncHandler(async (req, res) => {
+    const batch = await Batch.findById(req.params.id);
+
+    if (!batch) {
+        res.status(404);
+        throw new Error('Batch not found');
+    }
+
+    res.status(200).json(batch);
+});
+
+
 module.exports = {
     createBatch,
     putBatch,
     deleteBatch,
     getBatch,
     getallBatches,
+    getBatchById
 };

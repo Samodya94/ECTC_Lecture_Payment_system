@@ -3,7 +3,7 @@ import React from "react";
 // Styles
 import styles from "./styles/inputField.module.css";
 
-const InputField = ({ lable, placeholder, setValue, style }) => {
+const InputField = ({ lable, placeholder, setValue, style, value }) => {
   return (
     <>
       <div className={styles.container}>
@@ -14,6 +14,7 @@ const InputField = ({ lable, placeholder, setValue, style }) => {
           id="courseName"
           placeholder={placeholder}
           onChange={(e) => setValue(e.target.value)}
+          value={value}
           style={style}
         />
       </div>

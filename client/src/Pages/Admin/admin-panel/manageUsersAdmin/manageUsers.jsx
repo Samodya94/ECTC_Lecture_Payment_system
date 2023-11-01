@@ -1,4 +1,4 @@
-import { React, useEffect, useState } from "react";
+import { React, useEffect, useState, useMemo } from "react";
 
 import styles from "./manageUsers.module.css";
 
@@ -32,13 +32,7 @@ const ManageUsers = () => {
   const [search, setSearch] = useState("");
   const [users, setUsers] = useState([]);
 
-  const service = new Service();
-
-  const courseList = [
-    { _id: "1", name: "Software Engineering" },
-    { _id: "2", name: "Cyber Security" },
-    { _id: "3", name: "Data Science" },
-  ];
+  const service = useMemo(() => new Service(), []);
 
   const branchList = [
     { _id: "1", name: "Malabe" },
@@ -55,7 +49,7 @@ const ManageUsers = () => {
 
   useEffect(() => {
     getUsers();
-  }, []);
+  }, [getUsers]);
 
 
   function getUsers() {
@@ -71,7 +65,14 @@ const ManageUsers = () => {
 
   const handleSearch = (e) => {
     setSearch(e.target.value);
-    console.log(e.target.value);
+    if (e.target.value === "") {
+      getUsers();
+    } else {
+      const filteredUsers = users.filter((user) =>
+        user.fullname.toLowerCase().includes(e.target.value.toLowerCase())
+      );
+      setUsers(filteredUsers);
+    }
   };
 
 

@@ -1,4 +1,4 @@
-import { React, useEffect, useState, useMemo } from "react";
+import { React, useEffect, useState, useMemo, useCallback } from "react";
 
 import styles from "./manageUsers.module.css";
 
@@ -47,21 +47,21 @@ const ManageUsers = () => {
     { _id: "3", name: "Accounts" },
   ];
 
-  useEffect(() => {
-    getUsers();
-  }, [getUsers]);
-
-
-  function getUsers() {
-    const respone = service.get(`users/all`)
-    respone.then((res) => {
-      setUsers(res.data);
-    })
+  const getUsers = useCallback(() => {
+    const response = service.get(`users/all`);
+    response
+      .then((res) => {
+        setUsers(res.data);
+      })
       .catch((error) => {
         console.error('Error fetching data:', error);
       });
-  }
+  }, [service]);
 
+  useEffect(() => {
+    getUsers();
+
+  }, [getUsers]);
 
   const handleSearch = (e) => {
     setSearch(e.target.value);

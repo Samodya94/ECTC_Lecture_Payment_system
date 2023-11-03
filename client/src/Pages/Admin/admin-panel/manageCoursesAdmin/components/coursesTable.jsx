@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { useTheme } from "@mui/material/styles";
+import Service from "../../../../../utilities/httpService";
 
 // MUI Table components
 import {
@@ -111,6 +112,11 @@ const TableComponent = ({ rows, columns }) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+  const service = React.useMemo(() => new Service(), []);
+    //delete batch by getting the row id
+    const deleteCourse = (id) => {
+      service.delete(`course/${id}`);
+    };
   return (
     <>
       <TableContainer
@@ -172,7 +178,17 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="center"
                 >
-                  <button className={styles.removeBtn}> Remove </button>
+                  {/* <button className={styles.removeBtn}> Remove </button> */}
+                  <button
+                      className={styles.removeBtn}
+                      //pass the _id value and pop up a confirmation modal to confirm delete
+                      onClick={() => {
+                        if (window.confirm("Are you sure you want to delete this batch?")) {
+                          deleteCourse(row._id);
+                          window.location.reload();
+                        }
+                      }}
+                    > Remove </button>
                 </TableCell>
               </TableRow>
             ))}

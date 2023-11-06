@@ -1,12 +1,12 @@
 
 const express = require('express');
 const router = express.Router();
-const { getLecturer, createLecturer, deleteLecturer, putLecturer } = require('../controllers/lecturerController');
-const { authorize } = require('../middleware/authMiddleware');
+const { getLecturer, createLecturer, deleteLecturer, putLecturer, getallLecturers } = require('../controllers/lecturerController');
 
-const branchAccessControl = authorize(["Admin"]);
+router.post('/', createLecturer);
+router.get('/', getLecturer);
+router.put('/:id', putLecturer);
+router.delete('/:id', deleteLecturer);
+router.get('/all', getallLecturers);
 
-router.post('/', branchAccessControl, createLecturer).get('/', branchAccessControl, getLecturer);
-router.put('/:id',branchAccessControl, putLecturer).delete('/:id',branchAccessControl, deleteLecturer);
-
-module.exports = router ;
+module.exports = router;

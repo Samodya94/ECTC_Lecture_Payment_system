@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const lecturerSchema = mongoose.Schema({
-    
+
     nic: {
         type: String,
         required: [true, 'Please Enter NIC'],
@@ -37,8 +37,8 @@ const lecturerSchema = mongoose.Schema({
         required: [true, 'Please enter a value'],
     },
 },
-{
-    timestamps: true,
-});
+    {
+        timestamps: true,
+    });
 
 module.exports = mongoose.model('Lecturer', lecturerSchema);

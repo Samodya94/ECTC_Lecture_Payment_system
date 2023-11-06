@@ -18,7 +18,7 @@ app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/branch', protectUser, require('./routes/branchRoutes'));
 app.use('/api/batch', protectUser, require('./routes/batchRoutes'));
 app.use('/api/course', protectUser, require('./routes/courseRoutes'));
-//app.use('/api/lecturer', protectUser, require('./routes/lecturerRoutes'));
+app.use('/api/lecturer', protectUser, require('./routes/lecturerRoutes'));
 app.use('/api/coverage', protectUser, require('./routes/approveLectureCoverageRoutes'));
 
 app.use(errorHandler);

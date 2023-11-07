@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState, useCallback, useEffect, useMemo } from "react";
 
 // Styles
 import styles from "./manageLecturers.module.css";
@@ -10,8 +10,7 @@ import PrimaryButton from "../../components/primaryButton";
 import SearchField from "../../components/searchField";
 import DropdownField from "../../components/dropdownField";
 
-// Sample data for table
-import data from "./sampleData";
+import Service from "../../../../utilities/httpService";
 
 const tableColumns = [
   "Name",
@@ -25,58 +24,101 @@ const tableColumns = [
 ];
 
 const ManageLecturers = () => {
-  const [NIC, setNIC] = useState("");
+  const [nic, setNic] = useState("");
   const [username, setUsername] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [emailAddress, setEmailAddress] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [branch, setBranch] = useState("");
-  const registerDate = new Date().toLocaleDateString();
 
   const [search, setSearch] = useState("");
+  const [lecturers, setLecturers] = useState([]);
 
-  const branchList = [
-    { _id: "1", name: "Malabe" },
-    { _id: "2", name: "Metro" },
-    { _id: "3", name: "Kandy" },
-  ];
+  const service = useMemo(() => new Service(), []);
+
+  //get all branches and list them in the dropdown id:branchName name:branchName
+  useEffect(() => {
+    const respone = service.get(`branch/all`)
+    respone.then((res) => {
+      setBranchList(res.data);
+    }).catch((err) => {
+      alert(err);
+    })
+  }, [service]);
+
+  const [branchList, setBranchList] = useState([]);
+
+  const branchListAll = branchList.map((item) => {
+    return { _id: item.branchName, name: item.branchName };
+  });
+
+  const getLecturers = useCallback(() => {
+    const response = service.get(`lecturer/`);
+    response
+      .then((res) => {
+        setLecturers(res.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  }, [service]);
+
+  useEffect(() => {
+    getLecturers();
+
+  }, [getLecturers]);
 
   const handleSearch = (e) => {
     setSearch(e.target.value);
-    console.log(search);
+    if (e.target.value === "") {
+      getLecturers();
+    } else {
+      const filteredLectures = lecturers.filter((lecturer) =>
+        lecturer.firstName.toLowerCase().includes(e.target.value.toLowerCase())
+      );
+      setLecturers(filteredLectures);
+    }
   };
 
   const handleBranchChange = (e) => {
     setBranch(e.target.value);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form Submitted, and values are:");
-    console.log(
-      NIC,
-      username,
-      firstName,
-      lastName,
-      emailAddress,
-      phoneNumber,
-      branch,
-      registerDate
-    );
-    alert("Check console for values");
+  //new lecturer 
+  const newLecturer = {
+    nic: nic,
+    username: username,
+    firstName: firstName,
+    lastName: lastName,
+    email: email,
+    phone: phone,
+    branch: branch,
+    password: "ectc",
   };
+
+  //create new lecturer function
+  function createLecturer(e) {
+    e.preventDefault();
+    const response = service.post(`lecturer/`, newLecturer);
+    response.then((res) => {
+      alert("New Lecturer Added");
+      window.location.reload();
+    }).catch((err) => {
+      console.log(err);
+    })
+  }
 
   return (
     <>
       <div className={styles.container}>
         <div className={styles.subContainer}>
           <p className={styles.heading}>Lecturer Registration</p>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={createLecturer}>
             <InputField
               lable={"NIC"}
               placeholder={"Enter NIC"}
-              setValue={setNIC}
+              setValue={setNic}
               style={{ width: "300px" }}
             />
             <InputField
@@ -100,18 +142,18 @@ const ManageLecturers = () => {
             <InputField
               lable={"Email"}
               placeholder={"Enter Email Address"}
-              setValue={setEmailAddress}
+              setValue={setEmail}
               style={{ width: "300px" }}
             />
             <InputField
               lable={"Phone Number"}
               placeholder={"Enter Phone Number"}
-              setValue={setPhoneNumber}
+              setValue={setPhone}
               style={{ width: "300px" }}
             />
             <DropdownField
               lable={"Branch"}
-              list={branchList}
+              list={branchListAll}
               handleOptionChange={handleBranchChange}
               selectedBranch={branch}
               style={{ width: "318px" }}
@@ -147,7 +189,7 @@ const ManageLecturers = () => {
           <p className={styles.subHeading}>Lecturer Details</p>
           <SearchField lable={"Search By Name"} handleChange={handleSearch} />
           <div>
-            <TableComponent columns={tableColumns} rows={data} />
+            <TableComponent columns={tableColumns} rows={lecturers} />
           </div>
         </div>
       </div>

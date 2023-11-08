@@ -183,7 +183,7 @@ const TableComponent = ({ rows, columns }) => {
                       className={styles.removeBtn}
                       //pass the _id value and pop up a confirmation modal to confirm delete
                       onClick={() => {
-                        if (window.confirm("Are you sure you want to delete this batch?")) {
+                        if (window.confirm("Are you sure you want to delete this course?")) {
                           deleteCourse(row._id);
                           window.location.reload();
                         }

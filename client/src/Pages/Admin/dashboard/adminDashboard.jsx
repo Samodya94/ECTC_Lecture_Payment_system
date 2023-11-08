@@ -17,7 +17,7 @@ const AdminDashboard = () => {
 
   //get all courses and count them
   useEffect(() => {
-    const respone = service.get(`course/all`)
+    const respone = service.get(`course/`)
     respone.then((res) => {
       setTotalCourses(res.data.length);
     }).catch((err) => {

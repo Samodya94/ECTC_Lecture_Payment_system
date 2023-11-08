@@ -18,14 +18,9 @@ const ManageCourses = () => {
   const [courseDuration, setCourseDuration] = useState("");
   const [search, setSearch] = useState("");
   const [courses, setCourses] = useState([]);
-  //const service = new Service();
+
   const service = useMemo(() => new Service(), []);
 
-
-  // const handleSearch = (e) => {
-  //   setSearch(e.target.value);
-  //   console.log(search);
-  // };
 
   const handleSearch = (e) => {
     setSearch(e.target.value);
@@ -39,23 +34,8 @@ const ManageCourses = () => {
     }
   };
 
-
-  //   function getCourses() {
-  //     const respone = service.get(`course/all`)
-  //     respone.then((res) => {
-  //       setCourses(res.data);
-  //     })
-  //       .catch((error) => {
-  //         console.error('Error fetching data:', error);
-  //       });
-  //   }
-
-  //   useEffect(() => {
-  //   getCourses();
-  // }, [service]);
-
   const getCourses = useCallback(() => {
-    const response = service.get(`course/all`);
+    const response = service.get(`course/`);
     response
       .then((res) => {
         setCourses(res.data);

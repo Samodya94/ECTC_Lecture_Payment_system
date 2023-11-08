@@ -55,7 +55,7 @@ const ManageCourses = () => {
   // }, [service]);
 
   const getCourses = useCallback(() => {
-    const response = service.get(`course/all`);
+    const response = service.get(`course/`);
     response
       .then((res) => {
         setCourses(res.data);

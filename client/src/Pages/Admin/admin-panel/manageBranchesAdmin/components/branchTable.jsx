@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import Service from "../../../../../utilities/httpService";
 
 // MUI components
 import { useTheme } from "@mui/material/styles";
@@ -111,6 +112,12 @@ const TableComponent = ({ rows, columns }) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
+  const service = React.useMemo(() => new Service(), []);
+    
+    const deleteBranch = (id) => {
+      service.delete(`branch/${id}`);
+    };
   return (
     <>
       <TableContainer
@@ -153,7 +160,13 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="center"
                 >
-                  <button className={styles.removeBtn}> Remove </button>
+                  <button className={styles.removeBtn}
+                   onClick={() => {
+                    if (window.confirm("Are you sure you want to delete this branch?")) {
+                      deleteBranch(row._id);
+                      window.location.reload();
+                    }
+                  }}> Remove </button>
                 </TableCell>
               </TableRow>
             ))}

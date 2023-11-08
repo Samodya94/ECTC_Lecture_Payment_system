@@ -38,7 +38,7 @@ const ManageBatches = () => {
 
   //get all courses and list them in the dropdown id:courseName name:courseName
   useEffect(() => {
-    const respone = service.get(`course/all`)
+    const respone = service.get(`course/`)
     respone.then((res) => {
       setCourseList(res.data);
     }).catch((err) => {
@@ -49,7 +49,7 @@ const ManageBatches = () => {
   const [courseList, setCourseList] = useState([]);
 
   const courseListAll = courseList.map((item) => {
-    return { _id: item.courseName, name: item.courseName };
+    return { _id: item.courseName, name: item.courseName + "  ( " + item.courseDuration + "months )" };
   });
 
   //get all branches and list them in the dropdown id:branchName name:branchName
@@ -135,12 +135,48 @@ const ManageBatches = () => {
     })
   }
 
+  //function to get course duration
+  async function getCourseDuration(courseName) {
+    try {
+      const response = await service.get(`course/${courseName}`);
+      console.log(response.data.courseDuration);
+      return response.data.courseDuration;
+    } catch (err) {
+      console.log(err);
+      throw err; // rethrow the error to be caught by the calling function
+    }
+  }
+
+
+  //function to check course duration month > end date- start date 
+  async function checkCourseDuration(e) {
+    e.preventDefault();
+    try {
+      const duration = await getCourseDuration(newBatch.course);
+      const start = new Date(newBatch.startDate);
+      const end = new Date(newBatch.endDate);
+      const diffTime = Math.abs(end - start);
+      const diffMonths = Math.ceil(diffTime / (1000 * 60 * 60 * 24 * 30));
+
+      console.log(diffMonths);
+      console.log(duration);
+
+      if (diffMonths < duration) {
+        alert("Batch Duration is less than the course duration");
+      } else {
+        createBatch(e);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   return (
     <>
       <div className={styles.container}>
         <div className={styles.subContainer}>
           <p className={styles.heading}>Create New Batch</p>
-          <form onSubmit={createBatch}>
+          <form onSubmit={checkCourseDuration}>
             <InputField
               lable={"Batch Code"}
               placeholder={"Enter Batch Code"}

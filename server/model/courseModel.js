@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const courseSchema = mongoose.Schema({
-    
+
     courseName: {
         type: String,
         required: [true, 'Please Enter Course Name'],
@@ -12,12 +12,12 @@ const courseSchema = mongoose.Schema({
         required: [true, 'Please Enter Course Fee'],
     },
     courseDuration: {
-        type: String,
+        type: Number,
         required: [true, 'Please select a coursr Duration'],
     },
 },
-{
-    timestamps: true,
-});
+    {
+        timestamps: true,
+    });
 
 module.exports = mongoose.model('Course', courseSchema);

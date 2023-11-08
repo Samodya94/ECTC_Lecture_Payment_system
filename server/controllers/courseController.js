@@ -6,23 +6,37 @@ const getCourse = asyncHandler(async (req, res) => {
     res.status(200).json(course);
 });
 
-const getCourseNames = asyncHandler(async (req, res) => {
-    const courseName = await Course.find({}, 'courseName');
-    res.status(200).json(courseName);
+const getCourseByName = asyncHandler(async (req, res) => {
+    try {
+        const course = await Course.findOne({ courseName: req.params.courseName });
+        if (!course) {
+            res.status(404).json({ message: 'Course not found' });
+            return;
+        }
+
+        res.status(200).json({
+            id: course._id,
+            courseName: course.courseName,
+            courseFee: course.courseFee,
+            courseDuration: course.courseDuration,
+        });
+    } catch (error) {
+        res.status(500).json({ message: 'Server Error' });
+    }
 });
 
-const createCourse = asyncHandler(async (req,res) => {
+const createCourse = asyncHandler(async (req, res) => {
     const { courseName, courseFee, courseDuration } = req.body;
     console.log(courseName, courseFee, courseDuration);
 
-    if(!courseName || !courseFee || !courseDuration) {
+    if (!courseName || !courseFee || !courseDuration) {
         res.status(400);
         throw new Error('Please Fill All Fields');
     }
 
     const courseNameExists = await Course.findOne({ courseName });
 
-    if(courseNameExists) {
+    if (courseNameExists) {
         res.status(400);
         throw new Error('Course Already Exists');
     }
@@ -33,7 +47,7 @@ const createCourse = asyncHandler(async (req,res) => {
         courseDuration,
     });
 
-    if(course) {
+    if (course) {
         res.status(200).json({
             _id: course.id,
             courseName: course.courseName,
@@ -41,8 +55,8 @@ const createCourse = asyncHandler(async (req,res) => {
             courseDuration: course.courseDuration,
         });
     } else {
-            res.status(400);
-            throw new Error('Invalid Course Details');
+        res.status(400);
+        throw new Error('Invalid Course Details');
     }
 
     res.json({ message: 'New Course Created' });
@@ -76,17 +90,11 @@ const putCourse = asyncHandler(async (req, res) => {
     res.status(200).json(updatedCourse);
 });
 
-const getallCourses = asyncHandler(async (req, res) => {
-    const course = await Course.find();
-    res.status(200).json(course);
-});
-
 module.exports = {
     getCourse,
     createCourse,
     putCourse,
     deleteCourse,
-    getCourseNames,
-    getallCourses
+    getCourseByName,
 };
 

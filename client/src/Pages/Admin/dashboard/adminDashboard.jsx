@@ -13,6 +13,7 @@ const AdminDashboard = () => {
 
   const [totalCourses, setTotalCourses] = useState(0);
   const [totalBatches, setTotalBatches] = useState(0);
+  const [totalLecturers, setTotalLecturers] = useState(0);
 
   //get all courses and count them
   useEffect(() => {
@@ -34,13 +35,23 @@ const AdminDashboard = () => {
     })
   }, [service]);
 
+  //get all lecturers and count them
+  useEffect(() => {
+    const respone = service.get(`lecturer/`)
+    respone.then((res) => {
+      setTotalLecturers(res.data.length);
+    }).catch((err) => {
+      alert(err);
+    })
+  }, [service]);
+
 
   return (
     <>
       <div className={styles.container}>
         <InfoCard icon={"totBatch"} label={"Total Batches"} count={totalBatches} />
         <InfoCard icon={"totCourse"} label={"Total Courses"} count={totalCourses} />
-        <InfoCard icon={"totLecturer"} label={"Total Lecturers"} count="150" />
+        <InfoCard icon={"totLecturer"} label={"Total Lecturers"} count={totalLecturers} />
       </div>
     </>
   );

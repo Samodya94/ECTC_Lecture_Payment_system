@@ -27,6 +27,7 @@ import LastPageIcon from "@mui/icons-material/LastPage";
 // Styles
 import styles from "./batchTable.module.css";
 
+import Service from "../../../../../utilities/httpService";
 function TablePaginationActions(props) {
   const theme = useTheme();
   const { count, page, rowsPerPage, onPageChange } = props;
@@ -102,6 +103,14 @@ const TableComponent = ({ rows, columns }) => {
 
   const navigate = useNavigate();
 
+  const service = React.useMemo(() => new Service(), []);
+
+  //delete batch by getting the row id
+  const deleteBatch = (id) => {
+    service.delete(`batch/${id}`);
+  };
+
+
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
@@ -125,6 +134,7 @@ const TableComponent = ({ rows, columns }) => {
             <TableRow className={styles.tHead}>
               {columns.map((column, index) => (
                 <TableCell
+                  key={index}
                   style={{ border: "1px solid #ccc", padding: "8px 16px" }}
                 >
                   <span className={styles.tHead}>{column}</span>
@@ -136,8 +146,8 @@ const TableComponent = ({ rows, columns }) => {
             {(rowsPerPage > 0
               ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               : rows
-            ).map((row, index) => (
-              <TableRow key={index} style={{ border: "1px solid #ccc" }}>
+            ).map((row, _id) => (
+              <TableRow key={row._id} style={{ border: "1px solid #ccc" }}>
                 <TableCell
                   component="th"
                   scope="row"
@@ -173,7 +183,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {row.startDate}
+                  {row.startDate.slice(0, 10)}
                 </TableCell>
                 <TableCell
                   style={{
@@ -182,7 +192,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {row.endDate}
+                  {row.endDate.slice(0, 10)}
                 </TableCell>
                 <TableCell
                   style={{
@@ -191,7 +201,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {row.state}
+                  {row.batchState}
                 </TableCell>
                 <TableCell
                   style={{
@@ -204,12 +214,22 @@ const TableComponent = ({ rows, columns }) => {
                   <div className={styles.btnContainer}>
                     <button
                       className={styles.editBtn}
-                      onClick={() => navigate("update")}
+                      //pass the _id value and navigate update
+                      onClick={() => navigate(`update/${row._id}`)}
                     >
                       {" "}
                       Edit{" "}
                     </button>
-                    <button className={styles.removeBtn}> Remove </button>
+                    <button
+                      className={styles.removeBtn}
+                      //pass the _id value and pop up a confirmation modal to confirm delete
+                      onClick={() => {
+                        if (window.confirm("Are you sure you want to delete this batch?")) {
+                          deleteBatch(row._id);
+                          window.location.reload();
+                        }
+                      }}
+                    > Remove </button>
                   </div>
                 </TableCell>
               </TableRow>

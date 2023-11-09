@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState, useEffect, useMemo, useCallback } from "react";
 
 // Styles
 import styles from "./manageCourses.module.css";
@@ -8,9 +8,7 @@ import TableComponent from "./components/coursesTable";
 import InputField from "../../components/inputField";
 import PrimaryButton from "../../components/primaryButton";
 import SearchField from "../../components/searchField";
-
-// Sample data for table
-import data from "./sampleData";
+import Service from "../../../../utilities/httpService";
 
 const tableColumns = ["Course Name", "Course Fee", "Course Duration", "Action"];
 
@@ -19,25 +17,66 @@ const ManageCourses = () => {
   const [courseFee, setCourseFee] = useState("");
   const [courseDuration, setCourseDuration] = useState("");
   const [search, setSearch] = useState("");
+  const [courses, setCourses] = useState([]);
+
+  const service = useMemo(() => new Service(), []);
+
 
   const handleSearch = (e) => {
     setSearch(e.target.value);
-    console.log(search);
+    if (e.target.value === "") {
+      getCourses();
+    } else {
+      const filteredCourses = courses.filter((course) =>
+        course.courseName.toLowerCase().includes(e.target.value.toLowerCase())
+      );
+      setCourses(filteredCourses);
+    }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form Submitted, and values are:");
-    console.log(courseName, courseFee, courseDuration);
-    alert("Check console for values");
+  const getCourses = useCallback(() => {
+    const response = service.get(`course/`);
+    response
+      .then((res) => {
+        setCourses(res.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  }, [service]);
+
+  useEffect(() => {
+    getCourses();
+
+  }, [getCourses]);
+
+  //new course 
+  const newCourse = {
+    courseName: courseName,
+    courseFee: courseFee,
+    courseDuration: courseDuration,
+
   };
+
+  //create new course function
+  function createCourse(e) {
+    e.preventDefault();
+    const response = service.post(`course/`, newCourse);
+    response.then((res) => {
+      alert("New Course Added");
+      window.location.reload();
+    }).catch((err) => {
+      console.log(err);
+    })
+  }
+
 
   return (
     <>
       <div className={styles.container}>
         <div className={styles.subContainer}>
           <p className={styles.heading}>Manage Courses</p>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={createCourse}>
             <InputField
               lable={"Course Name"}
               placeholder={"Enter Course Name"}
@@ -75,7 +114,7 @@ const ManageCourses = () => {
           <p className={styles.subHeading}>Course Details</p>
           <SearchField lable={"Search By Name"} handleChange={handleSearch} />
           <div>
-            <TableComponent columns={tableColumns} rows={data} />
+            <TableComponent columns={tableColumns} rows={courses} />
           </div>
         </div>
       </div>

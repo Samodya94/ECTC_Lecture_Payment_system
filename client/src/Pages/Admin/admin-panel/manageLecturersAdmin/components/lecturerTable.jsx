@@ -26,6 +26,8 @@ import LastPageIcon from "@mui/icons-material/LastPage";
 // Styles
 import styles from "./lecturerTable.module.css";
 
+import Service from "../../../../../utilities/httpService";
+
 function TablePaginationActions(props) {
   const theme = useTheme();
   const { count, page, rowsPerPage, onPageChange } = props;
@@ -99,6 +101,13 @@ const TableComponent = ({ rows, columns }) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
+  const service = React.useMemo(() => new Service(), []);
+
+  //delete lecturer by getting the row id
+  const deleteLecturer = (id) => {
+    service.delete(`lecturer/${id}`);
+  };
+
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
@@ -122,6 +131,7 @@ const TableComponent = ({ rows, columns }) => {
             <TableRow className={styles.tHead}>
               {columns.map((column, index) => (
                 <TableCell
+                  key={index}
                   style={{ border: "1px solid #ccc", padding: "8px 16px" }}
                 >
                   <span className={styles.tHead}>{column}</span>
@@ -133,8 +143,8 @@ const TableComponent = ({ rows, columns }) => {
             {(rowsPerPage > 0
               ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               : rows
-            ).map((row, index) => (
-              <TableRow key={index} style={{ border: "1px solid #ccc" }}>
+            ).map((row, _id) => (
+              <TableRow key={_id} style={{ border: "1px solid #ccc" }}>
                 <TableCell
                   component="th"
                   scope="row"
@@ -179,7 +189,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {row.phoneNumber}
+                  {row.phone}
                 </TableCell>
                 <TableCell
                   style={{
@@ -197,7 +207,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {row.registeredDate}
+                  {row.createdAt.slice(0, 10)}
                 </TableCell>
                 <TableCell
                   style={{
@@ -207,7 +217,16 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="center"
                 >
-                  <button className={styles.removeBtn}> Remove </button>
+                  <button
+                    className={styles.removeBtn}
+                    //pass the _id value and pop up a confirmation modal to confirm delete
+                    onClick={() => {
+                      if (window.confirm("Are you sure you want to delete this lecturer?")) {
+                        deleteLecturer(row._id);
+                        window.location.reload();
+                      }
+                    }}>
+                    Remove </button>
                 </TableCell>
               </TableRow>
             ))}

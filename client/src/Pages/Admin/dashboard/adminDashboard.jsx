@@ -1,4 +1,4 @@
-import React from "react";
+import { React, useEffect, useState, useMemo } from "react";
 
 // Styles
 import styles from "./adminDashboard.module.css";
@@ -6,13 +6,52 @@ import styles from "./adminDashboard.module.css";
 // Components
 import InfoCard from "./components/infoCard";
 
+import Service from "../../../utilities/httpService";
+
 const AdminDashboard = () => {
+  const service = useMemo(() => new Service(), []);
+
+  const [totalCourses, setTotalCourses] = useState(0);
+  const [totalBatches, setTotalBatches] = useState(0);
+  const [totalLecturers, setTotalLecturers] = useState(0);
+
+  //get all courses and count them
+  useEffect(() => {
+    const respone = service.get(`course/`)
+    respone.then((res) => {
+      setTotalCourses(res.data.length);
+    }).catch((err) => {
+      alert(err);
+    })
+  }, [service]);
+
+  //get all batches and count them
+  useEffect(() => {
+    const respone = service.get(`batch/all`)
+    respone.then((res) => {
+      setTotalBatches(res.data.length);
+    }).catch((err) => {
+      alert(err);
+    })
+  }, [service]);
+
+  //get all lecturers and count them
+  useEffect(() => {
+    const respone = service.get(`lecturer/`)
+    respone.then((res) => {
+      setTotalLecturers(res.data.length);
+    }).catch((err) => {
+      alert(err);
+    })
+  }, [service]);
+
+
   return (
     <>
       <div className={styles.container}>
-        <InfoCard icon={"totBatch"} label={"Total Batches"} count="200" />
-        <InfoCard icon={"totCourse"} label={"Total Courses"} count="175" />
-        <InfoCard icon={"totLecturer"} label={"Total Lecturers"} count="150" />
+        <InfoCard icon={"totBatch"} label={"Total Batches"} count={totalBatches} />
+        <InfoCard icon={"totCourse"} label={"Total Courses"} count={totalCourses} />
+        <InfoCard icon={"totLecturer"} label={"Total Lecturers"} count={totalLecturers} />
       </div>
     </>
   );

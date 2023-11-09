@@ -7,6 +7,8 @@ import App from "../App";
 // Admin Pages
 import AdminLogin from "../Pages/Admin/loginPage/adminLogin";
 import LandingPage from "../Pages/Admin/landingPage/landingPage";
+import LecHome from "../Pages/Lecturer/lecHome";
+import LectureLogin from "../Pages/Lecturer/Login/LectureLogin";
 
 const AllRoutes = () => {
   return (
@@ -14,11 +16,14 @@ const AllRoutes = () => {
       <Routes>
         {/* Unprotected Routes */}
         <Route path="/admin-login" element={<AdminLogin />} />
+        <Route path="/lec-login" element={<LectureLogin/>}/>
 
         {/* Protected Routes */}
         <Route path="/" element={<App />}>
           <Route path="/admin/*" element={<LandingPage />} />
+          <Route path="/lecture/*" element={<LecHome/>}/>
         </Route>
+        
       </Routes>
     </Router>
   );

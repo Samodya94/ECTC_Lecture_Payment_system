@@ -7,7 +7,7 @@ const coverageSchema = mongoose.Schema({
         required: [true, 'Please Enter Coverage ID'],
         unique: true,
     },
-    lectureName: {
+    lectureid: {
         type: String,
     },
     courseName: {

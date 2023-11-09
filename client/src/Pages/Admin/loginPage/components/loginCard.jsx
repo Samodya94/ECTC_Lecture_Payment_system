@@ -12,6 +12,7 @@ import styles from "./loginCard.module.css";
 
 // Assets
 import logo from "../../../../assets/logo.jpg";
+import { Link } from "react-router-dom";
 
 const LoginCard = () => {
   const [username, setUsername] = useState("");
@@ -76,7 +77,7 @@ const LoginCard = () => {
           </form>
 
           {/* Buttons */}
-          <PrimaryButton
+          <Link to="/lec-login"><PrimaryButton
             label=">> Lecturer Login"
             style={{
               color: "white",
@@ -85,7 +86,7 @@ const LoginCard = () => {
               marginTop: "20px",
               backgroundColor: "#B60A21",
             }}
-          />
+          /></Link>
         </div>
       </div>
     </>

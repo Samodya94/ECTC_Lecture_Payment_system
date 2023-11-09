@@ -29,7 +29,6 @@ const PaymentsSchema = new mongoose.Schema({
         required: true,
     },
 
- 
     paidamount: {
         type: String,
         required: true,

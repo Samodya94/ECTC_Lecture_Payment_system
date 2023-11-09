@@ -6,6 +6,12 @@ const getBranch = asyncHandler(async (req, res) => {
     res.status(200).json(branches);
 });
 
+const getallBranches = asyncHandler(async (req, res) => {
+    const branch = await Branch.find();
+    res.status(200).json(branch);
+});
+
+
 const createBranch = asyncHandler(async (req, res) => {
     const { branchName } = req.body;
 
@@ -35,4 +41,5 @@ module.exports = {
     getBranch,
     createBranch,
     deleteBranch,
+    getallBranches,
 };

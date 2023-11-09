@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useEffect, useState, useMemo, useCallback } from "react";
 
 import styles from "./manageUsers.module.css";
 
@@ -10,7 +10,7 @@ import PrimaryButton from "../../components/primaryButton";
 import SearchField from "../../components/searchField";
 import PhotoUploadCard from "./components/photoUploadCard";
 
-import data from "./sampleData";
+import Service from "../../../../utilities/httpService";
 
 const tableColumns = [
   "Profile Image",
@@ -30,12 +30,9 @@ const ManageUsers = () => {
   const [profileImage, setProfileImage] = useState(null);
 
   const [search, setSearch] = useState("");
+  const [users, setUsers] = useState([]);
 
-  const courseList = [
-    { _id: "1", name: "Software Engineering" },
-    { _id: "2", name: "Cyber Security" },
-    { _id: "3", name: "Data Science" },
-  ];
+  const service = useMemo(() => new Service(), []);
 
   const branchList = [
     { _id: "1", name: "Malabe" },
@@ -50,10 +47,34 @@ const ManageUsers = () => {
     { _id: "3", name: "Accounts" },
   ];
 
+  const getUsers = useCallback(() => {
+    const response = service.get(`users/all`);
+    response
+      .then((res) => {
+        setUsers(res.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  }, [service]);
+
+  useEffect(() => {
+    getUsers();
+
+  }, [getUsers]);
+
   const handleSearch = (e) => {
     setSearch(e.target.value);
-    console.log(search);
+    if (e.target.value === "") {
+      getUsers();
+    } else {
+      const filteredUsers = users.filter((user) =>
+        user.fullname.toLowerCase().includes(e.target.value.toLowerCase())
+      );
+      setUsers(filteredUsers);
+    }
   };
+
 
   // Handling the dropdown fields
   const handleBranchChange = (e) => {
@@ -157,7 +178,7 @@ const ManageUsers = () => {
           <p className={styles.subHeading}>Manage Users</p>
           <SearchField lable={"Search By Name"} handleChange={handleSearch} />
           <div>
-            <TableComponent columns={tableColumns} rows={data} />
+            <TableComponent columns={tableColumns} rows={users} />
           </div>
         </div>
       </div>

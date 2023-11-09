@@ -1,15 +1,10 @@
 const mongoose = require('mongoose');
 
-const lecturerSchema = mongoose.Schema({
-
+const studentSchema = mongoose.Schema({
+    
     nic: {
         type: String,
         required: [true, 'Please Enter NIC'],
-        unique: true,
-    },
-    username: {
-        type: String,
-        required: [true, 'Please Enter the User Name'],
         unique: true,
     },
     firstName: {
@@ -32,13 +27,18 @@ const lecturerSchema = mongoose.Schema({
         type: String,
         required: [true, 'Please select a branch'],
     },
-    password: {
+    course: {
         type: String,
-        required: [true, 'Please enter a value'],
+        required: [true, 'Please select a course'],
     },
-},
-    {
-        timestamps: true,
-    });
+    batchCode: {
+        type: String,
+        required: [true, 'Please select a batch'],
+    },
 
-module.exports = mongoose.model('Lecturer', lecturerSchema);
+},
+{
+    timestamps: true,
+});
+
+module.exports = mongoose.model('Student', studentSchema);

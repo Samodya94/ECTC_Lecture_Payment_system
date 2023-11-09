@@ -7,7 +7,7 @@ const branchAccessControl = authorize(["Admin"]);
 
 router.post('/', protectUser, branchAccessControl, createUser);
 router.post('/login', loginUser);
-router.get('/', protectUser, branchAccessControl, getUser).delete('/:id',branchAccessControl, deleteUser);
+router.get('/', protectUser, branchAccessControl, getUser).delete('/:id', branchAccessControl, deleteUser);
 router.get('/all', protectUser, branchAccessControl, getallUsers)
 
 module.exports = router;

@@ -7,18 +7,29 @@ const getLecturer = asyncHandler(async (req, res) => {
     res.status(200).json(lecturer);
 });
 
-const createLecturer = asyncHandler(async (req,res) => {
+const getLecturerById = asyncHandler(async (req, res) => {
+    const lecturer = await Lecturer.findById(req.params.id);
+
+    if (!lecturer) {
+        res.status(404);
+        throw new Error('Lecturer not found');
+    }
+
+    res.status(200).json(lecturer);
+});
+
+const createLecturer = asyncHandler(async (req, res) => {
     const { nic, username, firstName, lastName, email, phone, branch, password } = req.body;
     console.log(nic, username, firstName, lastName, email, phone, branch, password);
 
-    if(!nic || !username || !firstName || !lastName || !email || !phone || !branch || !password) {
+    if (!nic || !username || !firstName || !lastName || !email || !phone || !branch || !password) {
         res.status(400);
         throw new Error('Please Fill All Fields');
     }
 
     const LecturerExists = await Lecturer.findOne({ nic });
 
-    if(LecturerExists) {
+    if (LecturerExists) {
         res.status(400);
         throw new Error('Lecturer Already Exists');
     }
@@ -27,17 +38,17 @@ const createLecturer = asyncHandler(async (req,res) => {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     const lecturer = await Lecturer.create({
-        nic, 
-        username, 
-        firstName, 
-        lastName, 
-        email, 
-        phone, 
+        nic,
+        username,
+        firstName,
+        lastName,
+        email,
+        phone,
         branch,
         password: hashedPassword,
     });
 
-    if(lecturer) {
+    if (lecturer) {
         res.status(200).json({
             _id: lecturer.id,
             nic: lecturer.nic,
@@ -49,8 +60,8 @@ const createLecturer = asyncHandler(async (req,res) => {
             branch: lecturer.branch,
         });
     } else {
-            res.status(400);
-            throw new Error('Invalid Lecturer Data');
+        res.status(400);
+        throw new Error('Invalid Lecturer Data');
     }
 
     res.json({ message: 'Lecturer Registered' });
@@ -89,5 +100,6 @@ module.exports = {
     createLecturer,
     putLecturer,
     deleteLecturer,
+    getLecturerById,
 };
 

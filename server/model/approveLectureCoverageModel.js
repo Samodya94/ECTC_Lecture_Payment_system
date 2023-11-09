@@ -36,6 +36,11 @@ const coverageSchema = mongoose.Schema({
         type: String,
         required: [true, 'Please select the Lecture Coverage'],
     },
+    status: {
+        type: String,
+        required: [true],
+        default:'Not Approved'
+    },
 },
 {
     timestamps: true,

@@ -7,9 +7,9 @@ const getCoverage = asyncHandler(async (req, res) => {
 });
 
 const createCoverage = asyncHandler(async (req, res) => {
-    const { coverageID ,lecturerName, courseName, batchCode, startTime, endTime, date, lectureCoverage } = req.body;
+    const { coverageID ,lecturerName, courseName, batchCode, startTime, endTime, date, lectureCoverage , status} = req.body;
 
-    if (!coverageID || !lecturerName || !courseName || !batchCode || !startTime || !endTime || ! date || ! lectureCoverage) {
+    if (!coverageID || !lecturerName || !courseName || !batchCode || !startTime || !endTime || ! date || ! lectureCoverage || ! status) {
         res.status(400).json({ message: 'Please Fill All Fields' });
         return;
     }
@@ -30,6 +30,7 @@ const createCoverage = asyncHandler(async (req, res) => {
         endTime, 
         date, 
         lectureCoverage,
+        status
     });
     
     if(coverage) {
@@ -43,6 +44,7 @@ const createCoverage = asyncHandler(async (req, res) => {
             endTime: coverage.endTime, 
             date: coverage.date, 
             lectureCoverage: coverage.lectureCoverage,
+            status:coverage.status
         });
     } else {
             res.status(400);

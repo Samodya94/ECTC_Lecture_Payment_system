@@ -6,6 +6,7 @@ import styles from "./manageBatches.module.css";
 // Components
 import TableComponent from "./components/batchTable";
 import InputField from "../../components/inputField";
+import InputFieldDate from "../../components/inputFieldDate";
 import PrimaryButton from "../../components/primaryButton";
 import SearchField from "../../components/searchField";
 import DropdownField from "../../components/dropdownField";
@@ -198,13 +199,13 @@ const ManageBatches = () => {
               selectedBranch={branch}
               style={{ width: "318px" }}
             />
-            <InputField
+            <InputFieldDate
               lable={"Start Date"}
               placeholder={"Enter Start Date"}
               setValue={setStartDate}
               style={{ width: "300px" }}
             />
-            <InputField
+            <InputFieldDate
               lable={"End Date"}
               placeholder={"Enter End Date"}
               setValue={setEndDate}

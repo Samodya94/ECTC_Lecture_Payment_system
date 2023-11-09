@@ -1,7 +1,6 @@
 import { useState } from "react";
 
 import { useLogin } from "../../../../hooks/useLogin";
-import Cookies from "js-cookie";
 
 // Import common components
 import InputField from "../../components/placeholderIntput";

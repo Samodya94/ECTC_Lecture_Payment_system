@@ -1,0 +1,49 @@
+@import url("../../../../../constants/fonts.css");
+
+.container {
+  border: 1px dotted red;
+  border-radius: 5px;
+  padding: 20px 10px;
+}
+
+.textContainer {
+  margin-bottom: 10px;
+}
+
+.heading {
+  font-family: var(--heading);
+  font-size: 1rem;
+  font-weight: 700;
+  color: #545454;
+  margin: 0;
+}
+
+.subHeading {
+  font-family: var(--heading);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #545454;
+  margin: 0;
+}
+
+.imageUploadDiv {
+  background-color: #f3b45b;
+  padding: 10px 10px;
+  border-radius: 3px;
+}
+
+.fileInput {
+  border: none;
+  color: white;
+}
+
+.profileImgPreview {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.profileImgPreview img {
+  width: 100px;
+  height: 100px;
+}

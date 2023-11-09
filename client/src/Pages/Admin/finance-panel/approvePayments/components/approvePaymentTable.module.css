@@ -1,0 +1,23 @@
+.tHead {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #293e56;
+}
+
+.approveBtn {
+  background-color: #00d400;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.viewBtn {
+  background-color: #f39c12;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+}

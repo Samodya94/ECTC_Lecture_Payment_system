@@ -1,36 +1,389 @@
-.content{
+@import url('https://fonts.googleapis.com/css2?family=Alkatra:wght@600;700&family=Anton&family=Bebas+Neue&family=Lexend:wght@500&family=Lobster&family=Merriweather:wght@700&family=Poppins&display=swap');
+
+.content {
     display: flex;
 }
 
-.sideNav{
-    flex:1;
-    height: 100vh;
+.sidenav-lec {
+    flex: 3;
     background: #2A3F54;
+    min-height: 100vh;
+}
+
+.min-sidenav,
+.min-sidenav2 {
+    flex: 1;
+}
+
+.min-sidenav {
+    display: none;
+}
+
+.lec-pg-content {
+    flex: 14;
+}
+
+.lecloginbody {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+}
+
+.lec-logo {
+    flex: 2;
+    background: #030574;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.lec-logo img {
+    width: 50%;
+}
+
+.lec-logo div {
+    text-align: center;
+    margin-top: 3vh;
+    font-size: 4rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.lec-loginform {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+    padding-left: 5vw;
+    justify-content: center;
+}
+
+.lec-loginform div {
+    margin: 15px 5px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.lec-loginform input {
+    padding: 10px;
+    width: 35%;
+    border: #9fa2a5 solid 2px;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.leclog_button {
+    text-align: center;
+    padding: 0.5vh 1vw;
+    color: #fff;
+    font-size: 1.2rem;
+    background: #030574;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    border-radius: 5px;
+}
+
+.cards {
+    display: flex;
+}
+
+.logo-lecsidenav {
+    padding-top: 2vh;
+    text-align: center;
+    margin-bottom: 4vh;
+}
+
+.sidenav_link {
+    width: 90%;
+    padding: 3%;
+}
+
+.sidenav_link1 {
+    width: 90%;
+    margin: 20% 5%;
+}
+
+.sidenav_link a {
+    display: flex;
+    align-items: center;
+    color: #fff;
+    width: 90%;
+    text-decoration: none;
+    padding-left: 2vw;
+    font-weight: 800;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.2rem;
+}
+
+.sidenav_link a:hover {
+    background: #fff;
+    color: #2A3F54;
+}
+
+.logo-lecsidenav img {
+    width: 60%;
+    margin: auto;
+}
+
+.min-sidenav2,
+.min-sidenav {
+    flex: 1;
+    text-align: center;
+    background: #2A3F54;
+    min-height: 100vh;
+}
+
+.sidenav_link1 a {
+    text-align: center;
+    color: #fff;
+    font-size: 1.5rem;
+    margin: 10px 10px;
+}
+
+.toggle-nav,
+.lgout {
+    flex: 1;
+}
+
+.lgout {
+    text-align: right;
+
+}
+
+.topnav {
+    display: flex;
+    padding: 2vh;
+    background: #e7e9ebe3;
+}
+
+.toggle_btn {
+    padding: 0.6rem;
+    font-size: 1rem;
+}
+
+.logout_btn {
+    padding: 0.4rem;
+    cursor: pointer;
+    background: transparent;
+    color: #585858;
+    border: none;
+    font-size: 1.5rem;
+}
+
+.card-row {
+    display: flex;
+    padding: 2vh 2vw;
+}
+
+.col-md-4 {
+    flex: 1;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    background: #EFEFEF;
+    width: 70%;
+    margin: auto;
+    padding: 15px;
+    padding-bottom: 0px;
+    min-height: 18vh;
+    justify-content: space-between;
+    box-shadow: 3px 3px 10px 3px rgba(0, 0, 0, 0.34);
+    -webkit-box-shadow: 3px 3px 10px 3px rgba(0, 0, 0, 0.34);
+    -moz-box-shadow: 3px 3px 10px 3px rgba(0, 0, 0, 0.34);
+}
+
+.card_title {
+    font-size: 1.4rem;
+    font-weight: 800;
+    font-family: 'Poppins', sans-serif;
+}
+
+.card_contet {
+    font-size: 3rem;
+    font-family: 'Anton';
+}
+
+.card-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top: 2px solid #585858;
+    text-align: center;
+    font-size: 1.3rem;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    font-weight: 700;
+    padding: 15px;
+}
+
+.card-bottom:hover {
+    background: #585858;
+    color: #fff;
+}
+
+.assign_batches {
+    width: 80%;
+    margin: auto;
+}
+
+.assign_batches h1 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.8rem;
+    color: #666768;
+}
+
+.assign_batches table {
+    width: 90%;
+    margin: auto;
+}
+
+.assign_batches table,th,td {
+    border: #585858 solid 1px;
+    border-collapse: collapse;
+    font-size: 1.1rem;
+}
+
+.assign_batches th,td{
+    width: 16%;
+    font-family: 'Lexend';
+    padding: 15px;
+}
+
+.add_coverage{
+    width: 90%;
+    padding: 1.5vh 2vw;
+    margin: auto;
+}
+
+.coverage_history{
+    margin: 2rem;
+}
+
+.add_coverage h1,.coverage_history h2{
+    font-family: 'Poppins', sans-serif;
+    font-size: 2.3rem;
+    font-weight: 800;
+    color: #585858;
+}
+
+
+
+.input_fields{
+   width: 80%;
+   margin: auto; 
+}
+
+.input_fields button{
+    font-weight: 600;
+}
+
+.pending_coverage{
+    padding: 50px;
+}
+
+.change_password{
+    width: 100%;
+    height: 90vh;
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.change_password h2{
+    font-weight: 800;
+}
+
+.change_password form{
+    width: 40%;
+    padding: 3%;
+    background: #EFEFEF;
+    flex-direction: column;
+    box-shadow: 3px 3px 10px 3px rgba(0, 0, 0, 0.34);
+    -webkit-box-shadow: 3px 3px 10px 3px rgba(0, 0, 0, 0.34);
+    -moz-box-shadow: 3px 3px 10px 3px rgba(0, 0, 0, 0.34);
+
+}
+
+.table_components{
+    width: 90%;
+    margin: auto;
+}
+
+@media (max-width: 1820px) {
+
+    .sidenav-lec {
+        flex: 2;
+    }
+
+    .lec-loginform input {
+        width: 60%;
+    }
+
+    .leclog_button {
+        text-align: center;
+        padding: 0.5vh 1.5vh;
+    }
+
+    .card_title {
+        font-size: 1.2rem;
+        font-weight: 800;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .card-bottom{
+        font-size: 1.1rem;
+    }
+
+    .lec-logo div {
+        font-size: 3rem;
+    }
+
     
 }
 
-.pgContent{
-    flex:5;
-    padding: 2rem;
-}
+@media (max-width: 1200px) {
 
-.cards{
-    display: flex;
-
-}
-
-
-
-
-@media (max-width: 1400px){
-        
-    .sideNav{
-        flex:2;
-        height: 100vh;
-        background: #2A3F54;
+    .sidenav-lec,
+    .min-sidenav2 {
+        display: none;
     }
 
-    .pgContent{
-        flex:5;
+    .card_title {
+        font-size: 1rem;
+        font-weight: 800;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .card-bottom{
+        font-size: 1rem;
+    }
+
+    .toggle_btn {
+        display: none;
+    }
+
+    .min-sidenav {
+        display: block;
+    }
+
+    .lec-loginform input {
+        width: 90%;
+    }
+
+    .lec-pg-content {
+        flex: 6;
+    }
+
+    .leclog_button {
+        text-align: center;
+        padding: 0.5vh 2vh;
+    }
+
+    .lec-logo div {
+        font-size: 2rem;
+
     }
 }

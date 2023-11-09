@@ -1,18 +1,16 @@
+
 import { BrowserRouter,Routes, Route} from "react-router-dom";
 
-import LecHome from "./Pages/Lecturer/lecHome";
 
 import './App.css';
+import { Outlet } from "react-router-dom";
+
 
 function App() {
   return (
     <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/lecindex" element=<LecHome/>></Route>
-          
-        </Routes>
-      </BrowserRouter>
+  
+    <Outlet/>
     </div>
   );
 }

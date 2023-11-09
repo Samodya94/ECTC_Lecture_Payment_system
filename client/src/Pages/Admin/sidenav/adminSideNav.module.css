@@ -1,0 +1,82 @@
+@import url("../../../constants/fonts.css");
+
+/* CollapsibleSideNav component styles */
+.sideNav {
+  bottom: 0;
+  width: 300px;
+  height: 100vh;
+  background-color: #293e56;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.3s;
+}
+
+.collapsed {
+  width: 50px; /* Adjust the collapsed width as needed */
+}
+
+.toggleButton {
+  cursor: pointer;
+  padding: 10px;
+  text-align: center;
+  background-color: #444;
+  border-bottom: 1px solid #555;
+}
+
+.logo {
+  width: 150px;
+  height: auto;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  align-self: center;
+}
+
+.ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  padding-bottom: 15px;
+  cursor: pointer;
+  font-family: var(--heading);
+  font-size: var(--ex-small);
+  font-weight: 700;
+}
+
+.liContainer {
+  display: flex;
+  align-items: center;
+}
+
+/* Hover effect for list items */
+.li:hover {
+  background-color: #293e5666;
+  opacity: 0.7;
+}
+
+.span {
+  margin-left: 10px;
+}
+
+.subMenu {
+  padding: 0;
+  margin: 0;
+  margin-left: 20px;
+}
+
+.subMenu li {
+  padding: 12px;
+  cursor: pointer;
+}
+
+.subMenu li:hover {
+  background-color: #293e5666;
+  opacity: 0.7;
+}

@@ -1,0 +1,52 @@
+.dropdownCard {
+  position: absolute;
+  min-width: 200px;
+  top: 60px; /* Adjust the top position as needed */
+  right: 20px; /* Adjust the left position as needed */
+  background-color: white;
+  border-radius: 5px;
+  border: 1px solid #eeedef;
+  padding: 10px;
+  z-index: 1000; /* Ensure it appears on top of other elements */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #eeedef;
+  cursor: pointer;
+  font-family: var(--heading);
+  font-size: var(--ex-small);
+  font-weight: 700;
+}
+
+.liContainer {
+  display: flex;
+  align-items: center;
+}
+
+.liContainer svg {
+  width: 20px;
+  height: 20px;
+  color: #293e56;
+}
+
+/* Hover effect for list items */
+.li:hover {
+  background-color: #eeedefcc;
+}
+
+.span {
+  font-size: small;
+  margin-left: 10px;
+  color: #293e56;
+}

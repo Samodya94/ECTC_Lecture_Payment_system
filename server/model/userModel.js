@@ -20,7 +20,7 @@ const userSchema = mongoose.Schema({
     },
     userLevel: {
         type: String,
-        enum: ['Admin', 'Manager', 'Finance'],
+        enum: ['Admin', 'Manager', 'Finance','Account'],
         default: 'Admin',
     },
     password: {

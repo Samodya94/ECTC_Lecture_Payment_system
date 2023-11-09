@@ -1,0 +1,13 @@
+:root {
+  --heading: "Open Sans", sans-serif;
+  --sub-heading: "Open Sans", sans-serif;
+  --search: "Open Sans", sans-serif;
+  --table-head: "Open Sans", sans-serif;
+  --button: "Open Sans", sans-serif;
+  --input-label: "Open Sans", sans-serif;
+  --placeholder: "Open Sans", sans-serif;
+  --large: 2.3rem;
+  --medium: 1.8rem;
+  --small: 0.95rem;
+  --ex-small: 0.85rem;
+}

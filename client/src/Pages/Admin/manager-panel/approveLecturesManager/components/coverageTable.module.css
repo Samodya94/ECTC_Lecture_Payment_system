@@ -1,0 +1,24 @@
+.tHead {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #293e56;
+}
+
+.regectBtn {
+  background-color: #f20c0c;
+  border: none;
+  padding: 8px 20px;
+  margin-top: 5px;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.approveBtn {
+  background-color: #00d400;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+}

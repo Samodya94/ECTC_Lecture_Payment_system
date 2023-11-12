@@ -125,6 +125,7 @@ const TableComponent = ({ rows, columns }) => {
             <TableRow className={styles.tHead}>
               {columns.map((column, index) => (
                 <TableCell
+                  key={index}
                   style={{ border: "1px solid #ccc", padding: "8px 16px" }}
                 >
                   <span className={styles.tHead}>{column}</span>
@@ -136,8 +137,8 @@ const TableComponent = ({ rows, columns }) => {
             {(rowsPerPage > 0
               ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               : rows
-            ).map((row) => (
-              <TableRow key={row.name} style={{ border: "1px solid #ccc" }}>
+            ).map((row, _id) => (
+              <TableRow key={row._id} style={{ border: "1px solid #ccc" }}>
                 <TableCell
                   component="th"
                   scope="row"
@@ -166,7 +167,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {row.courseName}
+                  {row.course}
                 </TableCell>
                 <TableCell
                   style={{
@@ -186,7 +187,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {row.payRate}
+                  {row.rate}
                 </TableCell>
                 <TableCell
                   style={{
@@ -196,7 +197,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {row.totalHours}
+                  {row.hours}
                 </TableCell>
                 <TableCell
                   style={{
@@ -206,7 +207,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {row.remainingHours}
+                  {row.hours}
                 </TableCell>
                 <TableCell
                   style={{

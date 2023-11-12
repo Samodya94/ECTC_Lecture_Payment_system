@@ -5,18 +5,16 @@ const assignBatchSchema = mongoose.Schema({
     lecturerNic: {
         type: String,
         required: [true, 'Please Enter Lecturer NIC'],
-        unique: true,
     },
     lecturerName: {
         type: String,
         required: [true, 'Please Enter Lecturer Name'],
-        unique: true,
     },
     course: {
         type: String,
         required: [true, 'Please Enter Course Name'],
     },
-    batchcode: {
+    batchCode: {
         type: String,
         required: [true, 'Please Enter Batch Code'],
     },

@@ -220,7 +220,7 @@ const TableComponent = ({ rows, columns }) => {
                   <div style={{ display: "flex", flexDirection: "row" }}>
                     <button
                       className={styles.viewBtn}
-                      onClick={() => navigate("view-assigned")}
+                      onClick={() => navigate(`view-assigned/${row._id}`)}
                     >
                       {" "}
                       View{" "}

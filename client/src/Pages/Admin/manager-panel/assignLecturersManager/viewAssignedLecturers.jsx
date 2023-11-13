@@ -1,75 +1,220 @@
-import { React, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { React, useState, useMemo, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 // Styles
 import styles from "./assignLecturers.module.css";
 
 // Components
-import InputField from "../../components/inputField";
+import InputFieldDis from "../../components/inputFieldDis";
 import PrimaryButton from "../../components/primaryButton";
+import DropdownField from "../../components/dropdownField";
+import InputNumField from "../../components/inputNumField";
+
+import Service from "../../../../utilities/httpService";
 
 const ViewAssignedLecturers = () => {
   const [lecturerName, setLecturerName] = useState("");
-  const [courseName, setCourseName] = useState("");
+  const [lecturerNic, setLecturerNic] = useState("");
+  const [course, setCourse] = useState("");
   const [batchCode, setBatchCode] = useState("");
-  const [paymentRate, setPaymentRate] = useState("");
-  const [noOfHours, setNoOfHours] = useState("");
-  const [hourlyRate, setHourlyRate] = useState("");
+  const [rate, setRate] = useState("");
+  const [hours, setHours] = useState("");
+
+  const service = useMemo(() => new Service(), []);
 
   const navigate = useNavigate();
+  const Param = useParams();
+  const id = Param.id;
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form Submitted, and values are:");
-    console.log(
-      lecturerName,
-      courseName,
-      batchCode,
-      paymentRate,
-      noOfHours,
-      hourlyRate
-    );
-    alert("Check console for values");
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   console.log("Form Submitted, and values are:");
+  //   console.log(
+  //     lecturerName,
+  //     course,
+  //     batchCode,
+  //     rate,
+  //     hours,
+  //   );
+  //   alert("Check console for values");
+  // };
+
+  useEffect(() => {
+    const respone = service.get(`lecturer/`)
+    respone.then((res) => {
+      setLecturerList(res.data);
+    }).catch((err) => {
+      alert(err);
+    })
+  }, [service]);
+
+  const [lecturerList, setLecturerList] = useState([]);
+
+  const lecturerListAll = lecturerList.map((item) => {
+    return { _id: item.firstName + " " + item.lastName, name: item.firstName + " " + item.lastName };
+  });
+
+  const handleLecturerChange = (e) => {
+    setLecturerName(e.target.value);
   };
+
+  useEffect(() => {
+    const respone = service.get(`batch/all`)
+    respone.then((res) => {
+      setBatchCodeList(res.data);
+    }).catch((err) => {
+      alert(err);
+    })
+  }, [service]);
+
+  const [batchCodeList, setBatchCodeList] = useState([]);
+
+  const batchCodeListAll = batchCodeList.map((item) => {
+    return { _id: item.batchCode, name: item.batchCode };
+  });
+
+  const handleBatchChange = (e) => {
+    setBatchCode(e.target.value);
+  };
+
+  const rateList = [
+    { _id: "Hourly Rate", name: "Hourly Rate" },
+    { _id: "30% Rate", name: "30% Rate" },
+  ];
+
+  const handleRateChange = (e) => {
+    setRate(e.target.value);
+  };
+
+  //get nic from lecturer name
+  async function getLecturerNic(lecturerName) {
+    try {
+      let nic = "";
+      lecturerList.forEach((item) => {
+        if (item.firstName + " " + item.lastName === lecturerName) {
+          nic = item.nic;
+        }
+      });
+      console.log(nic);
+      return nic;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  //get course from batch code
+  async function getCourse(batchCode) {
+    try {
+      let course = "";
+      batchCodeList.forEach((item) => {
+        if (item.batchCode === batchCode) {
+          course = item.course;
+        }
+      });
+      console.log(course);
+      return course;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  //get assigend batch details and set them to the fields
+  useEffect(() => {
+    function loadAssignBatch() {
+      const response = service.get(`assignbatch/${id}`);
+      response.then((res) => {
+        setLecturerName(res.data.lecturerName);
+        setLecturerNic(res.data.lecturerNic);
+        setBatchCode(res.data.batchCode);
+        setCourse(res.data.course);
+        setRate(res.data.rate);
+        setHours(res.data.hours);
+      }).catch((err) => {
+        alert(err);
+      });
+    }
+
+    loadAssignBatch();
+  }, [id, service]);
+
+  function editAssignBatch(e) {
+    e.preventDefault();
+    // Move the calls inside the function
+    const lecturerNic = getLecturerNic(lecturerName);
+    const course = getCourse(batchCode);
+
+    // Wait for both promises to resolve
+    Promise.all([lecturerNic, course])
+      .then(([nic, course]) => {
+        const assignBatch = {
+          lecturerNic: nic,
+          lecturerName: lecturerName,
+          course: course,
+          batchCode: batchCode,
+          rate: rate,
+          hours: hours,
+        };
+
+        const response = service.put(`assignbatch`, id, assignBatch);
+        response
+          .then((res) => {
+            alert("Edit Assigned to batch Successfully");
+            navigate('/admin/assign-batches');
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      })  // Catch any errors
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.subContainer}>
         <p className={styles.heading}>Assigned Course Details</p>
-        <form onSubmit={handleSubmit}>
-          <InputField
-            lable={"Lecturer Name"}
-            placeholder={"Enter Lecturer Name"}
-            setValue={setLecturerName}
+        <form onSubmit={editAssignBatch}>
+          <InputFieldDis
+            lable={"Lecturer NIC"}
+            placeholder={"Enter Lecturer NIC"}
+            value={lecturerNic}
             style={{ width: "300px" }}
           />
-          <InputField
+
+          <DropdownField
+            lable={"Lecturer Name"}
+            list={lecturerListAll}
+            handleOptionChange={handleLecturerChange}
+            selectedBranch={lecturerName}
+            style={{ width: "318px" }}
+          />
+          <InputFieldDis
             lable={"Course Name"}
             placeholder={"Enter Course Name"}
-            setValue={setCourseName}
+            value={course}
             style={{ width: "300px" }}
           />
-          <InputField
-            lable={"Batch Code"}
-            placeholder={"Enter Batch Code"}
-            setValue={setBatchCode}
-            style={{ width: "300px" }}
+          <DropdownField
+            lable={"Lecturer Name"}
+            list={batchCodeListAll}
+            handleOptionChange={handleBatchChange}
+            selectedBranch={batchCode}
+            style={{ width: "318px" }}
           />
-          <InputField
+          <DropdownField
             lable={"Payment Rate"}
-            placeholder={"Enter Rate"}
-            setValue={setPaymentRate}
-            style={{ width: "300px" }}
+            list={rateList}
+            handleOptionChange={handleRateChange}
+            selectedBranch={rate}
+            style={{ width: "318px" }}
           />
-          <InputField
+
+          <InputNumField
             lable={"No of Hours"}
             placeholder={"Enter No of Hours"}
-            setValue={setNoOfHours}
-            style={{ width: "300px" }}
-          />
-          <InputField
-            lable={"Hourly Rate (RS.)"}
-            placeholder={"Enter Hourly Rate"}
-            setValue={setHourlyRate}
+            value={hours}
+            setValue={setHours}
             style={{ width: "300px" }}
           />
           <div

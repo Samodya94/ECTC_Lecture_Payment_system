@@ -9,9 +9,6 @@ import TableComponent from "./components/assignedBatchesTable";
 import InputNumField from "../../components/inputNumField";
 import PrimaryButton from "../../components/primaryButton";
 
-// Sample data for table
-import data from "./sampleData";
-
 import Service from "../../../../utilities/httpService";
 import DropdownField from "../../components/dropdownField";
 

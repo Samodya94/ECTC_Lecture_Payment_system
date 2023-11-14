@@ -24,6 +24,7 @@ import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
 
+import Service from "../../../../../utilities/httpService";
 // Styles
 import styles from "./userTable.module.css";
 
@@ -130,6 +131,11 @@ const TableComponent = ({ rows, columns }) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+  const service = React.useMemo(() => new Service(), []);
+  //delete batch by getting the row id
+  const deleteUser = (id) => {
+    service.delete(`users/${id}`);
+  };
   return (
     <>
       <TableContainer
@@ -143,6 +149,7 @@ const TableComponent = ({ rows, columns }) => {
                 <TableCell
                   key={index}
                   style={{ border: "1px solid #ccc", padding: "8px 16px", cursor: "pointer" }}
+                  align="center"
                   onClick={() => handleSort(column)}
                 >
                   <span className={styles.tHead}>{column}</span>
@@ -159,28 +166,13 @@ const TableComponent = ({ rows, columns }) => {
               : sortedRows
             ).map((row, _id) => (
               <TableRow key={row._id} style={{ border: "1px solid #ccc" }}>
+               
                 <TableCell
-                  component="th"
-                  scope="row"
                   style={{
                     border: "1px solid #ccc",
                     padding: "5px 16px",
-                    width: "80px",
                   }}
                   align="center"
-                >
-                  <img
-                    src={row.profileImage}
-                    alt="User Profile"
-                    style={{ width: "45px" }}
-                  />
-                </TableCell>
-                <TableCell
-                  style={{
-                    border: "1px solid #ccc",
-                    padding: "5px 16px",
-                  }}
-                  align="left"
                 >
                   {row.fullname}
                 </TableCell>
@@ -189,7 +181,7 @@ const TableComponent = ({ rows, columns }) => {
                     border: "1px solid #ccc",
                     padding: "5px 16px",
                   }}
-                  align="left"
+                  align="center"
                 >
                   {row.username}
                 </TableCell>
@@ -198,7 +190,7 @@ const TableComponent = ({ rows, columns }) => {
                     border: "1px solid #ccc",
                     padding: "5px 16px",
                   }}
-                  align="left"
+                  align="center"
                 >
                   {row.email}
                 </TableCell>
@@ -208,7 +200,7 @@ const TableComponent = ({ rows, columns }) => {
                     padding: "5px 16px",
                     width: "100px",
                   }}
-                  align="left"
+                  align="center"
                 >
                   {row.userLevel
                     ? row.userLevel === "Admin"
@@ -231,7 +223,13 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="center"
                 >
-                  <button className={styles.removeBtn}> Remove </button>
+                  <button className={styles.removeBtn}
+                   onClick={() => {
+                    if (window.confirm("Are you sure you want to delete this user?")) {
+                      deleteUser(row._id);
+                      window.location.reload();
+                    }
+                  }}> Remove </button>
                 </TableCell>
               </TableRow>
             ))}

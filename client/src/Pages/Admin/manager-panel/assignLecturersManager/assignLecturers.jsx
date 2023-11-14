@@ -90,7 +90,6 @@ const AssignLecturers = () => {
           nic = item.nic;
         }
       });
-      console.log(nic);
       return nic;
     } catch (err) {
       console.log(err);
@@ -106,7 +105,6 @@ const AssignLecturers = () => {
           course = item.course;
         }
       });
-      console.log(course);
       return course;
     } catch (err) {
       console.log(err);
@@ -117,9 +115,17 @@ const AssignLecturers = () => {
     setLecturer(e.target.value);
   };
 
+  //search assigned batches by lecturer name and reset form to show all assigned batches
   const handleSearch = (e) => {
     e.preventDefault();
-    console.log(lecturerName);
+    if (lecturer === "") {
+      getAssignedBatches();
+    } else {
+      const response = assignedBatches.filter((item) => {
+        return item.lecturerName === lecturer;
+      });
+      setAssignedBatches(response);
+    }
   };
 
   const handleLecturerChange = (e) => {
@@ -132,6 +138,12 @@ const AssignLecturers = () => {
 
   const handleRateChange = (e) => {
     setPaymentRate(e.target.value);
+  };
+
+  const handleReset = (e) => {
+    e.preventDefault();
+    setLecturer("");
+    getAssignedBatches();
   };
 
   const rateList = [
@@ -228,11 +240,14 @@ const AssignLecturers = () => {
           <DropdownInput
             list={lecturerListAll}
             handleOptionChange={handleOptionChange}
-            selectedBranch={lecturerName}
+            selectedBranch={lecturer}
             style={{ width: "300px", marginLeft: "0" }}
           />
           <button className={styles.button} type="submit">
             View
+          </button>
+          <button className={styles.button} onClick={handleReset}>
+            Reset
           </button>
         </form>
         <div>

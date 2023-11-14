@@ -17,7 +17,6 @@ const assignBatchSchema = mongoose.Schema({
     batchCode: {
         type: String,
         required: [true, 'Please Enter Batch Code'],
-        unique: true,
     },
     rate: {
         type: String,

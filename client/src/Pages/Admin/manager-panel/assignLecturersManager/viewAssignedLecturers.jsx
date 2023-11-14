@@ -95,7 +95,6 @@ const ViewAssignedLecturers = () => {
           nic = item.nic;
         }
       });
-      console.log(nic);
       return nic;
     } catch (err) {
       console.log(err);
@@ -111,7 +110,6 @@ const ViewAssignedLecturers = () => {
           course = item.course;
         }
       });
-      console.log(course);
       return course;
     } catch (err) {
       console.log(err);

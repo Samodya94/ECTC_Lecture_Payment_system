@@ -20,7 +20,7 @@ const userSchema = mongoose.Schema({
     },
     userLevel: {
         type: String,
-        enum: ['Admin', 'Manager', 'Finance','Account'],
+        enum: ['Admin', 'Manager', 'Finance', 'Accounts'],
         default: 'Admin',
     },
     password: {
@@ -28,8 +28,8 @@ const userSchema = mongoose.Schema({
         required: [true, 'Please add a Password'],
     },
 },
-{
-    timestamps: true,
-});
+    {
+        timestamps: true,
+    });
 
 module.exports = mongoose.model('User', userSchema);

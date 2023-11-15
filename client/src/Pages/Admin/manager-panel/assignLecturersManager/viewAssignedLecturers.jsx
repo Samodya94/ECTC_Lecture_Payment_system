@@ -26,19 +26,6 @@ const ViewAssignedLecturers = () => {
   const Param = useParams();
   const id = Param.id;
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   console.log("Form Submitted, and values are:");
-  //   console.log(
-  //     lecturerName,
-  //     course,
-  //     batchCode,
-  //     rate,
-  //     hours,
-  //   );
-  //   alert("Check console for values");
-  // };
-
   useEffect(() => {
     const respone = service.get(`lecturer/`)
     respone.then((res) => {

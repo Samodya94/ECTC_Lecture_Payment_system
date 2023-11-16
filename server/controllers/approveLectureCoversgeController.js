@@ -86,10 +86,16 @@ const getCoverageNotApproved = asyncHandler(async (req, res) => {
     res.status(200).json(coverage);
 });
 
+//get all status = Approved
+const getCoverageApproved = asyncHandler(async (req, res) => {
+    const coverage = await Coverage.find({ status: "Approved" });
+    res.status(200).json(coverage);
+});
 module.exports = {
     createCoverage,
     getCoverage,
     putCoverage,
     deleteCoverage,
-    getCoverageNotApproved
+    getCoverageNotApproved,
+    getCoverageApproved
 };

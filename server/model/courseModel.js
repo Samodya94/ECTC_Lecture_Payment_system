@@ -15,6 +15,12 @@ const courseSchema = mongoose.Schema({
         type: Number,
         required: [true, 'Please select a coursr Duration'],
     },
+    batch_state:{
+        type:String,
+        required:true,
+        default:'T'
+    }
+
 },
     {
         timestamps: true,

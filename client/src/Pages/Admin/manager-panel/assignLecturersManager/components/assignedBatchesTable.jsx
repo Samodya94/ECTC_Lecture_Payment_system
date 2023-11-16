@@ -24,6 +24,8 @@ import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
 
+import Service from "../../../../../utilities/httpService";
+
 // Styles
 import styles from "./assignedBatchesTable.module.css";
 
@@ -101,6 +103,14 @@ const TableComponent = ({ rows, columns }) => {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const navigate = useNavigate();
+
+  const service = React.useMemo(() => new Service(), []);
+
+  //delete batch by getting the row id
+  const deleteAssignedBatch = (id) => {
+    service.delete(`assignbatch/${id}`);
+  };
+
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -225,7 +235,13 @@ const TableComponent = ({ rows, columns }) => {
                       {" "}
                       View{" "}
                     </button>
-                    <button className={styles.removeBtn}> Remove </button>
+                    <button className={styles.removeBtn}
+                      onClick={() => {
+                        if (window.confirm("Are you sure you want to remove this Assign Batch?")) {
+                          deleteAssignedBatch(row._id);
+                          window.location.reload();
+                        }
+                      }}> Remove </button>
                   </div>
                 </TableCell>
               </TableRow>

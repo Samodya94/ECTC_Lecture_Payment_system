@@ -23,6 +23,8 @@ import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
 
+import Service from "../../../../../utilities/httpService";
+
 // Styles
 import styles from "./coverageTable.module.css";
 
@@ -111,6 +113,56 @@ const TableComponent = ({ rows, columns }) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
+  const service = React.useMemo(() => new Service(), []);
+
+  const [lecturerNames, setLecturerNames] = React.useState({});
+
+  const getLecturerName = async (id) => {
+    try {
+      const response = await service.get(`lecturer/${id}`);
+      const lecturerName = response.data.firstName + " " + response.data.lastName;
+      setLecturerNames((prevNames) => ({
+        ...prevNames,
+        [id]: lecturerName,
+      }));
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setLecturerNames((prevNames) => ({
+        ...prevNames,
+        [id]: "", // Set an empty string or handle the error as needed
+      }));
+    }
+  };
+
+  // Fetch all lecturer names when the component mounts
+  React.useEffect(() => {
+    rows.forEach((row) => {
+      if (!lecturerNames[row.lectureid]) {
+        getLecturerName(row.lectureid);
+      }
+    });
+  }, [rows, lecturerNames]);
+
+  //update batch details function
+  const updateApproveCoverage = (id) => {
+    const data = {
+      status: "Approved",
+    };
+    console.log("Data to be sent:", data);
+
+    const response = service.put(`coverage`, id, data);
+    response
+      .then((res) => {
+        alert("Lecture Coverage Approved");
+        window.location.reload();
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
+
+
   return (
     <>
       <TableContainer
@@ -122,6 +174,7 @@ const TableComponent = ({ rows, columns }) => {
             <TableRow className={styles.tHead}>
               {columns.map((column, index) => (
                 <TableCell
+                  key={index}
                   style={{ border: "1px solid #ccc", padding: "8px 16px" }}
                 >
                   <span className={styles.tHead}>{column}</span>
@@ -133,8 +186,8 @@ const TableComponent = ({ rows, columns }) => {
             {(rowsPerPage > 0
               ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               : rows
-            ).map((row) => (
-              <TableRow key={row.name} style={{ border: "1px solid #ccc" }}>
+            ).map((row, _id) => (
+              <TableRow key={row._id} style={{ border: "1px solid #ccc" }}>
                 <TableCell
                   component="th"
                   scope="row"
@@ -143,7 +196,7 @@ const TableComponent = ({ rows, columns }) => {
                     padding: "5px 16px",
                   }}
                 >
-                  {row.lecturerName}
+                  {lecturerNames[row.lectureid] || "Loading..."}
                 </TableCell>
                 <TableCell
                   style={{
@@ -173,7 +226,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {row.date}
+                  {row.date.slice(0, 10)}
                 </TableCell>
                 <TableCell
                   style={{
@@ -223,7 +276,11 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="center"
                 >
-                  <button className={styles.approveBtn}> Approve </button>
+                  <button className={styles.approveBtn}
+                    onClick={() =>
+                      updateApproveCoverage(row._id)
+                    }
+                  > Approve </button>
                   <button className={styles.regectBtn}> Decline </button>
                 </TableCell>
               </TableRow>

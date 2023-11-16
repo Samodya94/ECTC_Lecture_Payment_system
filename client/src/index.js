@@ -4,12 +4,15 @@ import { AuthContextProvider } from "./context/AuthContext";
 
 // Routes page
 import AllRoutes from "./routes/routes";
+import { LecAuthContextProvider } from "./context/LecAuthContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <AuthContextProvider>
-      <AllRoutes />
+      <LecAuthContextProvider>
+        <AllRoutes />
+      </LecAuthContextProvider>
     </AuthContextProvider>
   </React.StrictMode>
 );

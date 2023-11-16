@@ -20,6 +20,7 @@ app.use('/api/batch', protectUser, require('./routes/batchRoutes'));
 app.use('/api/course', protectUser, require('./routes/courseRoutes'));
 app.use('/api/lecturer', protectUser, require('./routes/lecturerRoutes'));
 app.use('/api/coverage', protectUser, require('./routes/approveLectureCoverageRoutes'));
+app.use('/api/assignbatch', protectUser, require('./routes/AssignBatchesRoutes'));
 
 app.use(errorHandler);
 

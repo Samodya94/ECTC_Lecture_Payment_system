@@ -114,10 +114,10 @@ const TableComponent = ({ rows, columns }) => {
   };
 
   const service = React.useMemo(() => new Service(), []);
-    
-    const deleteBranch = (id) => {
-      service.delete(`branch/${id}`);
-    };
+
+  const deleteBranch = (id) => {
+    service.delete(`branch/${id}`);
+  };
   return (
     <>
       <TableContainer
@@ -129,6 +129,7 @@ const TableComponent = ({ rows, columns }) => {
             <TableRow className={styles.tHead}>
               {columns.map((column, index) => (
                 <TableCell
+                  key={index}
                   style={{ border: "1px solid #ccc", padding: "8px 16px" }}
                 >
                   <span className={styles.tHead}>{column}</span>
@@ -140,8 +141,8 @@ const TableComponent = ({ rows, columns }) => {
             {(rowsPerPage > 0
               ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               : rows
-            ).map((row, index) => (
-              <TableRow key={index} style={{ border: "1px solid #ccc" }}>
+            ).map((row, _id) => (
+              <TableRow key={_id} style={{ border: "1px solid #ccc" }}>
                 <TableCell
                   component="th"
                   scope="row"
@@ -161,12 +162,12 @@ const TableComponent = ({ rows, columns }) => {
                   align="center"
                 >
                   <button className={styles.removeBtn}
-                   onClick={() => {
-                    if (window.confirm("Are you sure you want to delete this branch?")) {
-                      deleteBranch(row._id);
-                      window.location.reload();
-                    }
-                  }}> Remove </button>
+                    onClick={() => {
+                      if (window.confirm("Are you sure you want to delete this branch?")) {
+                        deleteBranch(row._id);
+                        window.location.reload();
+                      }
+                    }}> Remove </button>
                 </TableCell>
               </TableRow>
             ))}

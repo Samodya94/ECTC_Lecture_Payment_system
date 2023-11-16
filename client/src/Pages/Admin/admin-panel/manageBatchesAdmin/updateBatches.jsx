@@ -62,7 +62,7 @@ const UpdateBatches = () => {
   const [endDate, setEndDate] = useState("");
   const [batchState, setBatchState] = useState("");
 
-  //get all batch details and set them to the fields
+  //get batch details and set them to the fields
   useEffect(() => {
     function loadBatch() {
       const response = service.get(`batch/${id}`);

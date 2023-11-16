@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState, useEffect, useMemo, useCallback } from "react";
 
 // Styles
 import styles from "./assignLecturers.module.css";
@@ -6,11 +6,11 @@ import styles from "./assignLecturers.module.css";
 // Components
 import DropdownInput from "./components/dropdownInput";
 import TableComponent from "./components/assignedBatchesTable";
-import InputField from "../../components/inputField";
+import InputNumField from "../../components/inputNumField";
 import PrimaryButton from "../../components/primaryButton";
 
-// Sample data for table
-import data from "./sampleData";
+import Service from "../../../../utilities/httpService";
+import DropdownField from "../../components/dropdownField";
 
 const tableColumns = [
   "Lecturer NIC",
@@ -23,60 +23,198 @@ const tableColumns = [
   "Action",
 ];
 
-const lecturerList = [
-  { _id: "1", name: "Asha Madushani" },
-  { _id: "2", name: "Dammika Priyasad" },
-  { _id: "3", name: "Charith Athulgala" },
-];
-
 const AssignLecturers = () => {
   const [lecturer, setLecturer] = useState("");
   const [lecturerName, setLecturerName] = useState("");
   const [batchCode, setBatchCode] = useState("");
   const [paymentRate, setPaymentRate] = useState("");
-  const [noOfHours, setNoOfHours] = useState("");
+  const [noOfHours, setNoOfHours] = useState(0);
+  const [assignedBatches, setAssignedBatches] = useState([]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form Submitted, and values are:");
-    console.log(lecturerName, batchCode, paymentRate, noOfHours);
-    alert("Check console for values");
-  };
+
+  const service = useMemo(() => new Service(), []);
+
+  const getAssignedBatches = useCallback(() => {
+    const response = service.get(`assignbatch/`);
+    response
+      .then((res) => {
+        setAssignedBatches(res.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  }, [service]);
+
+  useEffect(() => {
+    getAssignedBatches();
+  }, [getAssignedBatches]);
+
+  //get all lectures and list them in the dropdown id:courseName name:courseName
+  useEffect(() => {
+    const respone = service.get(`lecturer/`)
+    respone.then((res) => {
+      setLecturerList(res.data);
+    }).catch((err) => {
+      alert(err);
+    })
+  }, [service]);
+
+  const [lecturerList, setLecturerList] = useState([]);
+
+  const lecturerListAll = lecturerList.map((item) => {
+    return { _id: item.firstName + " " + item.lastName, name: item.firstName + " " + item.lastName };
+  });
+
+  //get all batches and list them in the dropdown id:courseName name:courseName
+  useEffect(() => {
+    const respone = service.get(`batch/all`)
+    respone.then((res) => {
+      setBatchCodeList(res.data);
+    }).catch((err) => {
+      alert(err);
+    })
+  }, [service]);
+
+  const [batchCodeList, setBatchCodeList] = useState([]);
+
+  const batchCodeListAll = batchCodeList.map((item) => {
+    return { _id: item.batchCode, name: item.batchCode };
+  });
+
+  //get nic from lecturer name
+  async function getLecturerNic(lecturerName) {
+    try {
+      let nic = "";
+      lecturerList.forEach((item) => {
+        if (item.firstName + " " + item.lastName === lecturerName) {
+          nic = item.nic;
+        }
+      });
+      return nic;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  //get course from batch code
+  async function getCourse(batchCode) {
+    try {
+      let course = "";
+      batchCodeList.forEach((item) => {
+        if (item.batchCode === batchCode) {
+          course = item.course;
+        }
+      });
+      return course;
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   const handleOptionChange = (e) => {
     setLecturer(e.target.value);
   };
 
+  //search assigned batches by lecturer name and reset form to show all assigned batches
   const handleSearch = (e) => {
     e.preventDefault();
-    console.log(lecturer);
+    if (lecturer === "") {
+      getAssignedBatches();
+    } else {
+      const response = assignedBatches.filter((item) => {
+        return item.lecturerName === lecturer;
+      });
+      setAssignedBatches(response);
+    }
   };
+
+  const handleLecturerChange = (e) => {
+    setLecturerName(e.target.value);
+  };
+
+  const handleBatchChange = (e) => {
+    setBatchCode(e.target.value);
+  };
+
+  const handleRateChange = (e) => {
+    setPaymentRate(e.target.value);
+  };
+
+  const handleReset = (e) => {
+    e.preventDefault();
+    setLecturer("");
+    getAssignedBatches();
+  };
+
+  const rateList = [
+    { _id: "Hourly Rate", name: "Hourly Rate" },
+    { _id: "30% Rate", name: "30% Rate" },
+  ];
+
+  function createAssignBatch(e) {
+    e.preventDefault();
+    // Move the calls inside the function
+    const lecturerNic = getLecturerNic(lecturerName);
+    const course = getCourse(batchCode);
+
+    // Wait for both promises to resolve
+    Promise.all([lecturerNic, course])
+      .then(([nic, course]) => {
+        const newAssignBatch = {
+          lecturerNic: nic,
+          lecturerName: lecturerName,
+          course: course,
+          batchCode: batchCode,
+          rate: paymentRate,
+          hours: noOfHours,
+        };
+
+        const response = service.post(`assignbatch/`, newAssignBatch);
+        response
+          .then((res) => {
+            alert("Lecturer Assigned to batch Successfully");
+            window.location.reload();
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      })  // Catch any errors
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
 
   return (
     <>
       <div className={styles.container}>
         <div className={styles.subContainer}>
           <p className={styles.heading}>Assign Lecturers to Courses</p>
-          <form onSubmit={handleSubmit}>
-            <InputField
+          <form onSubmit={createAssignBatch}>
+            <DropdownField
               lable={"Lecturer Name"}
-              placeholder={"Enter Lecturer Name"}
-              setValue={setLecturerName}
-              style={{ width: "300px" }}
+              list={lecturerListAll}
+              handleOptionChange={handleLecturerChange}
+              selectedBranch={lecturerName}
+              style={{ width: "318px" }}
             />
-            <InputField
+            <DropdownField
               lable={"Batch Code"}
-              placeholder={"Enter Batch Code"}
-              setValue={setBatchCode}
-              style={{ width: "300px" }}
+              list={batchCodeListAll}
+              handleOptionChange={handleBatchChange}
+              selectedBranch={batchCode}
+              style={{ width: "318px" }}
             />
-            <InputField
+
+            <DropdownField
               lable={"Payment Rate"}
-              placeholder={"Enter Rate"}
-              setValue={setPaymentRate}
-              style={{ width: "300px" }}
+              list={rateList}
+              handleOptionChange={handleRateChange}
+              selectedBranch={paymentRate}
+              style={{ width: "318px" }}
             />
-            <InputField
+
+            <InputNumField
               lable={"No of Hours"}
               placeholder={"Enter No of Hours"}
               setValue={setNoOfHours}
@@ -100,7 +238,7 @@ const AssignLecturers = () => {
         <p className={styles.subHeading}>Assigned Batches</p>
         <form className={styles.searchContainer} onSubmit={handleSearch}>
           <DropdownInput
-            list={lecturerList}
+            list={lecturerListAll}
             handleOptionChange={handleOptionChange}
             selectedBranch={lecturer}
             style={{ width: "300px", marginLeft: "0" }}
@@ -108,9 +246,12 @@ const AssignLecturers = () => {
           <button className={styles.button} type="submit">
             View
           </button>
+          <button className={styles.button} onClick={handleReset}>
+            Reset
+          </button>
         </form>
         <div>
-          <TableComponent columns={tableColumns} rows={data} />
+          <TableComponent columns={tableColumns} rows={assignedBatches} />
         </div>
       </div>
     </>

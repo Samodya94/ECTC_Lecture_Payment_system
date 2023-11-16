@@ -8,12 +8,12 @@ import TwoRowInput from "./components/twoRowInput";
 import TwoRowDropdown from "./components/twoRowDropdown";
 import PrimaryButton from "../../components/primaryButton";
 import SearchField from "../../components/searchField";
-import PhotoUploadCard from "./components/photoUploadCard";
+//import PhotoUploadCard from "./components/photoUploadCard";
 
 import Service from "../../../../utilities/httpService";
 
 const tableColumns = [
-  "Profile Image",
+  //"Profile Image",
   "Full Name",
   "Username",
   "Email",
@@ -27,24 +27,36 @@ const ManageUsers = () => {
   const [email, setEmail] = useState("");
   const [userLevel, setUserLevel] = useState("");
   const [username, setUsername] = useState("");
-  const [profileImage, setProfileImage] = useState(null);
+  
+  //const [profileImage, setProfileImage] = useState(null);
 
   const [search, setSearch] = useState("");
   const [users, setUsers] = useState([]);
 
   const service = useMemo(() => new Service(), []);
 
-  const branchList = [
-    { _id: "1", name: "Malabe" },
-    { _id: "2", name: "Metro" },
-    { _id: "3", name: "Kandy" },
-  ];
+  //get all branches and list them in the dropdown id:branchName name:branchName
+  useEffect(() => {
+    const respone = service.get(`branch/all`)
+    respone.then((res) => {
+      setBranchList(res.data);
+    }).catch((err) => {
+      alert(err);
+    })
+  }, [service]);
 
+  const [branchList, setBranchList] = useState([]);
+
+  const branchListAll = branchList.map((item) => {
+    return { _id: item.branchName, name: item.branchName };
+  });
+
+  
   const userLevels = [
-    { _id: "0", name: "Admin" },
-    { _id: "1", name: "Manager" },
-    { _id: "2", name: "Finance" },
-    { _id: "3", name: "Accounts" },
+    { _id: "Admin", name: "Admin" },
+    { _id: "Manager", name: "Manager" },
+    { _id: "Finance", name: "Finance" },
+    { _id: "Accounts", name: "Accounts" },
   ];
 
   const getUsers = useCallback(() => {
@@ -90,22 +102,39 @@ const ManageUsers = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Form Submitted, and values are:");
-    console.log(fullName, email, branch, username, userLevel, profileImage);
+    console.log(fullName, email, branch, username, userLevel);
     alert("Check console for values");
   };
+
+  //new user 
+  const newUser = {
+    fullname: fullName,
+    email: email,
+    branch: branch,
+    username: username,
+    password: "ectc",
+    userLevel: userLevel,
+  };
+
+  //create new batch function
+  function createUser(e) {
+    e.preventDefault();
+    const response = service.post(`users/`, newUser);
+    response.then((res) => {
+      alert("New User Added");
+      window.location.reload();
+    }).catch((err) => {
+      console.log(err);
+    })
+  }
   return (
     <>
       <div className={styles.container}>
         <div className={styles.subContainer}>
           <p className={styles.heading}>Manage Users</p>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={createUser}>
             <div className={styles.formContainer}>
-              <div>
-                <PhotoUploadCard
-                  profileImage={profileImage}
-                  setProfileImage={setProfileImage}
-                />
-              </div>
+             
               <div>
                 <div className={styles.inputContainer}>
                   <TwoRowInput
@@ -116,7 +145,7 @@ const ManageUsers = () => {
                   />
                   <TwoRowDropdown
                     lable={"Branch"}
-                    list={branchList}
+                    list={branchListAll}
                     handleOptionChange={handleBranchChange}
                     selectedBranch={branch}
                     style={{ width: "218px" }}
@@ -155,6 +184,7 @@ const ManageUsers = () => {
                       value={"ectc"}
                       disabled
                     />
+
                   </div>
                 </div>
               </div>

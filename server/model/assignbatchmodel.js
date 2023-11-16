@@ -1,16 +1,22 @@
 const mongoose = require('mongoose');
 
 const assignBatchSchema = mongoose.Schema({
-    lecturer: {
+
+    lecturerNic: {
+        type: String,
+        required: [true, 'Please Enter Lecturer NIC'],
+    },
+    lecturerName: {
         type: String,
         required: [true, 'Please Enter Lecturer Name'],
-        unique: true,
     },
-    course:{
+
+    course: {
         type: String,
-        required: [true, 'Please Select the course'],
+        required: [true, 'Please Enter Course Name'],
     },
-    batchcode: {
+    batchCode: {
+
         type: String,
         required: [true, 'Please Enter Batch Code'],
     },
@@ -19,7 +25,7 @@ const assignBatchSchema = mongoose.Schema({
         required: [true, 'Please Enter hourely rate'],
     },
     hours: {
-        type: String,
+        type: Number,
         required: [true, 'Please Select the no of hours'],
     },
     hourly_pay:{
@@ -31,8 +37,8 @@ const assignBatchSchema = mongoose.Schema({
         dafault:"T"
     },
 },
-{
-    timestamps: true,
-});
+    {
+        timestamps: true,
+    });
 
 module.exports = mongoose.model('AssignBatch', assignBatchSchema);

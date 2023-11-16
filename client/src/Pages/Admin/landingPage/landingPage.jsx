@@ -83,7 +83,7 @@ const LandingPage = () => {
           <Route path="approved-lectures" element={<ApprovedLectures />} />
           <Route path="assign-batches" element={<AssignLecturers />} />
           <Route
-            path="assign-batches/view-assigned"
+            path="assign-batches/view-assigned/:id"
             element={<ViewAssignedLecturers />}
           />
 

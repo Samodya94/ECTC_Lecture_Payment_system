@@ -24,6 +24,8 @@ import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
 
+import Service from "../../../../../utilities/httpService";
+
 // Styles
 import styles from "./assignedBatchesTable.module.css";
 
@@ -102,6 +104,14 @@ const TableComponent = ({ rows, columns }) => {
 
   const navigate = useNavigate();
 
+  const service = React.useMemo(() => new Service(), []);
+
+  //delete batch by getting the row id
+  const deleteAssignedBatch = (id) => {
+    service.delete(`assignbatch/${id}`);
+  };
+
+
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
@@ -125,6 +135,7 @@ const TableComponent = ({ rows, columns }) => {
             <TableRow className={styles.tHead}>
               {columns.map((column, index) => (
                 <TableCell
+                  key={index}
                   style={{ border: "1px solid #ccc", padding: "8px 16px" }}
                 >
                   <span className={styles.tHead}>{column}</span>
@@ -136,8 +147,8 @@ const TableComponent = ({ rows, columns }) => {
             {(rowsPerPage > 0
               ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               : rows
-            ).map((row) => (
-              <TableRow key={row.name} style={{ border: "1px solid #ccc" }}>
+            ).map((row, _id) => (
+              <TableRow key={row._id} style={{ border: "1px solid #ccc" }}>
                 <TableCell
                   component="th"
                   scope="row"
@@ -166,7 +177,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {row.courseName}
+                  {row.course}
                 </TableCell>
                 <TableCell
                   style={{
@@ -186,7 +197,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {row.payRate}
+                  {row.rate}
                 </TableCell>
                 <TableCell
                   style={{
@@ -196,7 +207,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {row.totalHours}
+                  {row.hours}
                 </TableCell>
                 <TableCell
                   style={{
@@ -206,7 +217,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {row.remainingHours}
+                  {row.hours}
                 </TableCell>
                 <TableCell
                   style={{
@@ -219,12 +230,18 @@ const TableComponent = ({ rows, columns }) => {
                   <div style={{ display: "flex", flexDirection: "row" }}>
                     <button
                       className={styles.viewBtn}
-                      onClick={() => navigate("view-assigned")}
+                      onClick={() => navigate(`view-assigned/${row._id}`)}
                     >
                       {" "}
                       View{" "}
                     </button>
-                    <button className={styles.removeBtn}> Remove </button>
+                    <button className={styles.removeBtn}
+                      onClick={() => {
+                        if (window.confirm("Are you sure you want to remove this Assign Batch?")) {
+                          deleteAssignedBatch(row._id);
+                          window.location.reload();
+                        }
+                      }}> Remove </button>
                   </div>
                 </TableCell>
               </TableRow>

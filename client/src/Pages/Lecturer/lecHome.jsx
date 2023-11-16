@@ -17,6 +17,7 @@ import { EditCoverage } from "./add_lecture_coverage/component/Edit_coverage";
 import { ChangePassword } from "./Change_Password";
 import { Coverage_History } from "./add_lecture_coverage/component/coverage_history";
 import { Lec_Payment_History } from "./Payments/payment_history";
+import { MarkAttendance } from "./Students/MarkAttendance";
 
 function LecHome() {
   const [toggle, setToggle] = useState("show");
@@ -75,6 +76,7 @@ function LecHome() {
               <Route path="change_password" element={<ChangePassword/>}/>
               <Route path="Coverage_History" element={<Coverage_History/>}/>
               <Route path="lec_pay_history" element={<Lec_Payment_History/>}/>
+              <Route path="mark_attendance" element={<MarkAttendance/>}/>
             </Routes>
           </div>
         </div>

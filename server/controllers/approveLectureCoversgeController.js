@@ -80,9 +80,16 @@ const putCoverage = asyncHandler(async (req, res) => {
     res.status(200).json(updatedCoverage);
 });
 
+//get all status = Not Approved
+const getCoverageNotApproved = asyncHandler(async (req, res) => {
+    const coverage = await Coverage.find({ status: "Not Approved" });
+    res.status(200).json(coverage);
+});
+
 module.exports = {
     createCoverage,
     getCoverage,
     putCoverage,
     deleteCoverage,
+    getCoverageNotApproved
 };

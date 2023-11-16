@@ -10,11 +10,13 @@ const assignBatchSchema = mongoose.Schema({
         type: String,
         required: [true, 'Please Enter Lecturer Name'],
     },
+
     course: {
         type: String,
         required: [true, 'Please Enter Course Name'],
     },
     batchCode: {
+
         type: String,
         required: [true, 'Please Enter Batch Code'],
     },
@@ -25,7 +27,15 @@ const assignBatchSchema = mongoose.Schema({
     hours: {
         type: Number,
         required: [true, 'Please Select the no of hours'],
-    }
+    },
+    hourly_pay:{
+        type: Number,
+    },
+    status:{
+        type: String,
+        required: true, 
+        dafault:"T"
+    },
 },
     {
         timestamps: true,

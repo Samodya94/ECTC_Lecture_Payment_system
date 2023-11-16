@@ -1,11 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const Lecturer = require('../model/lecturerModel');
 const bcrypt = require('bcryptjs');
-const jwt = require("jsonwebtoken");
-
-const createToken = (_id) => {
-  return jwt.sign({ _id }, process.env.JWT_SECRET, { expiresIn: "3d" });
-};
 
 const getLecturer = asyncHandler(async (req, res) => {
     const lecturer = await Lecturer.find();
@@ -22,8 +17,6 @@ const getLecturerById = asyncHandler(async (req, res) => {
 
     res.status(200).json(lecturer);
 });
-
-
 
 const createLecturer = asyncHandler(async (req, res) => {
     const { nic, username, firstName, lastName, email, phone, branch, password } = req.body;
@@ -74,19 +67,6 @@ const createLecturer = asyncHandler(async (req, res) => {
     res.json({ message: 'Lecturer Registered' });
 });
 
-const loginLecturer = async (req, res) => {
-    const { username, password } = req.body;
-  
-    try {
-      const lecturer = await Lecturer.login(username, password);
-      const id = lecturer._id;
-      const token = createToken(lecturer._id);
-      res.status(200).json({ id, username, token });
-    } catch (error) {
-      res.status(400).json({ error: error.message });
-    }
-  };
-
 const deleteLecturer = asyncHandler(async (req, res) => {
     const lecturer = await Lecturer.findById(req.params.id);
 
@@ -121,6 +101,5 @@ module.exports = {
     putLecturer,
     deleteLecturer,
     getLecturerById,
-    loginLecturer
 };
 

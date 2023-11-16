@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt')
 
 const lecturerSchema = mongoose.Schema({
 
@@ -41,27 +40,5 @@ const lecturerSchema = mongoose.Schema({
     {
         timestamps: true,
     });
-
-    lecturerSchema.statics.login = async function (username, password) {
-        if(!username || !password){
-            throw Error("All fields must be filled");
-        }
-    
-        const lecturer = await this.findOne({ username });
-    
-        if (!lecturer) {
-            throw Error("Incrorrect username or password");
-          }
-        
-          const match = await bcrypt.compare(password, lecturer.password);
-        
-          if (!match) {
-            throw Error("Incorrect username or password");
-          }
-        
-          return lecturer;
-        
-    }
-
 
 module.exports = mongoose.model('Lecturer', lecturerSchema);

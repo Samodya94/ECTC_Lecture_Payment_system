@@ -1,5 +1,5 @@
-import { React, useState } from "react";
-
+import { React, useState , useCallback,useMemo,useEffect} from "react";
+import Service from "../../../../utilities/httpService"
 // Styles
 import styles from "./approveLectures.module.css";
 
@@ -64,6 +64,25 @@ const ApprovedLectures = () => {
   const [selectedMonth, setSelectedMonth] = useState("");
   const [selectedYear, setSelectedYear] = useState("");
 
+  const service = useMemo(() => new Service(), []);
+
+  const [approvedCoverages, setApprovedCoverages] = useState([]);
+
+  const getApprovedLectureCoverage = useCallback(() => {
+    const response = service.get(`coverage/approved`);
+    response
+      .then((res) => {
+        setApprovedCoverages(res.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  }, [service]);
+
+  useEffect(() => {
+    getApprovedLectureCoverage();
+  }, [getApprovedLectureCoverage]);
+
   const handleDateChange = (event) => {
     const selectedValue = event.target.value;
 
@@ -103,7 +122,7 @@ const ApprovedLectures = () => {
           </button>
         </form>
         <div>
-          <TableComponent columns={tableColumns} rows={data} />
+          <TableComponent columns={tableColumns} rows={approvedCoverages} />
         </div>
       </div>
     </>

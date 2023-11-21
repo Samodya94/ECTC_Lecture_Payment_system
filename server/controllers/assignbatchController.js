@@ -2,10 +2,10 @@ const asyncHandler = require('express-async-handler');
 const AssignedBatch = require('../model/assignbatchmodel');
 
 const AssignBatch = asyncHandler(async (req, res) => {
-    const { lecturerNic, lecturerName, course, batchCode, rate, hours } = req.body;
-    console.log(lecturerNic, lecturerName, course, batchCode, rate, hours);
+    const { lecturerID, lecturerName, course, batchCode, rate, hours,status } = req.body;
+    console.log(lecturerID, lecturerName, course, batchCode, rate, hours,status);
 
-    if (!lecturerNic || !lecturerName || !course || !batchCode || !rate || !hours) {
+    if (!lecturerID || !lecturerName || !course || !batchCode || !rate || !hours || !status) {
         res.status(400);
         throw new Error('Please Fill All Fields');
     }
@@ -18,24 +18,25 @@ const AssignBatch = asyncHandler(async (req, res) => {
     }
 
     const abatch = await AssignedBatch.create({
-        lecturerNic,
+        lecturerID,
         lecturerName,
         course,
         batchCode,
         rate,
-        hours
+        hours,
+        status
     });
 
     if (abatch) {
         res.status(200).json({
             _id: abatch.id,
-            lecturerNic: abatch.lecturerNic,
+            lecturerID: abatch.lecturerID,
             lecturerName: abatch.lecturerName,
             course: abatch.course,
             batchCode: abatch.batchCode,
             rate: abatch.rate,
-            hours: abatch.hours
-
+            hours: abatch.hours,
+            status: abatch.status
         });
     } else {
         res.status(400);
@@ -89,10 +90,25 @@ const getAssignedBatchById = asyncHandler(async (req, res) => {
     res.status(200).json(batch);
 });
 
+const getAssignedByLecture = (req, res) => {
+    const { lecturerID } = req.params;
+  
+    const patient = AssignedBatch.find( {lecturerID: lecturerID});
+    patient
+      .then((data) => {
+        console.log(data);
+        res.status(200).json(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
 module.exports = {
     AssignBatch,
     putAssignBatch,
     deleteAssignedBatch,
     getallAssignedBatches,
-    getAssignedBatchById
+    getAssignedBatchById,
+    getAssignedByLecture
 };

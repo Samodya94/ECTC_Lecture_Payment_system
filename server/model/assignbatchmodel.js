@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const assignBatchSchema = mongoose.Schema({
 
-    lecturerNic: {
+    lecturerID: {
         type: String,
         required: [true, 'Please Enter Lecturer NIC'],
     },

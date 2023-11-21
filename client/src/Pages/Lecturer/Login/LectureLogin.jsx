@@ -2,18 +2,19 @@ import React,{useState, useEffect} from "react";
 import '../lec.css'
 import logo from '../../../assets/logo.jpg'
 import { useNavigate } from "react-router";
+import { useLecLogin } from "../../../hooks/useLecLogin";
 
 const LectureLogin =()=>{
 
     const [username,setUsername] = useState('')
     const [password,setPassword] = useState('')
     const navigate = useNavigate()
+    const {login, isLoading, error } = useLecLogin()
 
-    function handlelogin(e){
+    const handleLogin= async (e) => {
         e.preventDefault()
-        navigate('/lecture');
-        console.log(username)
-        console.log(password)
+    
+        await login(username,password)
     }
 
     return(
@@ -25,6 +26,7 @@ const LectureLogin =()=>{
                 </div>
             </div>
             <div className="lec-loginform">
+                <form onSubmit={handleLogin} >
                 <div>
                     <label>Username:</label><br/>
                     <input
@@ -46,8 +48,11 @@ const LectureLogin =()=>{
                     />    
                 </div>
                 <div>
-                    <button onClick={handlelogin} className="leclog_button">Login</button>
+                    <button className="leclog_button">Login</button>
+
+                    {error && <div className="error">{error}</div>}
                 </div>
+                </form>
             </div>
         </div>
     )

@@ -1,9 +1,9 @@
-import { AuthContext } from "../context/AuthContext";
+import { LecAuthContext } from "../context/LecAuthContext";
 import { useContext } from "react";
 
-export const useAuthContext = () => {
+export const useLecAuthContext = () => {
 
-    const context = useContext(AuthContext)
+    const context = useContext(LecAuthContext)
 
     if (!context) {
 

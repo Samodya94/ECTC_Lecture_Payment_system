@@ -1,6 +1,6 @@
 //Dependancies
-import React, { useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Routes, Route,Navigate } from "react-router-dom";
 
 //Assets
 import { FaBars } from "react-icons/fa6";
@@ -9,6 +9,7 @@ import "./lec.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 //Routing Pages
+
 import LecSideNav from "../../Components/Navigation/Lecturer/LecSideNav";
 import MiniLecSideNav from "../../Components/Navigation/Lecturer/MiniSidenav";
 import { Dashboard } from "./Dashboard/Dashboard";
@@ -18,9 +19,21 @@ import { ChangePassword } from "./Change_Password";
 import { Coverage_History } from "./add_lecture_coverage/component/coverage_history";
 import { Lec_Payment_History } from "./Payments/payment_history";
 import { MarkAttendance } from "./Students/MarkAttendance";
+import { useLecAuthContext } from "../../hooks/useLecAuthContext"; 
+import { useLecLogout } from "../../hooks/useLecLogout";
+import  LectureLogin  from "./Login/LectureLogin";
+import Service from "../../utilities/httpService";
+
 
 function LecHome() {
   const [toggle, setToggle] = useState("show");
+  const { logout } = useLecLogout();
+  const service = new Service();
+  
+  const { lecturer } = useLecAuthContext();
+
+  const [dFname, setDFname] = useState("");
+  const [dLname, setDLname] = useState("");
 
   function toggleMenu() {
     if (toggle === "show") {
@@ -30,31 +43,54 @@ function LecHome() {
     }
   }
 
+  useEffect(()=>{
+    getLecturer();
+  },[])
+
+  const getLecturer = () =>{
+    if(lecturer){
+      const id = lecturer.id
+    const response = service.get(`lecturer`,id)
+
+    response
+      .then((res) =>{
+        console.log(res.data);
+      }).catch((error) =>{
+        console.log(error)
+      })
+    }
+  }
+
+  function handleLogout(e){
+    e.preventDefault()
+
+    logout()
+  }
+
   return (
     <div>
       <div className="content">
-        {toggle === "show" ? (
-          <div className="sidenav-lec">
-            <LecSideNav />
+        {toggle === "show" ? <div className="sidenav-lec">
+            <LecSideNav /> 
           </div>
-        ) : (
+        : 
           <div className="min-sidenav2">
             <MiniLecSideNav />
           </div>
-        )}
+        }
 
-        <div className="min-sidenav">
+         <div className="min-sidenav">
           <MiniLecSideNav />
         </div>
         <div className="lec-pg-content">
           <div className="topnav">
             <div className="toggle-nav">
               <button onClick={toggleMenu} className="toggle_btn">
-                <FaBars />
-              </button>
+                <FaBars /> 
+              </button> &nbsp; 
             </div>
             <div className="lgout">
-              <button className="logout_btn">
+              <button className="logout_btn" onClick={handleLogout}>
                 <BsFillPersonFill /> Logout
               </button>
             </div>
@@ -65,11 +101,13 @@ function LecHome() {
                 path="/"
                 element={
                   <div className="text-center mt-5">
+                 
                     <h1>Select the page you want to access!</h1>
                     <p>Use the side nav</p>
                   </div>
                 }
               />
+              <Route path="/lec-login" element={!lecturer ?<LectureLogin/> : <Navigate to=""/>}/>
               <Route path="dash" element={<Dashboard/>} />
               <Route path="edit_coverage" element={<EditCoverage/>} />
               <Route path="add_coverage" element={<AddLectureCoverage/>} />

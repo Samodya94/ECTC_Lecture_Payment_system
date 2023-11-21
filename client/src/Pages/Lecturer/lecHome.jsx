@@ -1,5 +1,5 @@
 //Dependancies
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Routes, Route,Navigate } from "react-router-dom";
 
 //Assets
@@ -22,18 +22,42 @@ import { MarkAttendance } from "./Students/MarkAttendance";
 import { useLecAuthContext } from "../../hooks/useLecAuthContext"; 
 import { useLecLogout } from "../../hooks/useLecLogout";
 import  LectureLogin  from "./Login/LectureLogin";
+import Service from "../../utilities/httpService";
+
 
 function LecHome() {
   const [toggle, setToggle] = useState("show");
   const { logout } = useLecLogout();
+  const service = new Service();
   
   const { lecturer } = useLecAuthContext();
+
+  const [dFname, setDFname] = useState("");
+  const [dLname, setDLname] = useState("");
 
   function toggleMenu() {
     if (toggle === "show") {
       setToggle("hide");
     } else {
       setToggle("show");
+    }
+  }
+
+  useEffect(()=>{
+    getLecturer();
+  },[])
+
+  const getLecturer = () =>{
+    if(lecturer){
+      const id = lecturer.id
+    const response = service.get(`lecturer`,id)
+
+    response
+      .then((res) =>{
+        console.log(res.data);
+      }).catch((error) =>{
+        console.log(error)
+      })
     }
   }
 
@@ -46,38 +70,38 @@ function LecHome() {
   return (
     <div>
       <div className="content">
-        {lecturer? toggle === "show" ? (
-          <div className="sidenav-lec">
-            <LecSideNav />
+        {toggle === "show" ? <div className="sidenav-lec">
+            <LecSideNav /> 
           </div>
-        ) : (
+        : 
           <div className="min-sidenav2">
             <MiniLecSideNav />
           </div>
-        ):""}
+        }
 
-        {lecturer? <div className="min-sidenav">
+         <div className="min-sidenav">
           <MiniLecSideNav />
-        </div>:""}
+        </div>
         <div className="lec-pg-content">
-          {lecturer? <div className="topnav">
+          <div className="topnav">
             <div className="toggle-nav">
               <button onClick={toggleMenu} className="toggle_btn">
-                <FaBars />
-              </button>
+                <FaBars /> 
+              </button> &nbsp; 
             </div>
             <div className="lgout">
               <button className="logout_btn" onClick={handleLogout}>
                 <BsFillPersonFill /> Logout
               </button>
             </div>
-          </div>:""}
+          </div>
           <div className="page-contents">
             <Routes>
               <Route
                 path="/"
                 element={
                   <div className="text-center mt-5">
+                 
                     <h1>Select the page you want to access!</h1>
                     <p>Use the side nav</p>
                   </div>

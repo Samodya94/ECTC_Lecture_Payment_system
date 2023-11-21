@@ -101,7 +101,7 @@ const deleteLecturer = asyncHandler(async (req, res) => {
 });
 
 const putLecturer = asyncHandler(async (req, res) => {
-    const lecturer = await Lecturer.findById(req.params.id);
+    const lecturer = await Lecturer.findById({_id:req.params.id});
 
     if (!lecturer) {
         res.status(404);
@@ -115,12 +115,24 @@ const putLecturer = asyncHandler(async (req, res) => {
     res.status(200).json(updatedLecturer);
 });
 
+const changePassword = async (res,req) =>{
+    const lecturer = await Lecturer.findById(req.params.id);
+
+    if (!lecturer) {
+        res.status(404);
+        throw new Error('Lecturer not found');
+    }
+
+    res.status(200).json(lecturer);
+}
+
 module.exports = {
     getLecturer,
     createLecturer,
     putLecturer,
     deleteLecturer,
     getLecturerById,
-    loginLecturer
+    loginLecturer,
+    changePassword
 };
 

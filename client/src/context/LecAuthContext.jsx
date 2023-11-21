@@ -22,9 +22,9 @@ export const LecAuthContextProvider = ({ children }) => {
     const lecturer = JSON.parse(localStorage.getItem('lecturer'))
 
     if(lecturer){
-        dispatch({type: 'LOGIN', payload: lecturer})
+      dispatch({ type: 'LOGIN', payload: lecturer})
     }
-}, [])
+},[])
 
 
   console.log("AuthContext state: ", state);

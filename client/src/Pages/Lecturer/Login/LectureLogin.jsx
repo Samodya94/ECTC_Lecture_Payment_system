@@ -26,6 +26,7 @@ const LectureLogin =()=>{
                 </div>
             </div>
             <div className="lec-loginform">
+                <form onSubmit={handleLogin} >
                 <div>
                     <label>Username:</label><br/>
                     <input
@@ -47,10 +48,11 @@ const LectureLogin =()=>{
                     />    
                 </div>
                 <div>
-                    <button onClick={handleLogin} className="leclog_button">Login</button>
+                    <button className="leclog_button">Login</button>
 
                     {error && <div className="error">{error}</div>}
                 </div>
+                </form>
             </div>
         </div>
     )

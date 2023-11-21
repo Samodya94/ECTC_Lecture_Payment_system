@@ -10,7 +10,7 @@ export const useLecLogout = () => {
         localStorage.removeItem('lecturer')
         
         dispatch({type: 'LOGOUT'})
-        navigate('/lec-login')
+        navigate('/admin-login')
     }
 
     return {logout}

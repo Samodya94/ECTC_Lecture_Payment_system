@@ -312,6 +312,25 @@
     margin: auto;
 }
 
+.error{
+    background: #a30303;
+    padding: 10px 15px;
+    width: 40%;
+    color: #fff;
+    font-weight: 800;
+    font-family: 'Poppins', 'sans';
+    text-align: center;
+    border-radius:5px ;
+}
+
+.mark_attendance{
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
 @media (max-width: 1820px) {
 
     .sidenav-lec {

@@ -22,6 +22,7 @@ import FirstPageIcon from "@mui/icons-material/FirstPage";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
+import Service from "../../../../../utilities/httpService";
 
 // Styles
 import styles from "./coverageTable.module.css";
@@ -111,6 +112,37 @@ const TableComponent = ({ rows, columns }) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
+
+  const service = React.useMemo(() => new Service(), []);
+
+  const [lecturerNames, setLecturerNames] = React.useState({});
+
+  const getLecturerName = async (id) => {
+    try {
+      const response = await service.get(`lecturer/${id}`);
+      const lecturerName = response.data.firstName + " " + response.data.lastName;
+      setLecturerNames((prevNames) => ({
+        ...prevNames,
+        [id]: lecturerName,
+      }));
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setLecturerNames((prevNames) => ({
+        ...prevNames,
+        [id]: "", // Set an empty string or handle the error as needed
+      }));
+    }
+  };
+
+  // Fetch all lecturer names when the component mounts
+  React.useEffect(() => {
+    rows.forEach((row) => {
+      if (!lecturerNames[row.lectureid]) {
+        getLecturerName(row.lectureid);
+      }
+    });
+  }, [rows, lecturerNames]);
   return (
     <>
       <TableContainer
@@ -143,7 +175,7 @@ const TableComponent = ({ rows, columns }) => {
                     padding: "5px 16px",
                   }}
                 >
-                  {row.lecturerName}
+                   {lecturerNames[row.lectureid] || "Loading..."}
                 </TableCell>
                 <TableCell
                   style={{
@@ -173,7 +205,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {row.date}
+                  {row.date.slice(0, 10)}
                 </TableCell>
                 <TableCell
                   style={{

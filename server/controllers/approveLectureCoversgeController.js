@@ -7,14 +7,14 @@ const getCoverage = asyncHandler(async (req, res) => {
 });
 
 const createCoverage = asyncHandler(async (req, res) => {
-    const { coverageID ,lecturerName, courseName, batchCode, startTime, endTime, date, lectureCoverage , status} = req.body;
+    const { lectureid, courseName, batchCode, startTime, endTime, date, lectureCoverage, status } = req.body;
 
-    if (!coverageID || !lecturerName || !courseName || !batchCode || !startTime || !endTime || ! date || ! lectureCoverage || ! status) {
+    if (!lectureid || !courseName || !batchCode || !startTime || !endTime || !date || !lectureCoverage || !status) {
         res.status(400).json({ message: 'Please Fill All Fields' });
         return;
     }
 
-    const coverageExists = await Coverage.findOne({ coverageID });
+    const coverageExists = await Coverage.findOne({ _id: req.body._id });
 
     if (coverageExists) {
         res.status(400).json({ message: 'Coverage Already Exists' });
@@ -22,33 +22,31 @@ const createCoverage = asyncHandler(async (req, res) => {
     }
 
     const coverage = await Coverage.create({
-        coverageID ,
-        lecturerName, 
-        courseName, 
-        batchCode, 
-        startTime, 
-        endTime, 
-        date, 
+        lectureid,
+        courseName,
+        batchCode,
+        startTime,
+        endTime,
+        date,
         lectureCoverage,
         status
     });
-    
-    if(coverage) {
+
+    if (coverage) {
         res.status(200).json({
-            _id: coverage.id,
-            coverageID: coverage.coverageID,
-            lecturerName: coverage.lecturerName, 
-            courseName: coverage.courseName, 
-            batchCode: coverage.batchCode, 
-            startTime: coverage.startTime, 
-            endTime: coverage.endTime, 
-            date: coverage.date, 
+            coverageID: coverage._id,
+            lectureid: coverage.lectureid,
+            courseName: coverage.courseName,
+            batchCode: coverage.batchCode,
+            startTime: coverage.startTime,
+            endTime: coverage.endTime,
+            date: coverage.date,
             lectureCoverage: coverage.lectureCoverage,
-            status:coverage.status
+            status: coverage.status
         });
     } else {
-            res.status(400);
-            throw new Error('Invalid Course Details');
+        res.status(400);
+        throw new Error('Invalid Course Details');
     }
 
     res.json({ message: 'New Lecture Coverage Created' });
@@ -82,9 +80,22 @@ const putCoverage = asyncHandler(async (req, res) => {
     res.status(200).json(updatedCoverage);
 });
 
+//get all status = Not Approved
+const getCoverageNotApproved = asyncHandler(async (req, res) => {
+    const coverage = await Coverage.find({ status: "Not Approved" });
+    res.status(200).json(coverage);
+});
+
+//get all status = Approved
+const getCoverageApproved = asyncHandler(async (req, res) => {
+    const coverage = await Coverage.find({ status: "Approved" });
+    res.status(200).json(coverage);
+});
 module.exports = {
     createCoverage,
     getCoverage,
     putCoverage,
     deleteCoverage,
+    getCoverageNotApproved,
+    getCoverageApproved
 };

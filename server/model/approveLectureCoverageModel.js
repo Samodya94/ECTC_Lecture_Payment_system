@@ -1,24 +1,20 @@
 const mongoose = require('mongoose');
 
 const coverageSchema = mongoose.Schema({
-    
+
     coverageID: {
-        type: String,
-        required: [true, 'Please Enter Coverage ID'],
-        unique: true,
+        type: mongoose.Schema.Types.ObjectId,
     },
     lectureid: {
         type: String,
     },
     courseName: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: String,
         required: [true, 'Please Enter Course Name'],
-        ref: 'Course',
     },
     batchCode: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: String,
         required: [true, 'Please select the Batch Code'],
-        ref: 'Batch',
     },
     startTime: {
         type: String,
@@ -39,11 +35,11 @@ const coverageSchema = mongoose.Schema({
     status: {
         type: String,
         required: [true],
-        default:'Not Approved'
+        default: 'Not Approved'
     },
 },
-{
-    timestamps: true,
-});
+    {
+        timestamps: true,
+    });
 
 module.exports = mongoose.model('Coverage', coverageSchema);

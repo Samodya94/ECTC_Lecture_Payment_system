@@ -143,14 +143,28 @@ export const AddLectureCoverage = () => {
         <div className="row m-auto">
           <div className="col-md-6 ">
             <div className="input_fields">
-              Lecture Name :
-              <input className="form-control mb-3" type="date" />
+              Date :
+              <input 
+                className="form-control mb-3" 
+                type="date"
+                value={date}
+                onChange={(e)=>{
+                  setDate(e.target.value)
+                }}
+                 />
             </div>
           </div>
           <div className="col-md-6">
             <div className="input_fields ">
-              Select Batch :
-              <textarea className="form-control mb-2" rows={2}>
+              Coverage :
+              <textarea 
+                className="form-control mb-2" 
+                rows={2}
+                value={coverage}
+                onChange={(e)=>{
+                  setDate(e.target.value)
+                }}
+                >
                 {stime}
               </textarea>
             </div>

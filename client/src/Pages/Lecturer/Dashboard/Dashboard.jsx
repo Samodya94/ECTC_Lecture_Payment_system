@@ -1,28 +1,65 @@
 import { BsFillArrowRightCircleFill } from "react-icons/bs";
 
 import { ViewAssignedLecturers } from "./Components/ViewAssignedBatches";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ViewApprovedLecCov } from "./Components/ViewApprovedLecCov";
 import { PendingLecture } from "./Components/PendingCoverage";
 
+import { useLecAuthContext } from "../../../hooks/useLecAuthContext";
+import Service from "../../../utilities/httpService";
+
 export const Dashboard = () => {
+  const [details, setDetails] = useState();
+  const [batches, setBatches] = useState([]);
+  const [noofBatches, setNoofBatches] = useState(0);
 
-    const [details,setDetails] = useState();
+  const { lecturer } = useLecAuthContext();
+  const service = new Service();
+  const [currentDate, setCurrentDate] = useState(new Date());
 
-    function ViewAssBatches(e){
-        e.preventDefault()
-        setDetails('AssignedBatches')
+  //
+  useEffect(() => {
+    getAssignedBatches();
+  }, [lecturer]);
+
+  const getAssignedBatches = (e) => {
+    if (lecturer) {
+      const id = lecturer.id;
+
+      const response = service.get(`assignbatch/bylecture`, id);
+      response
+        .then((res) => {
+          console.log(res.data);
+          setBatches(res.data);
+          setNoofBatches(res.data.length)
+        })
+        .catch((error) => {
+          console.log(error, "Failed to Fetch information");
+        });
     }
+  };
 
-    function ViewApproved(e){
-        e.preventDefault()
-        setDetails('ApproveCove')
-    }
+  useEffect(() => {
+    setCurrentDate(new Date());
+  }, []);
 
-    function ViewPending(e){
-        e.preventDefault()
-        setDetails('Pending')
-    }
+  const currentMonth = currentDate.toLocaleString("default", { month: "short" });
+  const currentYear = currentDate.getFullYear();
+
+  function ViewAssBatches(e) {
+    e.preventDefault();
+    setDetails("AssignedBatches");
+  }
+
+  function ViewApproved(e) {
+    e.preventDefault();
+    setDetails("ApproveCove");
+  }
+
+  function ViewPending(e) {
+    e.preventDefault();
+    setDetails("Pending");
+  }
 
   return (
     <div>
@@ -31,7 +68,7 @@ export const Dashboard = () => {
           <div className="card">
             <div className="card_title">Assigned Batches</div>
             <div className="card_contet">
-              55
+              {noofBatches < 10 ? "0"+noofBatches : noofBatches }
               <div className="card-bottom" onClick={ViewAssBatches}>
                 <BsFillArrowRightCircleFill /> &nbsp; View more
               </div>
@@ -40,7 +77,7 @@ export const Dashboard = () => {
         </div>
         <div className="col-md-4">
           <div className="card">
-            <div className="card_title">Approved Lectures - oct-2023</div>
+            <div className="card_title">Approved Lectures <br></br><b>{currentMonth} {currentYear}</b></div>
             <div className="card_contet">
               55
               <div className="card-bottom" onClick={ViewApproved}>
@@ -61,14 +98,15 @@ export const Dashboard = () => {
           </div>
         </div>
       </div>
-      <div className="page_midrow">
-        {
-            details==='AssignedBatches'?<ViewAssignedLecturers/>: 
-            details==='ApproveCove' ? <ViewApprovedLecCov/>:
-            details==="Pending"? <PendingLecture/>:null
-        }
+      <div className="page_midrow my-5">
+        {details === "AssignedBatches" ? (
+          <ViewAssignedLecturers />
+        ) : details === "ApproveCove" ? (
+          <ViewApprovedLecCov />
+        ) : details === "Pending" ? (
+          <PendingLecture />
+        ) : null}
       </div>
-      
     </div>
   );
 };

@@ -32,9 +32,6 @@ function LecHome() {
   
   const { lecturer } = useLecAuthContext();
 
-  const [dFname, setDFname] = useState("");
-  const [dLname, setDLname] = useState("");
-
   function toggleMenu() {
     if (toggle === "show") {
       setToggle("hide");

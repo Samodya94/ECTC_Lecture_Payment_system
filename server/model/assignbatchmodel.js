@@ -28,6 +28,10 @@ const assignBatchSchema = mongoose.Schema({
         type: Number,
         required: [true, 'Please Select the no of hours'],
     },
+    remaining_hours: {
+        type: Number,
+        required: [true, 'Please Select the no of hours'],
+    },
     hourly_pay:{
         type: Number,
     },

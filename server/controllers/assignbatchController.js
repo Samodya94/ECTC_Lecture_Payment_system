@@ -36,6 +36,7 @@ const AssignBatch = asyncHandler(async (req, res) => {
             batchCode: abatch.batchCode,
             rate: abatch.rate,
             hours: abatch.hours,
+            remaining_hours:abatch.hours,
             status: abatch.status
         });
     } else {

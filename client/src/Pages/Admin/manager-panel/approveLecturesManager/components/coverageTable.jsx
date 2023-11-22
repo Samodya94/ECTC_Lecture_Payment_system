@@ -162,6 +162,39 @@ const TableComponent = ({ rows, columns }) => {
       });
   };
 
+  //reject batch details function
+  const rejectApproveCoverage = (id) => {
+    const data = {
+      status: "Rejected",
+    };
+    console.log("Data to be sent:", data);
+
+    const response = service.put(`coverage`, id, data);
+    response
+      .then((res) => {
+        alert("Lecture Coverage Rejected");
+        window.location.reload();
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
+
+  function calculateTotalHours(startTime, endTime) {
+    const start = startTime.split(".");
+    const end = endTime.split(".");
+
+    const startHours = parseInt(start[0]);
+    const startMinutes = parseInt(start[1]);
+
+    const endHours = parseInt(end[0]);
+    const endMinutes = parseInt(end[1]);
+
+    const totalHours = endHours - startHours;
+    const totalMinutes = endMinutes - startMinutes;
+
+    return `${totalHours}h : ${totalMinutes}m`;
+  }
 
   return (
     <>
@@ -256,7 +289,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {row.totalHours}
+                  {calculateTotalHours(row.startTime, row.endTime)}
                 </TableCell>
                 <TableCell
                   style={{
@@ -281,7 +314,10 @@ const TableComponent = ({ rows, columns }) => {
                       updateApproveCoverage(row._id)
                     }
                   > Approve </button>
-                  <button className={styles.regectBtn}> Decline </button>
+                  <button className={styles.regectBtn}
+                    onClick={() =>
+                      rejectApproveCoverage(row._id)
+                    }> Decline </button>
                 </TableCell>
               </TableRow>
             ))}

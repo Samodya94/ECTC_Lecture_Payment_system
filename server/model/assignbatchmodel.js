@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const assignBatchSchema = mongoose.Schema({
 
-    lecturerNic: {
+    lecturerID: {
         type: String,
         required: [true, 'Please Enter Lecturer NIC'],
     },
@@ -25,6 +25,10 @@ const assignBatchSchema = mongoose.Schema({
         required: [true, 'Please Enter hourely rate'],
     },
     hours: {
+        type: Number,
+        required: [true, 'Please Select the no of hours'],
+    },
+    remaining_hours: {
         type: Number,
         required: [true, 'Please Select the no of hours'],
     },

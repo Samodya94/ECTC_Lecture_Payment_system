@@ -7,7 +7,7 @@ const branchAccessControl = authorize(["Admin", "Manager"]);
 
 router.post('/', branchAccessControl, createBatch).get('/', branchAccessControl, getBatch);
 router.put('/:id', branchAccessControl, putBatch).delete('/:id', branchAccessControl, deleteBatch);
-router.get('/all', branchAccessControl, getallBatches);
-router.get('/:id', branchAccessControl, getBatchById);
+router.get('/all',  getallBatches);
+router.get('/:id', getBatchById);
 
 module.exports = router;

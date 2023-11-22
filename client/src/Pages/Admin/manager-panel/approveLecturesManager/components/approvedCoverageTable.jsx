@@ -143,6 +143,23 @@ const TableComponent = ({ rows, columns }) => {
       }
     });
   }, [rows, lecturerNames]);
+
+  function calculateTotalHours(startTime, endTime) {
+    const start = startTime.split(".");
+    const end = endTime.split(".");
+
+    const startHours = parseInt(start[0]);
+    const startMinutes = parseInt(start[1]);
+
+    const endHours = parseInt(end[0]);
+    const endMinutes = parseInt(end[1]);
+
+    const totalHours = endHours - startHours;
+    const totalMinutes = endMinutes - startMinutes;
+
+    return `${totalHours}h : ${totalMinutes}m`;
+  }
+
   return (
     <>
       <TableContainer
@@ -175,7 +192,7 @@ const TableComponent = ({ rows, columns }) => {
                     padding: "5px 16px",
                   }}
                 >
-                   {lecturerNames[row.lectureid] || "Loading..."}
+                  {lecturerNames[row.lectureid] || "Loading..."}
                 </TableCell>
                 <TableCell
                   style={{
@@ -235,7 +252,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {row.totalHours}
+                  {calculateTotalHours(row.startTime, row.endTime)}
                 </TableCell>
                 <TableCell
                   style={{

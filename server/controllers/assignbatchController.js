@@ -2,10 +2,10 @@ const asyncHandler = require('express-async-handler');
 const AssignedBatch = require('../model/assignbatchmodel');
 
 const AssignBatch = asyncHandler(async (req, res) => {
-    const { lecturerID, lecturerNIC, lecturerName, course, batchCode, rate, hours, status } = req.body;
-    console.log(lecturerID, lecturerNIC, lecturerName, course, batchCode, rate, hours, status);
+    const { lecturerID, lecturerNic, lecturerName, course, batchCode, rate, hours, remaining_hours, hourly_pay } = req.body;
+    console.log(lecturerID, lecturerNic, lecturerName, course, batchCode, rate, hours, remaining_hours, hourly_pay);
 
-    if (!lecturerID || !lecturerNIC || !lecturerName || !course || !batchCode || !rate || !hours || !status) {
+    if (!lecturerID || !lecturerNic || !lecturerName || !course || !batchCode || !rate || !hours || !remaining_hours) {
         res.status(400);
         throw new Error('Please Fill All Fields');
     }
@@ -19,27 +19,28 @@ const AssignBatch = asyncHandler(async (req, res) => {
 
     const abatch = await AssignedBatch.create({
         lecturerID,
-        lecturerNIC,
+        lecturerNic,
         lecturerName,
         course,
         batchCode,
         rate,
         hours,
-        status
+        remaining_hours,
+        hourly_pay,
     });
 
     if (abatch) {
         res.status(200).json({
             _id: abatch.id,
             lecturerID: abatch.lecturerID,
-            lecturerNIC: abatch.lecturerNIC,
+            lecturerNic: abatch.lecturerNic,
             lecturerName: abatch.lecturerName,
             course: abatch.course,
             batchCode: abatch.batchCode,
             rate: abatch.rate,
             hours: abatch.hours,
             remaining_hours: abatch.hours,
-            status: abatch.status
+            hourly_pay: abatch.hourly_pay,
         });
     } else {
         res.status(400);

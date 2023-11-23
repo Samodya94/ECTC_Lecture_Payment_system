@@ -207,7 +207,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {row.hours}
+                  {row.hours + "h : 00m"}
                 </TableCell>
                 <TableCell
                   style={{
@@ -217,7 +217,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {row.hours}
+                  {row.hours + "h : 00m"}
                 </TableCell>
                 <TableCell
                   style={{

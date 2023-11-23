@@ -2,10 +2,10 @@ const asyncHandler = require('express-async-handler');
 const AssignedBatch = require('../model/assignbatchmodel');
 
 const AssignBatch = asyncHandler(async (req, res) => {
-    const { lecturerID, lecturerName, course, batchCode, rate, hours,status } = req.body;
-    console.log(lecturerID, lecturerName, course, batchCode, rate, hours,status);
+    const { lecturerID, lecturerNic, lecturerName, course, batchCode, rate, hours, remaining_hours, hourly_pay } = req.body;
+    console.log(lecturerID, lecturerNic, lecturerName, course, batchCode, rate, hours, remaining_hours, hourly_pay);
 
-    if (!lecturerID || !lecturerName || !course || !batchCode || !rate || !hours || !status) {
+    if (!lecturerID || !lecturerNic || !lecturerName || !course || !batchCode || !rate || !hours || !remaining_hours) {
         res.status(400);
         throw new Error('Please Fill All Fields');
     }
@@ -19,25 +19,28 @@ const AssignBatch = asyncHandler(async (req, res) => {
 
     const abatch = await AssignedBatch.create({
         lecturerID,
+        lecturerNic,
         lecturerName,
         course,
         batchCode,
         rate,
         hours,
-        status
+        remaining_hours,
+        hourly_pay,
     });
 
     if (abatch) {
         res.status(200).json({
             _id: abatch.id,
             lecturerID: abatch.lecturerID,
+            lecturerNic: abatch.lecturerNic,
             lecturerName: abatch.lecturerName,
             course: abatch.course,
             batchCode: abatch.batchCode,
             rate: abatch.rate,
             hours: abatch.hours,
-            remaining_hours:abatch.hours,
-            status: abatch.status
+            remaining_hours: abatch.hours,
+            hourly_pay: abatch.hourly_pay,
         });
     } else {
         res.status(400);
@@ -93,17 +96,17 @@ const getAssignedBatchById = asyncHandler(async (req, res) => {
 
 const getAssignedByLecture = (req, res) => {
     const { lecturerID } = req.params;
-  
-    const patient = AssignedBatch.find( {lecturerID: lecturerID});
+
+    const patient = AssignedBatch.find({ lecturerID: lecturerID });
     patient
-      .then((data) => {
-        console.log(data);
-        res.status(200).json(data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+        .then((data) => {
+            console.log(data);
+            res.status(200).json(data);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+};
 
 module.exports = {
     AssignBatch,

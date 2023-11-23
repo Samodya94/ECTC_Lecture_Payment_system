@@ -6,6 +6,12 @@ const assignBatchSchema = mongoose.Schema({
         type: String,
         required: [true, 'Please Enter Lecturer NIC'],
     },
+
+    lecturerNic: {
+        type: String,
+        required: [true, 'Please Enter Lecturer NIC'],
+    },
+
     lecturerName: {
         type: String,
         required: [true, 'Please Enter Lecturer Name'],
@@ -32,13 +38,8 @@ const assignBatchSchema = mongoose.Schema({
         type: Number,
         required: [true, 'Please Select the no of hours'],
     },
-    hourly_pay:{
+    hourly_pay: {
         type: Number,
-    },
-    status:{
-        type: String,
-        required: true, 
-        dafault:"T"
     },
 },
     {

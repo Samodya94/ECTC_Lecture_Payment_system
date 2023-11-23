@@ -8,6 +8,7 @@ import DropdownInput from "./components/dropdownInput";
 import TableComponent from "./components/assignedBatchesTable";
 import InputNumField from "../../components/inputNumField";
 import PrimaryButton from "../../components/primaryButton";
+import InputNumFieldDis from "../../components/inputNumFieldDis";
 
 import Service from "../../../../utilities/httpService";
 import DropdownField from "../../components/dropdownField";
@@ -29,6 +30,7 @@ const AssignLecturers = () => {
   const [batchCode, setBatchCode] = useState("");
   const [paymentRate, setPaymentRate] = useState("");
   const [noOfHours, setNoOfHours] = useState(0);
+  const [hourlyPay, setHourlyPay] = useState(0);
   const [assignedBatches, setAssignedBatches] = useState([]);
 
 
@@ -96,6 +98,21 @@ const AssignLecturers = () => {
     }
   }
 
+  //get id from lecturer name
+  async function getLecturerId(lecturerName) {
+    try {
+      let id = "";
+      lecturerList.forEach((item) => {
+        if (item.firstName + " " + item.lastName === lecturerName) {
+          id = item._id;
+        }
+      });
+      return id;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   //get course from batch code
   async function getCourse(batchCode) {
     try {
@@ -153,20 +170,25 @@ const AssignLecturers = () => {
 
   function createAssignBatch(e) {
     e.preventDefault();
+
     // Move the calls inside the function
     const lecturerNic = getLecturerNic(lecturerName);
     const course = getCourse(batchCode);
+    const _id = getLecturerId(lecturerName);
 
     // Wait for both promises to resolve
-    Promise.all([lecturerNic, course])
-      .then(([nic, course]) => {
+    Promise.all([lecturerNic, course, _id])
+      .then(([nic, course, _id]) => {
         const newAssignBatch = {
+          lecturerID: _id,
           lecturerNic: nic,
           lecturerName: lecturerName,
           course: course,
           batchCode: batchCode,
           rate: paymentRate,
           hours: noOfHours,
+          remaining_hours: noOfHours,
+          hourly_pay: hourlyPay,
         };
 
         const response = service.post(`assignbatch/`, newAssignBatch);
@@ -183,7 +205,6 @@ const AssignLecturers = () => {
         console.log(err);
       });
   }
-
 
   return (
     <>
@@ -220,6 +241,15 @@ const AssignLecturers = () => {
               setValue={setNoOfHours}
               style={{ width: "300px" }}
             />
+
+            <InputNumFieldDis
+              lable={"Hourly Pay"}
+              placeholder={"Enter Hourly Pay"}
+              setValue={setHourlyPay}
+              style={{ width: "300px" }}
+              disabled={paymentRate === "Hourly Rate" ? false : true}
+            />
+
             <div style={{ display: "flex", justifyContent: "center" }}>
               <PrimaryButton
                 label={"Assign Lecturer"}

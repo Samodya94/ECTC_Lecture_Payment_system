@@ -108,12 +108,75 @@ const TableComponent = ({ rows, columns }) => {
     setSortOrder(sortOrder === "asc" ? "desc" : "asc");
   };
 
-  // Sorting function based on userLevel
+  // Sorting function based on userLevel's index when ascending order is selected (0, 1, 2, 3) and descending order is selected (3, 2, 1, 0)
   const compareUserLevel = (a, b) => {
     const levelA = a.userLevel || "";
     const levelB = b.userLevel || "";
-    return sortOrder === "asc" ? levelA.localeCompare(levelB) : levelB.localeCompare(levelA);
+
+    if (sortOrder === "asc") {
+      if (levelA === "Admin") {
+        return -1;
+      } else if (levelA === "Manager") {
+        if (levelB === "Admin") {
+          return 1;
+        } else {
+          return -1;
+        }
+      } else if (levelA === "Finance") {
+        if (levelB === "Admin" || levelB === "Manager") {
+          return 1;
+        } else {
+          return -1;
+        }
+      } else if (levelA === "Accounts") {
+        if (levelB === "Admin" || levelB === "Manager" || levelB === "Finance") {
+          return 1;
+        } else {
+          return -1;
+        }
+      } else {
+        return 1;
+      }
+    }
+    else {
+      if (sortOrder === "desc") {
+        if (levelA === "Admin") {
+          if (levelB === "Manager" || levelB === "Finance" || levelB === "Accounts") {
+            return 1;
+          } else {
+            return -1;
+          }
+        } else if (levelA === "Manager") {
+          if (levelB === "Finance" || levelB === "Accounts") {
+            return 1;
+          } else if (levelB === "Admin") {
+            return -1;
+          } else {
+            return -1;
+          }
+        } else if (levelA === "Finance") {
+          if (levelB === "Accounts") {
+            return 1;
+          } else if (levelB === "Admin" || levelB === "Manager") {
+            return -1;
+          } else {
+            return -1;
+          }
+        } else if (levelA === "Accounts") {
+          if (levelB === "Admin" || levelB === "Manager" || levelB === "Finance") {
+            return -1;
+          } else {
+            return -1;
+          }
+        } else {
+          return 1;
+        }
+      }
+    }
   };
+
+
+
 
   const sortedRows = [...rows].sort(compareUserLevel);
 
@@ -166,7 +229,7 @@ const TableComponent = ({ rows, columns }) => {
               : sortedRows
             ).map((row, _id) => (
               <TableRow key={row._id} style={{ border: "1px solid #ccc" }}>
-               
+
                 <TableCell
                   style={{
                     border: "1px solid #ccc",
@@ -224,12 +287,12 @@ const TableComponent = ({ rows, columns }) => {
                   align="center"
                 >
                   <button className={styles.removeBtn}
-                   onClick={() => {
-                    if (window.confirm("Are you sure you want to delete this user?")) {
-                      deleteUser(row._id);
-                      window.location.reload();
-                    }
-                  }}> Remove </button>
+                    onClick={() => {
+                      if (window.confirm("Are you sure you want to delete this user?")) {
+                        deleteUser(row._id);
+                        window.location.reload();
+                      }
+                    }}> Remove </button>
                 </TableCell>
               </TableRow>
             ))}

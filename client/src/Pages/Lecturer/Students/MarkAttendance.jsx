@@ -8,6 +8,10 @@ export const MarkAttendance = () => {
   const [lname, setLname] = useState("");
   const [batchCode,setBatchCode] = useState("")
   const [hr, setHr] = useState(0);
+  const [date, setDate] = useState("");
+  const [stime, setStime] = useState("");
+  const [etime, setEtime] = useState("");
+  const [coverage, setCoverage] = useState("");
 
   const { lecturer } = useLecAuthContext();
   const service = new Service();
@@ -19,21 +23,6 @@ export const MarkAttendance = () => {
   
   },[lecturer]);
 
-  useEffect(() => {
-    getBatch();
-  }, [batchCode]);
-
-  const getBatch= async () =>{
-    if (lecturer && batchCode) {
-        try {
-          const response = await service.get(`assignbatch/`, batchCode);
-          console.log(response.data);
-          setHr(response.data.hours);
-        } catch (error) {
-          console.log(error, "Failed to Fetch Lecturer information");
-        }
-      }
-  }
   const getLecturer = async (e) => {
     if (lecturer) {
       const id = lecturer.id;
@@ -67,9 +56,27 @@ export const MarkAttendance = () => {
     }
   };
 
+  useEffect(() => {
+    getBatch();
+  }, [batchCode]);
+
+  const getBatch= async () =>{
+    if (lecturer && batchCode) {
+        try {
+          const response = await service.get(`assignbatch/`, batchCode);
+          console.log(response.data);
+          setHr(response.data.hours);
+        } catch (error) {
+          console.log(error, "Failed to Fetch Lecturer information");
+        }
+      }
+  }
+  
+
   
   return (
     <div className="mark_attendance">
+    <h1>Student Attendance</h1>
       <form className="w-50 m-auto my-4">
         <div className="row my-4">
           <div className="col-md-6">
@@ -108,21 +115,46 @@ export const MarkAttendance = () => {
         <div className="row my-4">
           <div className="col-md-6 ">
             <label>Start Time:</label>
-            <input type="time" className="form-control" />
+            <input 
+              type="time" 
+              className="form-control"
+              value={stime}
+              onChange={(e)=>{
+                setStime(e.target.value)
+              }} />
           </div>
           <div className="col-md-6">
             <label>End-time:</label>
-            <input type="time" className="form-control" />
+            <input 
+              type="time" 
+              className="form-control"
+              value={etime}
+              onChange={(e)=>{
+                setEtime(e.target.value)
+              }}
+               />
           </div>
         </div>
         <div className="row my-4">
           <div className="col-md-6">
             <label>Date:</label>
-            <input type="date" className="form-control" />
+            <input type="date"
+             className="form-control"
+             value={date}
+             onChange={(e)=>{
+              setDate(e.target.value)
+             }}
+              />
           </div>
           <div className="col-md-6">
             <label>Coverage:</label>
-            <textarea className="form-control"></textarea>
+            <textarea 
+              className="form-control"
+              value={coverage}
+              onChange={(e)=>{
+                setCoverage(e.target.value)
+              }}
+              ></textarea>
           </div>
         </div>
 
@@ -131,7 +163,18 @@ export const MarkAttendance = () => {
         </button>
       </form>
 
-      <div className="view_student w-75 p-5"></div>
+      <div className="view_student w-75 p-5">
+      <table className="table table-bordered">
+          <thead>
+            <tr>
+              <td>Student Name</td>
+              <td>Mark Attendance</td>
+              <td>Attendace</td>
+              <td>Action</td>
+            </tr>
+          </thead>
+        </table>
+      </div>
     </div>
   );
 };

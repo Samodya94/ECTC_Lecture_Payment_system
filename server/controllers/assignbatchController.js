@@ -2,10 +2,10 @@ const asyncHandler = require('express-async-handler');
 const AssignedBatch = require('../model/assignbatchmodel');
 
 const AssignBatch = asyncHandler(async (req, res) => {
-    const { lecturerID, lecturerName, course, batchCode, rate, hours,status } = req.body;
-    console.log(lecturerID, lecturerName, course, batchCode, rate, hours,status);
+    const { lecturerID, lecturerNIC, lecturerName, course, batchCode, rate, hours, status } = req.body;
+    console.log(lecturerID, lecturerNIC, lecturerName, course, batchCode, rate, hours, status);
 
-    if (!lecturerID || !lecturerName || !course || !batchCode || !rate || !hours || !status) {
+    if (!lecturerID || !lecturerNIC || !lecturerName || !course || !batchCode || !rate || !hours || !status) {
         res.status(400);
         throw new Error('Please Fill All Fields');
     }
@@ -19,6 +19,7 @@ const AssignBatch = asyncHandler(async (req, res) => {
 
     const abatch = await AssignedBatch.create({
         lecturerID,
+        lecturerNIC,
         lecturerName,
         course,
         batchCode,
@@ -31,12 +32,13 @@ const AssignBatch = asyncHandler(async (req, res) => {
         res.status(200).json({
             _id: abatch.id,
             lecturerID: abatch.lecturerID,
+            lecturerNIC: abatch.lecturerNIC,
             lecturerName: abatch.lecturerName,
             course: abatch.course,
             batchCode: abatch.batchCode,
             rate: abatch.rate,
             hours: abatch.hours,
-            remaining_hours:abatch.hours,
+            remaining_hours: abatch.hours,
             status: abatch.status
         });
     } else {
@@ -93,17 +95,17 @@ const getAssignedBatchById = asyncHandler(async (req, res) => {
 
 const getAssignedByLecture = (req, res) => {
     const { lecturerID } = req.params;
-  
-    const patient = AssignedBatch.find( {lecturerID: lecturerID});
+
+    const patient = AssignedBatch.find({ lecturerID: lecturerID });
     patient
-      .then((data) => {
-        console.log(data);
-        res.status(200).json(data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+        .then((data) => {
+            console.log(data);
+            res.status(200).json(data);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+};
 
 module.exports = {
     AssignBatch,

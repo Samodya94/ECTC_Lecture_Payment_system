@@ -187,7 +187,7 @@ const AssignLecturers = () => {
           batchCode: batchCode,
           rate: paymentRate,
           hours: noOfHours,
-          remaining_hours: noOfHours,
+          remaining_hours: noOfHours * 3600000,
           hourly_pay: hourlyPay,
         };
 

@@ -18,6 +18,8 @@ export const AddLectureCoverage = () => {
   const [batches, setBatches] = useState([]);
   const service = new Service();
 
+   
+
   //
   useEffect(() => {
     getLecturer();
@@ -61,21 +63,24 @@ export const AddLectureCoverage = () => {
       const startTime = new Date(`1970-01-01T${stime}`);
       const endTime = new Date(`1970-01-01T${etime}`);
       const timeDiffInMillis = endTime - startTime;
-
       // Convert time difference to hours and minutes
       const hours = Math.floor(timeDiffInMillis / (1000 * 60 * 60));
       const minutes = Math.floor(
         (timeDiffInMillis % (1000 * 60 * 60)) / (1000 * 60)
       );
 
-      return `${hours} hours ${minutes} minutes`;
+      return (`${hours} hours ${minutes} minutes`);
     }
 
     return "";
   };
+
+  function handleSubmit(){
+
+  }
   return (
     <div>
-      <form>
+      <form onSubmit={handleSubmit()}>
         <div className="add_coverage">
           <h1>Add Lecture Coverages</h1>
         </div>
@@ -143,14 +148,28 @@ export const AddLectureCoverage = () => {
         <div className="row m-auto">
           <div className="col-md-6 ">
             <div className="input_fields">
-              Lecture Name :
-              <input className="form-control mb-3" type="date" />
+              Date :
+              <input 
+                className="form-control mb-3" 
+                type="date"
+                value={date}
+                onChange={(e)=>{
+                  setDate(e.target.value)
+                }}
+                 />
             </div>
           </div>
           <div className="col-md-6">
             <div className="input_fields ">
-              Select Batch :
-              <textarea className="form-control mb-2" rows={2}>
+              Coverage :
+              <textarea 
+                className="form-control mb-2" 
+                rows={2}
+                value={coverage}
+                onChange={(e)=>{
+                  setDate(e.target.value)
+                }}
+                >
                 {stime}
               </textarea>
             </div>

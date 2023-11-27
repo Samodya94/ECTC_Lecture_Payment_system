@@ -2,9 +2,6 @@ const mongoose = require('mongoose');
 
 const coverageSchema = mongoose.Schema({
 
-    coverageID: {
-        type: mongoose.Schema.Types.ObjectId,
-    },
     lectureid: {
         type: String,
     },
@@ -23,6 +20,10 @@ const coverageSchema = mongoose.Schema({
     endTime: {
         type: String,
         required: [true, 'Please select the End Time'],
+    },
+    duration: {
+        type: Number,
+        required: true
     },
     date: {
         type: Date,

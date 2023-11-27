@@ -14,7 +14,6 @@ import LecSideNav from "../../Components/Navigation/Lecturer/LecSideNav";
 import MiniLecSideNav from "../../Components/Navigation/Lecturer/MiniSidenav";
 import { Dashboard } from "./Dashboard/Dashboard";
 import { AddLectureCoverage } from "./add_lecture_coverage/AddLectureCoverage";
-import { EditCoverage } from "./add_lecture_coverage/component/Edit_coverage";
 import { ChangePassword } from "./Change_Password";
 import { Coverage_History } from "./add_lecture_coverage/component/coverage_history";
 import { Lec_Payment_History } from "./Payments/payment_history";
@@ -23,6 +22,7 @@ import { useLecAuthContext } from "../../hooks/useLecAuthContext";
 import { useLecLogout } from "../../hooks/useLecLogout";
 import  LectureLogin  from "./Login/LectureLogin";
 import Service from "../../utilities/httpService";
+import { EditCoverage } from "./add_lecture_coverage/component/EditCoverage";
 
 
 function LecHome() {
@@ -106,8 +106,8 @@ function LecHome() {
               />
               <Route path="/lec-login" element={!lecturer ?<LectureLogin/> : <Navigate to=""/>}/>
               <Route path="dash" element={<Dashboard/>} />
-              <Route path="edit_coverage" element={<EditCoverage/>} />
               <Route path="add_coverage" element={<AddLectureCoverage/>} />
+              <Route path="edit_coverage/:lecid" element={<EditCoverage/>}/>
               <Route path="change_password" element={<ChangePassword/>}/>
               <Route path="Coverage_History" element={<Coverage_History/>}/>
               <Route path="lec_pay_history" element={<Lec_Payment_History/>}/>

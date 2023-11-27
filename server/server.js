@@ -14,10 +14,17 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(cors());
 
+//Admin Dashborad routes
 app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/branch', require('./routes/branchRoutes'));
 app.use('/api/batch', require('./routes/batchRoutes'));
 app.use('/api/course', require('./routes/courseRoutes'));
+app.use('/api/lecturer', require('./routes/lecturerRoutes'));
+app.use('/api/coverage',  require('./routes/approveLectureCoverageRoutes'));
+app.use('/api/assignbatch', require('./routes/AssignBatchesRoutes'));
+
+//Lecturer Routes
+app.use('/api/Lecturer/course', require('./routes/courseRoutes'));
 app.use('/api/lecturer', require('./routes/lecturerRoutes'));
 app.use('/api/coverage',  require('./routes/approveLectureCoverageRoutes'));
 app.use('/api/assignbatch', require('./routes/AssignBatchesRoutes'));

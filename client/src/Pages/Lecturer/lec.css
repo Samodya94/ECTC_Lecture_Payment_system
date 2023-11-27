@@ -23,6 +23,20 @@
     flex: 14;
 }
 
+table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed; /* This ensures equal column width */
+  }
+
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
 .lecloginbody {
     width: 100%;
     height: 100vh;

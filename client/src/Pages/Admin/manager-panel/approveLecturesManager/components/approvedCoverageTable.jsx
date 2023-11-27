@@ -118,47 +118,53 @@ const TableComponent = ({ rows, columns }) => {
 
   const [lecturerNames, setLecturerNames] = React.useState({});
 
-  const getLecturerName = async (id) => {
-    try {
-      const response = await service.get(`lecturer/${id}`);
-      const lecturerName = response.data.firstName + " " + response.data.lastName;
-      setLecturerNames((prevNames) => ({
-        ...prevNames,
-        [id]: lecturerName,
-      }));
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      setLecturerNames((prevNames) => ({
-        ...prevNames,
-        [id]: "", // Set an empty string or handle the error as needed
-      }));
-    }
-  };
-
-  // Fetch all lecturer names when the component mounts
   React.useEffect(() => {
+    const getLecturerName = async (id) => {
+      try {
+        const response = await service.get(`lecturer/${id}`);
+        const lecturerName = response.data.firstName + " " + response.data.lastName;
+        setLecturerNames((prevNames) => ({
+          ...prevNames,
+          [id]: lecturerName,
+        }));
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setLecturerNames((prevNames) => ({
+          ...prevNames,
+          [id]: "", // Set an empty string or handle the error as needed
+        }));
+      }
+    };
+
     rows.forEach((row) => {
       if (!lecturerNames[row.lectureid]) {
         getLecturerName(row.lectureid);
       }
     });
-  }, [rows, lecturerNames]);
+  }, [rows, lecturerNames, service]);
 
-  function calculateTotalHours(startTime, endTime) {
-    const start = startTime.split(".");
-    const end = endTime.split(".");
+  function calculateDuration(duration) {
+    const hours = Math.floor(duration / 3600000);
+    const minutes = Math.floor((duration % 3600000) / 60000);
 
-    const startHours = parseInt(start[0]);
-    const startMinutes = parseInt(start[1]);
-
-    const endHours = parseInt(end[0]);
-    const endMinutes = parseInt(end[1]);
-
-    const totalHours = endHours - startHours;
-    const totalMinutes = endMinutes - startMinutes;
-
-    return `${totalHours}h : ${totalMinutes}m`;
+    return `${hours}h : ${minutes}m`;
   }
+
+  //get batch batchCode from coverage batchCode 
+  const [batched, setBatched] = React.useState({});
+
+  React.useEffect(() => {
+    const getBatch = async () => {
+      const response = await service.get("assignbatch");
+      const batches = response.data.reduce((acc, batch) => {
+        acc[batch._id] = batch.batchCode;
+        return acc;
+      }, {});
+      setBatched(batches);
+    };
+
+    getBatch();
+  }, [rows, service]);
 
   return (
     <>
@@ -171,6 +177,7 @@ const TableComponent = ({ rows, columns }) => {
             <TableRow className={styles.tHead}>
               {columns.map((column, index) => (
                 <TableCell
+                  key={index}
                   style={{ border: "1px solid #ccc", padding: "8px 16px" }}
                 >
                   <span className={styles.tHead}>{column}</span>
@@ -182,8 +189,8 @@ const TableComponent = ({ rows, columns }) => {
             {(rowsPerPage > 0
               ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               : rows
-            ).map((row) => (
-              <TableRow key={row.name} style={{ border: "1px solid #ccc" }}>
+            ).map((row, _id) => (
+              <TableRow key={row._id} style={{ border: "1px solid #ccc" }}>
                 <TableCell
                   component="th"
                   scope="row"
@@ -212,7 +219,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {row.batchCode}
+                  {batched[row.batchCode]}
                 </TableCell>
                 <TableCell
                   style={{
@@ -252,7 +259,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {calculateTotalHours(row.startTime, row.endTime)}
+                  {calculateDuration(row.duration)}
                 </TableCell>
                 <TableCell
                   style={{

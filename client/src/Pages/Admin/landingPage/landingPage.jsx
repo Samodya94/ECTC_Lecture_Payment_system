@@ -82,10 +82,7 @@ const LandingPage = () => {
           <Route path="approve-lectures" element={<ApproveLectures />} />
           <Route path="approved-lectures" element={<ApprovedLectures />} />
           <Route path="assign-batches" element={<AssignLecturers />} />
-          <Route
-            path="assign-batches/view-assigned/:id"
-            element={<ViewAssignedLecturers />}
-          />
+          <Route path="assign-batches/view-assigned/:id" element={<ViewAssignedLecturers />} />
 
           {/* Accounts Routes */}
           <Route path="add-payments" element={<AddPayments />} />
@@ -93,10 +90,7 @@ const LandingPage = () => {
           <Route path="finalized-payments" element={<FinalizedPayments />} />
 
           {/* Finance Routes */}
-          <Route
-            path="approve-payments-finance"
-            element={<ApprovePaymentsFinance />}
-          />
+          <Route path="approve-payments-finance" element={<ApprovePaymentsFinance />} />
           <Route path="rollback-payments" element={<RollbackPayments />} />
         </Routes>
       </div>

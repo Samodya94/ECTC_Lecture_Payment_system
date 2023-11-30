@@ -87,6 +87,12 @@ const getCoverageNotApproved = asyncHandler(async (req, res) => {
   res.status(200).json(coverage);
 });
 
+const getCoverages = asyncHandler(async (req, res) => {
+    const id = req.params.id
+    const coverage = await Coverage.findOne({ _id:id });
+    res.status(200).json(coverage);
+  });
+
 const getLecCoverageNotApproved = asyncHandler(async (req, res) => {
   const lecid = req.params.lecid;
   const coverage = await Coverage.find({
@@ -130,6 +136,7 @@ module.exports = {
   createCoverage,
   getCoverage,
   putCoverage,
+  getCoverages,
   deleteCoverage,
   getCoverageNotApproved,
   getCoverageApproved,

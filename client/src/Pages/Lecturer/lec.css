@@ -345,10 +345,32 @@ table {
     justify-content: center;
 }
 
-@media (max-width: 1820px) {
+.logDetails{
+    padding: 5vh 5vw;
+}
+
+.logDetails h1{
+    font-family: 'Poppins', 'sans';
+    color: #666768;
+}
+
+.log_datcard{
+    min-width: 10%;
+    min-height: 20vh;
+    background: #314497;
+    border-radius: 5px;
+}
+
+.log_datcard .card-top{
+    color: #ddd;
+    padding: 15px 15px;
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+@media (max-width: 2500px) {
 
     .sidenav-lec {
-        flex: 2;
+        flex: 3;
     }
 
     .lec-loginform input {
@@ -377,7 +399,7 @@ table {
     
 }
 
-@media (max-width: 1500px) {
+@media (max-width: 2200px) {
 
     .sidenav-lec,
     .min-sidenav2 {

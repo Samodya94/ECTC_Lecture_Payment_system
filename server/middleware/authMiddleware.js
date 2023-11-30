@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const asyncHandler = require('express-async-handler');
 const User = require('../model/userModel');
+const Lecturer = require('../model/lecturerModel')
 
 const protectUser = asyncHandler(async (req, res, next) => {
     let token;
@@ -12,6 +13,31 @@ const protectUser = asyncHandler(async (req, res, next) => {
             const decoded = jwt.verify(token, process.env.JWT_SECRET)
             //we can get all information from here, bcs it's getting user from mongo by decoded id
             req.user = await User.findById(decoded.id).select('-password');
+
+            next();
+        } catch (error) {
+            console.log(error);
+            res.status(401);
+            throw new Error('User Not Authorized');
+        }
+    }
+
+    if (!token) {
+        res.status(401);
+        throw new Error('User Not Authorized, No Token Passed');
+    }
+});
+
+const lecturerUser = asyncHandler(async (req, res, next) => {
+    let token;
+
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+        try {
+            token = req.headers.authorization.split(' ')[1];
+
+            const decoded = jwt.verify(token, process.env.JWT_SECRET)
+            //we can get all information from here, bcs it's getting user from mongo by decoded id
+            req.lecturer = await Lecturer.findById(decoded.id).select('-password');
 
             next();
         } catch (error) {
@@ -44,5 +70,6 @@ const authorize = (allowedUserLevels) => {
 
 module.exports = {
     protectUser,
+    lecturerUser,
     authorize,
 };

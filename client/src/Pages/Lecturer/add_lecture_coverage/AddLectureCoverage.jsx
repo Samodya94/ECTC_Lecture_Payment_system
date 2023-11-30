@@ -12,19 +12,63 @@ export const AddLectureCoverage = () => {
   const [batchCode, setBatchCode] = useState("");
   const [stime, setStime] = useState("");
   const [etime, setEtime] = useState("");
+  const [course, setCourse] = useState("");
+  const [duration, setDuratuion] = useState("")
   const [date, setDate] = useState("");
   const [coverage, setCoverage] = useState("");
+  const [seconds, setSeconds] = useState(0);
   const { lecturer } = useLecAuthContext();
+  const [remHours, setRemHours] = useState();
+  const [updateremHours, setUpdateremHours] = useState(0)
   const [batches, setBatches] = useState([]);
   const service = new Service();
 
-   
-
-  //
+ 
   useEffect(() => {
     getLecturer();
     getAssignedBatches();
+    calculateTimeDifference();
   }, [lecturer]);
+
+  useEffect(()=>{
+    getHours();
+    calculateRemHours();
+    
+  },[batchCode])
+
+  useEffect(()=>{
+    calculateTimeDifference();
+   
+  })
+
+  function calculateRemHours(){
+    if(seconds && duration){
+      const ms = seconds - duration;
+      setUpdateremHours(ms);
+      
+
+    }
+  }
+
+  const getHours =()=>{
+    const id = batchCode;
+
+      const response = service.get(`assignbatch`, id);
+      response
+        .then((res) => {
+          console.log(res.data);
+          let ms =res.data.remaining_hours*1000*60*60;
+          setRemHours(ms)
+          setCourse(res.data.course);
+          setSeconds(ms);
+          calculateRemHours();
+        })
+        .catch((error) => {
+          console.log(error, "Failed to Fetch information");
+        });
+  }
+
+
 
   const getLecturer = (e) => {
     if (lecturer) {
@@ -68,23 +112,50 @@ export const AddLectureCoverage = () => {
       const minutes = Math.floor(
         (timeDiffInMillis % (1000 * 60 * 60)) / (1000 * 60)
       );
-
-      return (`${hours} hours ${minutes} minutes`);
+        setDuratuion(timeDiffInMillis)
+      calculateRemHours();
     }
 
     return "";
   };
 
-  function handleSubmit(){
+  const handleSubmit = async (e) => {
 
-  }
+    e.preventDefault();
+
+    const lecid= lecturer.id;
+    const data = {
+      lectureid:lecid,
+      courseName:course,
+      batchCode:batchCode,
+      startTime:stime,
+      endTime:etime,
+      duration:duration,
+      date:date,
+      lectureCoverage:coverage,
+    }
+
+    console.log()
+
+    const respone = service.post('coverage', data)
+    respone.then((res) => {
+        console.log(res);
+        alert('Coverage Added');
+        window.location.reload();
+        
+    }).catch((error) => {
+        console.error('Error with adding data:', error);
+    });
+
+
+}
   return (
     <div>
-      <form onSubmit={handleSubmit()}>
+      <form onSubmit={handleSubmit}>
         <div className="add_coverage">
           <h1>Add Lecture Coverages</h1>
         </div>
-        <div className="row m-auto">
+        <div className="row m-auto my-3">
           <div className="col-md-6 ">
             <div className="input_fields">
               Lecture Name :
@@ -111,9 +182,12 @@ export const AddLectureCoverage = () => {
                 {batches.map((batch) => (
                   <option key={batch._id} value={batch._id}>
                     {batch.batchCode}
+                    
                   </option>
                 ))}
               </select>
+
+              {remHours && remHours + " Hours remains"}
             </div>
           </div>
         </div>
@@ -167,7 +241,7 @@ export const AddLectureCoverage = () => {
                 rows={2}
                 value={coverage}
                 onChange={(e)=>{
-                  setDate(e.target.value)
+                  setCoverage(e.target.value)
                 }}
                 >
                 {stime}
@@ -179,7 +253,8 @@ export const AddLectureCoverage = () => {
             <div className="input_fields my-2">
               <button className="btn btn-primary">Add Coverage</button>
             </div>
-            {calculateTimeDifference()}
+            &nbsp; {duration && duration}
+            {seconds +" " + updateremHours}
           </div>
         </div>
       </form>

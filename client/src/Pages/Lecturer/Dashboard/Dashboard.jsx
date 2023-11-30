@@ -11,7 +11,10 @@ import Service from "../../../utilities/httpService";
 export const Dashboard = () => {
   const [details, setDetails] = useState();
   const [batches, setBatches] = useState([]);
+  const [penCoverage, setPenCoverage] = useState([])
   const [noofBatches, setNoofBatches] = useState(0);
+  const [pendingCove, setPendingCove] = useState(0);
+  const [approvedCove, setApprovedCove] = useState(0)
 
   const { lecturer } = useLecAuthContext();
   const service = new Service();
@@ -20,6 +23,8 @@ export const Dashboard = () => {
   //
   useEffect(() => {
     getAssignedBatches();
+    getViewCoverage();
+    getApprovedCoverage();
   }, [lecturer]);
 
   const getAssignedBatches = (e) => {
@@ -39,6 +44,37 @@ export const Dashboard = () => {
     }
   };
 
+  const getViewCoverage = () => {
+    if (lecturer) {
+      const lecid = lecturer.id;
+      const respone = service.get("coverage/notapprovedbymonth", lecid);
+      respone
+        .then((res) => {
+          console.log(res.data);
+          setPenCoverage(res.data);
+          setPendingCove(res.data.length)
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
+
+  const getApprovedCoverage = () => {
+    if (lecturer) {
+      const lecid = lecturer.id;
+      const respone = service.get("coverage/approved", lecid);
+      respone
+        .then((res) => {
+          console.log(res.data);
+          setApprovedCove(res.data.length)
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
+
   useEffect(() => {
     setCurrentDate(new Date());
   }, []);
@@ -51,15 +87,17 @@ export const Dashboard = () => {
     setDetails("AssignedBatches");
   }
 
-  function ViewApproved(e) {
-    e.preventDefault();
-    setDetails("ApproveCove");
-  }
-
   function ViewPending(e) {
     e.preventDefault();
-    setDetails("Pending");
+    setDetails("PendingCoverages");
   }
+
+  function ViewApproved(e) {
+    e.preventDefault();
+    setDetails("ApprovedCoverages");
+  }
+
+  
 
   return (
     <div>
@@ -70,42 +108,43 @@ export const Dashboard = () => {
             <div className="card_contet">
               {noofBatches < 10 ? "0"+noofBatches : noofBatches }
               <div className="card-bottom" onClick={ViewAssBatches}>
-                <BsFillArrowRightCircleFill /> &nbsp; View more
+                <BsFillArrowRightCircleFill /> &nbsp; View
               </div>
             </div>
           </div>
         </div>
         <div className="col-md-4">
           <div className="card">
-            <div className="card_title">Approved Lectures <br></br><b>{currentMonth} {currentYear}</b></div>
+            <div className="card_title">Approval Pending Lectures for<br></br><b>{currentMonth} {currentYear}</b></div>
             <div className="card_contet">
-              55
-              <div className="card-bottom" onClick={ViewApproved}>
-                <BsFillArrowRightCircleFill /> &nbsp; View more
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-4">
-          <div className="card">
-            <div className="card_title">Aproval Pending Lectures</div>
-            <div className="card_contet">
-              55
+              {pendingCove < 10 ? "0"+ pendingCove : pendingCove}
               <div className="card-bottom" onClick={ViewPending}>
-                <BsFillArrowRightCircleFill /> &nbsp; View more
+                <BsFillArrowRightCircleFill /> &nbsp; View
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="col-md-4">
+          <div className="card">
+            <div className="card_title">Approved Lectures </div>
+            <div className="card_contet p-2"> 
+              {approvedCove < 10 ? "0"+approvedCove:approvedCove}
+              <div className="card-bottom" onClick={ViewApproved}>
+                <BsFillArrowRightCircleFill /> &nbsp; View
               </div>
             </div>
           </div>
         </div>
       </div>
       <div className="page_midrow my-5">
-        {details === "AssignedBatches" ? (
-          <ViewAssignedLecturers />
-        ) : details === "ApproveCove" ? (
-          <ViewApprovedLecCov />
-        ) : details === "Pending" ? (
-          <PendingLecture />
-        ) : null}
+        {
+          details ==="AssignedBatches" ?
+            <ViewAssignedLecturers/> :
+          details === "PendingCoverages"  ?
+            <PendingLecture/>:
+          details === "ApprovedCoverages" ? 
+            <ViewApprovedLecCov/>:""
+        }
       </div>
     </div>
   );

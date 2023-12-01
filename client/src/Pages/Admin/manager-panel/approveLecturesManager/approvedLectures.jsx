@@ -1,4 +1,4 @@
-import { React, useState , useCallback,useMemo,useEffect} from "react";
+import { React, useState, useCallback, useMemo, useEffect } from "react";
 import Service from "../../../../utilities/httpService"
 // Styles
 import styles from "./approveLectures.module.css";
@@ -7,40 +7,6 @@ import styles from "./approveLectures.module.css";
 import TableComponent from "./components/approvedCoverageTable";
 import DropdownInput from "./components/dropdownInput";
 import MonthSelector from "./components/monthSelectorField";
-
-// Sample data for table
-const data = [
-  {
-    lecturerName: "Asha Madushani",
-    courseName: "OOC (L) WEnd",
-    batchCode: "OOC(Lab)-Asha-July 2023(Weekend)",
-    date: "2023-10-01",
-    startTime: "07:00:00",
-    endTime: "09:00:00",
-    totalHours: "2h : 0m",
-    lectureCoverage: "Lab 07",
-  },
-  {
-    lecturerName: "Asha Madushani",
-    courseName: "OOC (L) WEnd",
-    batchCode: "OOC(Lab)-Asha-July 2023(Weekend)",
-    date: "2023-10-01",
-    startTime: "07:00:00",
-    endTime: "09:00:00",
-    totalHours: "2h : 0m",
-    lectureCoverage: "Lab 07",
-  },
-  {
-    lecturerName: "Asha Madushani",
-    courseName: "OOC (L) WEnd",
-    batchCode: "OOC(Lab)-Asha-July 2023(Weekend)",
-    date: "2023-10-01",
-    startTime: "07:00:00",
-    endTime: "09:00:00",
-    totalHours: "2h : 0m",
-    lectureCoverage: "Lab 07",
-  },
-];
 
 const tableColumns = [
   "Lecturer Name",

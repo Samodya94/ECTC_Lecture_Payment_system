@@ -121,11 +121,17 @@ const getCoverageApproved = asyncHandler(async (req, res) => {
 });
 
 const getCoverageApprovedByLecturer = asyncHandler(async (req, res) => {
-    const lecid = req.params.lecid
+  const lecid = req.params.lecid
 
-    const coverage = await Coverage.find({ status: "Approved",lectureid:lecid });
-    res.status(200).json(coverage);
-  });
+  const coverage = await Coverage.find({ status: "Approved", lectureid: lecid });
+  res.status(200).json(coverage);
+});
+
+const getCoverageByID = asyncHandler(async (req, res) => {
+  const coverage = await Coverage.findById(req.params.id);
+  res.status(200).json(coverage);
+});
+
 module.exports = {
   createCoverage,
   getCoverage,
@@ -135,5 +141,6 @@ module.exports = {
   getCoverageApproved,
   getLecCoverageNotApproved,
   getCoverageNotApprovedByMonth,
-  getCoverageApprovedByLecturer
+  getCoverageApprovedByLecturer,
+  getCoverageByID
 };

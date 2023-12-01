@@ -80,7 +80,7 @@ const AssignLecturers = () => {
   const [batchCodeList, setBatchCodeList] = useState([]);
 
   const batchCodeListAll = batchCodeList.map((item) => {
-    return { _id: item.batchCode, name: item.batchCode };
+    return { _id: item._id, name: item.batchCode };
   });
 
   //get nic from lecturer name
@@ -118,7 +118,7 @@ const AssignLecturers = () => {
     try {
       let course = "";
       batchCodeList.forEach((item) => {
-        if (item.batchCode === batchCode) {
+        if (item._id === batchCode) {
           course = item.course;
         }
       });

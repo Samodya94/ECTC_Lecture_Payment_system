@@ -111,6 +111,22 @@ const TableComponent = ({ rows, columns }) => {
     service.delete(`assignbatch/${id}`);
   };
 
+  //get batch batchCode from coverage batchCode 
+  const [batched, setBatched] = React.useState({});
+
+  React.useEffect(() => {
+    const getBatch = async () => {
+      const response = await service.get("batch");
+      const batches = response.data.reduce((acc, batch) => {
+        acc[batch._id] = batch.batchCode;
+        return acc;
+      }, {});
+      setBatched(batches);
+    };
+
+    getBatch();
+  }, [rows, service]);
+
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -187,7 +203,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {row.batchCode}
+                  {batched[row.batchCode]}
                 </TableCell>
                 <TableCell
                   style={{

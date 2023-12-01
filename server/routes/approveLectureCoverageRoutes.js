@@ -4,6 +4,7 @@ const { createCoverage,
         deleteCoverage,
         putCoverage,
         getCoverage,
+        getCoverages,
         getCoverageNotApproved,
         getCoverageApproved,
         getLecCoverageNotApproved,
@@ -13,7 +14,7 @@ const { createCoverage,
 
 router.post('/', createCoverage).get('/', getCoverage);
 router.put('/:id', putCoverage).delete('/:id', deleteCoverage);
-router.get('/:id', getCoverageByID);
+router.get('/:id', getCoverages);
 router.get('/notapproved', getCoverageNotApproved);
 router.get('/approved', getCoverageApproved);
 router.get('/approved/:lecid', getCoverageApprovedByLecturer)

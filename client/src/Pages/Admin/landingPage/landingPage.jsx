@@ -34,6 +34,7 @@ import ConfirmedPayments from "../accounts-panel/confirmedPayments/confirmedPaym
 // User Level == accounts components
 import AddPayments from "../accounts-panel/addPayments/addPayments";
 import FinalizedPayments from "../accounts-panel/finalizedPayments/finalizedPayments";
+import CreatePayment from "../accounts-panel/addPayments/createPayment";
 
 // User Level == finance components
 import ApprovePaymentsFinance from "../finance-panel/approvePayments/approvePayments";
@@ -82,21 +83,16 @@ const LandingPage = () => {
           <Route path="approve-lectures" element={<ApproveLectures />} />
           <Route path="approved-lectures" element={<ApprovedLectures />} />
           <Route path="assign-batches" element={<AssignLecturers />} />
-          <Route
-            path="assign-batches/view-assigned/:id"
-            element={<ViewAssignedLecturers />}
-          />
+          <Route path="assign-batches/view-assigned/:id" element={<ViewAssignedLecturers />} />
 
           {/* Accounts Routes */}
           <Route path="add-payments" element={<AddPayments />} />
+          <Route path="add-payments/create-payment" element={<CreatePayment />} />
           <Route path="confirmed-payments" element={<ConfirmedPayments />} />
           <Route path="finalized-payments" element={<FinalizedPayments />} />
 
           {/* Finance Routes */}
-          <Route
-            path="approve-payments-finance"
-            element={<ApprovePaymentsFinance />}
-          />
+          <Route path="approve-payments-finance" element={<ApprovePaymentsFinance />} />
           <Route path="rollback-payments" element={<RollbackPayments />} />
         </Routes>
       </div>

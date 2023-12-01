@@ -118,31 +118,30 @@ const TableComponent = ({ rows, columns }) => {
 
   const [lecturerNames, setLecturerNames] = React.useState({});
 
-  const getLecturerName = async (id) => {
-    try {
-      const response = await service.get(`lecturer/${id}`);
-      const lecturerName = response.data.firstName + " " + response.data.lastName;
-      setLecturerNames((prevNames) => ({
-        ...prevNames,
-        [id]: lecturerName,
-      }));
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      setLecturerNames((prevNames) => ({
-        ...prevNames,
-        [id]: "", // Set an empty string or handle the error as needed
-      }));
-    }
-  };
-
-  // Fetch all lecturer names when the component mounts
   React.useEffect(() => {
+    const getLecturerName = async (id) => {
+      try {
+        const response = await service.get(`lecturer/${id}`);
+        const lecturerName = response.data.firstName + " " + response.data.lastName;
+        setLecturerNames((prevNames) => ({
+          ...prevNames,
+          [id]: lecturerName,
+        }));
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setLecturerNames((prevNames) => ({
+          ...prevNames,
+          [id]: "", // Set an empty string or handle the error as needed
+        }));
+      }
+    };
+
     rows.forEach((row) => {
       if (!lecturerNames[row.lectureid]) {
         getLecturerName(row.lectureid);
       }
     });
-  }, [rows, lecturerNames]);
+  }, [rows, lecturerNames, service]);
 
   //update batch details function
   const updateApproveCoverage = (id) => {
@@ -180,20 +179,26 @@ const TableComponent = ({ rows, columns }) => {
       });
   };
 
-  function calculateTotalHours(startTime, endTime) {
-    const start = startTime.split(".");
-    const end = endTime.split(".");
+  const [batched, setBatched] = React.useState({});
 
-    const startHours = parseInt(start[0]);
-    const startMinutes = parseInt(start[1]);
+  React.useEffect(() => {
+    const getBatch = async () => {
+      const response = await service.get("assignbatch");
+      const batches = response.data.reduce((acc, batch) => {
+        acc[batch._id] = batch.batchCode;
+        return acc;
+      }, {});
+      setBatched(batches);
+    };
 
-    const endHours = parseInt(end[0]);
-    const endMinutes = parseInt(end[1]);
+    getBatch();
+  }, [rows, service]);
 
-    const totalHours = endHours - startHours;
-    const totalMinutes = endMinutes - startMinutes;
+  function calculateDuration(duration) {
+    const hours = Math.floor(duration / 3600000);
+    const minutes = Math.floor((duration % 3600000) / 60000);
 
-    return `${totalHours}h : ${totalMinutes}m`;
+    return `${hours}h : ${minutes}m`;
   }
 
   return (
@@ -249,7 +254,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {row.batchCode}
+                  {batched[row.batchCode]}
                 </TableCell>
                 <TableCell
                   style={{
@@ -289,7 +294,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {calculateTotalHours(row.startTime, row.endTime)}
+                  {calculateDuration(row.duration)}
                 </TableCell>
                 <TableCell
                   style={{

@@ -87,11 +87,11 @@ const getCoverageNotApproved = asyncHandler(async (req, res) => {
   res.status(200).json(coverage);
 });
 
-const getCoverages = asyncHandler(async (req, res) => {
-    const id = req.params.id
-    const coverage = await Coverage.findOne({ _id:id });
-    res.status(200).json(coverage);
-  });
+const getCoverageById = asyncHandler(async (req, res) => {
+  const id = req.params.id
+  const coverage = await Coverage.findOne({ _id: id });
+  res.status(200).json(coverage);
+});
 
 const getLecCoverageNotApproved = asyncHandler(async (req, res) => {
   const lecid = req.params.lecid;
@@ -127,20 +127,21 @@ const getCoverageApproved = asyncHandler(async (req, res) => {
 });
 
 const getCoverageApprovedByLecturer = asyncHandler(async (req, res) => {
-    const lecid = req.params.lecid
+  const lecid = req.params.lecid
 
-    const coverage = await Coverage.find({ status: "Approved",lectureid:lecid });
-    res.status(200).json(coverage);
-  });
+  const coverage = await Coverage.find({ status: "Approved", lectureid: lecid });
+  res.status(200).json(coverage);
+});
+
 module.exports = {
   createCoverage,
   getCoverage,
   putCoverage,
-  getCoverages,
+  getCoverageById,
   deleteCoverage,
   getCoverageNotApproved,
   getCoverageApproved,
   getLecCoverageNotApproved,
   getCoverageNotApprovedByMonth,
-  getCoverageApprovedByLecturer
+  getCoverageApprovedByLecturer,
 };

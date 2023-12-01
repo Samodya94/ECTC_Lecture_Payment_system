@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
 const PaymentsSchema = new mongoose.Schema({
+    lecturerId: {
+        type: String,
+        required: true,
+    },
 
     coursename: {
         type: String,
@@ -30,7 +34,15 @@ const PaymentsSchema = new mongoose.Schema({
     paidamount: {
         type: String,
         required: true,
-    }
+    },
+
+    document: {
+        type: String,
+        required: false,
+    },
+
+}, {
+    timestamps: true,
 
 })
 

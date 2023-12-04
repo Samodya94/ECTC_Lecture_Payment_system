@@ -2,6 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import { useTheme } from "@mui/material/styles";
 
+import Service from "../../../../../utilities/httpService";
+
 // MUI Table components
 import {
   Box,
@@ -111,6 +113,115 @@ const TableComponent = ({ rows, columns }) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
+  const service = React.useMemo(() => new Service(), []);
+
+  const [lecturerNames, setLecturerNames] = React.useState({});
+
+  React.useEffect(() => {
+    const getLecturerName = async (id) => {
+      try {
+        const response = await service.get(`lecturer/${id}`);
+        const lecturerName = response.data.firstName + " " + response.data.lastName;
+        setLecturerNames((prevNames) => ({
+          ...prevNames,
+          [id]: lecturerName,
+        }));
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setLecturerNames((prevNames) => ({
+          ...prevNames,
+          [id]: "", // Set an empty string or handle the error as needed
+        }));
+      }
+    };
+
+    rows.forEach((row) => {
+      if (!lecturerNames[row.lectureid]) {
+        getLecturerName(row.lectureid);
+      }
+    });
+  }, [rows, lecturerNames, service]);
+
+  //get lecturer branch from lecturer id
+  const [branches, setBranches] = React.useState({});
+
+  React.useEffect(() => {
+    const getBranchName = async (id) => {
+      try {
+        const response = await service.get(`lecturer/${id}`);
+        const branch = response.data.branch;
+        setBranches((prevNames) => ({
+          ...prevNames,
+          [id]: branch,
+        }));
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setBranches((prevNames) => ({
+          ...prevNames,
+          [id]: "", // Set an empty string or handle the error as needed
+        }));
+      }
+    };
+
+    rows.forEach((row) => {
+      if (!branches[row.lectureid]) {
+        getBranchName(row.lectureid);
+      }
+    });
+  }, [rows, branches, service]);
+
+
+  //get batch batchCode from coverage batchCode 
+  const [batched, setBatched] = React.useState({});
+
+  React.useEffect(() => {
+    const getBatch = async () => {
+      const response = await service.get("assignbatch");
+      const batches = response.data.reduce((acc, batch) => {
+        acc[batch._id] = batch.batchCode;
+        return acc;
+      }, {});
+      setBatched(batches);
+    };
+
+    getBatch();
+  }, [rows, service]);
+
+  //get batch batchCode from batched batchCode
+  const [batchCodes, setBatchCodes] = React.useState({});
+
+  React.useEffect(() => {
+    const getBatchCode = async () => {
+      const response = await service.get("batch");
+      const batches = response.data.reduce((acc, batch) => {
+        acc[batch._id] = batch.batchCode;
+        return acc;
+      }, {});
+      setBatchCodes(batches);
+    };
+
+    getBatchCode();
+  }, [rows, service]);
+
+
+  //get pay rate from coverage batchCode
+  const [payRates, setPayRates] = React.useState({});
+
+  React.useEffect(() => {
+    const getRate = async () => {
+      const response = await service.get("assignbatch");
+      const batches = response.data.reduce((acc, batch) => {
+        acc[batch._id] = batch.rate;
+        return acc;
+      }, {});
+      setPayRates(batches);
+    };
+
+    getRate();
+  }, [rows, service]);
+
+
   return (
     <>
       <TableContainer
@@ -122,6 +233,7 @@ const TableComponent = ({ rows, columns }) => {
             <TableRow className={styles.tHead}>
               {columns.map((column, index) => (
                 <TableCell
+                  key={index}
                   style={{ border: "1px solid #ccc", padding: "8px 16px" }}
                 >
                   <span className={styles.tHead}>{column}</span>
@@ -133,8 +245,8 @@ const TableComponent = ({ rows, columns }) => {
             {(rowsPerPage > 0
               ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               : rows
-            ).map((row) => (
-              <TableRow key={row.name} style={{ border: "1px solid #ccc" }}>
+            ).map((row, _id) => (
+              <TableRow key={row._id} style={{ border: "1px solid #ccc" }}>
                 <TableCell
                   component="th"
                   scope="row"
@@ -143,7 +255,7 @@ const TableComponent = ({ rows, columns }) => {
                     padding: "5px 16px",
                   }}
                 >
-                  {row.lecturerName}
+                  {lecturerNames[row.lectureid] || "Loading..."}
                 </TableCell>
                 <TableCell
                   style={{
@@ -153,7 +265,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {row.branch}
+                  {branches[row.lectureid] || "Loading..."}
                 </TableCell>
                 <TableCell
                   style={{
@@ -173,7 +285,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {row.batchCode}
+                  {batchCodes[batched[row.batchCode]]}
                 </TableCell>
                 <TableCell
                   style={{
@@ -183,7 +295,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {row.payMonth}
+                  {row.date.slice(0, 7)}
                 </TableCell>
                 <TableCell
                   style={{
@@ -193,7 +305,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {row.payRate}
+                  {payRates[row.batchCode]}
                 </TableCell>
                 <TableCell
                   style={{

@@ -104,20 +104,45 @@ const getLecCoverageNotApproved = asyncHandler(async (req, res) => {
 
 const getCoverageNotApprovedByMonth = asyncHandler(async (req, res) => {
   const lecid = req.params.lecid;
-  const currentDate = new Date();
-  const currentMonth = currentDate.getMonth() + 1;
+ const currentDate = new Date();
+  console.log(currentDate)
+   const currentMonth = currentDate.getMonth() + 1;
   const currentYear = currentDate.getFullYear();
+
+  if (isNaN(currentMonth) || isNaN(currentYear)) {
+    return res.status(500).json({ error: 'Invalid current month or year' });
+  }
+
+  let nextMonth = currentMonth + 1;
+let nextYear = currentYear;
+
+// Check if it's December (12), in which case the next month is January of the next year
+if (nextMonth > 12) {
+  nextMonth = 1;
+  nextYear++;
+}
+
+console.log(nextMonth)
+console.log(nextYear)
+
+const startDate = new Date(`${currentYear}-${currentMonth}-01T00:00:00.000Z`);
+const lastDayOfMonth = new Date(currentYear, currentMonth, 0).getDate();
+const endDate = new Date(`${currentYear}-${currentMonth}-${lastDayOfMonth}T23:59:59.999Z`);
+ 
+console.log(endDate)
 
   const coverage = await Coverage.find({
     status: "Not Approved",
     lectureid: lecid,
     date: {
-      $gte: new Date(`${currentYear}-${currentMonth}-01`),
-      $lt: new Date(`${currentYear}-${currentMonth + 1}-01`),
+      $exists: true,
+      $type: 'date',
+      $gte: startDate,
+      $lt: endDate,
     },
   });
 
-  res.status(200).json(coverage);
+   res.status(200).json(coverage);
 });
 
 //get all status = Approved

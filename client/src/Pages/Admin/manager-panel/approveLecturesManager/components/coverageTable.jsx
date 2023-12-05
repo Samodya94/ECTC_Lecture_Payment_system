@@ -143,6 +143,40 @@ const TableComponent = ({ rows, columns }) => {
     });
   }, [rows, lecturerNames, service]);
 
+  //get batch batchCode from coverage batchCode 
+  const [batched, setBatched] = React.useState({});
+
+  React.useEffect(() => {
+    const getBatch = async () => {
+      const response = await service.get("assignbatch");
+      const batches = response.data.reduce((acc, batch) => {
+        acc[batch._id] = batch.batchCode;
+        return acc;
+      }, {});
+      setBatched(batches);
+    };
+
+    getBatch();
+  }, [rows, service]);
+
+  //get batch batchCode from batched batchCode
+  const [batchCodes, setBatchCodes] = React.useState({});
+
+  React.useEffect(() => {
+    const getBatchCode = async () => {
+      const response = await service.get("batch");
+      const batches = response.data.reduce((acc, batch) => {
+        acc[batch._id] = batch.batchCode;
+        return acc;
+      }, {});
+      setBatchCodes(batches);
+    };
+
+    getBatchCode();
+  }, [rows, service]);
+
+
+
   //update batch details function
   const updateApproveCoverage = (id) => {
     const data = {
@@ -179,20 +213,6 @@ const TableComponent = ({ rows, columns }) => {
       });
   };
 
-  const [batched, setBatched] = React.useState({});
-
-  React.useEffect(() => {
-    const getBatch = async () => {
-      const response = await service.get("assignbatch");
-      const batches = response.data.reduce((acc, batch) => {
-        acc[batch._id] = batch.batchCode;
-        return acc;
-      }, {});
-      setBatched(batches);
-    };
-
-    getBatch();
-  }, [rows, service]);
 
   function calculateDuration(duration) {
     const hours = Math.floor(duration / 3600000);
@@ -254,7 +274,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {batched[row.batchCode]}
+                  {batchCodes[batched[row.batchCode]]}
                 </TableCell>
                 <TableCell
                   style={{

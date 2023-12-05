@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { useTheme } from "@mui/material/styles";
+import { useNavigate } from "react-router-dom";
 
 import Service from "../../../../../utilities/httpService";
 
@@ -100,6 +101,8 @@ TablePaginationActions.propTypes = {
 const TableComponent = ({ rows, columns }) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+  const navigate = useNavigate();
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -315,7 +318,8 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="center"
                 >
-                  <button className={styles.approveBtn}> Add Payments </button>
+                  <button className={styles.approveBtn}
+                    onClick={() => navigate(`create-payment/${row._id}`)}> Add Payments </button>
                 </TableCell>
               </TableRow>
             ))}

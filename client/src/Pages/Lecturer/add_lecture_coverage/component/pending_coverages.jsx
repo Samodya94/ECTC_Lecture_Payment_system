@@ -10,13 +10,26 @@ export const PendingCoverages = () => {
   const [coverages, setCoverages] = useState([]);
   const { lecturer } = useLecAuthContext();
   const service = new Service();
-  const [batched, setBatched] = useState({});
-
+  const [assgbatches, setAssgBatches] = useState([]);
   useEffect(() => {
     getViewCoverage();
-    getBatch()
-    formatDuration()
+    formatDuration();
+    getdata();
   }, [lecturer]);
+
+  
+
+  function getdata(){
+    const response = service.get("batch");
+    response.then((res)=>{
+      const batchcode = res.data.reduce((ace, batch)=>{
+        ace[batch._id] = batch.batchCode;
+        return ace;
+      },{})
+      console.log(batchcode)
+      setAssgBatches(batchcode);
+    })
+  }
 
   const getViewCoverage = () => {
     if (lecturer) {
@@ -32,17 +45,17 @@ export const PendingCoverages = () => {
     }
   };
 
-  function getBatch() {
-    const response = service.get("assignbatch");
-    response.then((res) => {
-      const batches = res.data.reduce((acc, batch) => {
-        acc[batch._id] = batch.batchCode;
-        return acc;
-      }, {});
-      setBatched(batches);
+  // function getBatch() {
+  //   const response = service.get("assignbatch");
+  //   response.then((res) => {
+  //     const batches = res.data.reduce((acc, batch) => {
+  //       acc[batch._id] = batch.batchCode;
+  //       return acc;
+  //     }, {});
+  //     setBatched(batches);
       
-    });
-  };
+  //   });
+  // };
 
   const formatDuration = (milliseconds) => {
     if (!milliseconds) {
@@ -74,7 +87,7 @@ export const PendingCoverages = () => {
             coverages.map((coverage) =>(
                 <tr key={coverage._id}>
                     <td>{coverage.courseName}</td>
-                    <td>{batched[coverage.batchCode]}</td>
+                    <td>{assgbatches[coverage.batchCode]}</td>
                     <td>{new Date(coverage.date).toLocaleDateString(
                     "en-US",
                     { year: "numeric", month: "numeric", day: "numeric" }

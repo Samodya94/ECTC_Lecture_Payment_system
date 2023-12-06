@@ -120,7 +120,7 @@ export const Dashboard = () => {
           <div className="card">
             <div className="card_title">Approval Pending Lectures for<br></br><b>{currentMonth} {currentYear}</b></div>
             <div className="card_contet">
-              {pendingCove}
+              {pendingCove<10? "0"+pendingCove: pendingCove}
               <div className="card-bottom" onClick={ViewPending}>
                 <BsFillArrowRightCircleFill /> &nbsp; View
               </div>

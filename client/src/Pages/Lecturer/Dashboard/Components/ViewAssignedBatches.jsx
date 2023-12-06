@@ -7,6 +7,7 @@ export const ViewAssignedLecturers = () => {
   const service = new Service();
 
   const [batches, setBatches] = useState([]);
+  const [batchcodes,setBatchcodes] = useState([]);
   const [batched, setBatched] = useState({});
   const [batchedEnd, setBatchedEnd] = useState({});
 
@@ -20,14 +21,19 @@ export const ViewAssignedLecturers = () => {
     const response = service.get("batch");
     response.then((res) => {
       console.log(res.data);
+      const batchcodee = res.data.reduce((ace, batch)=>{
+        ace[batch._id] = batch.batchCode;
+        return ace;
+      }, {})
       const batched = res.data.reduce((acc, batch) => {
-        acc[batch.batchCode] = batch.startDate;
+        acc[batch._id] = batch.startDate;
         return acc;
       }, {});
       const batchedEnd = res.data.reduce((acco, batch) => {
-        acco[batch.batchCode] = batch.endDate;
+        acco[batch._id] = batch.endDate;
         return acco;
       }, {});
+      setBatchcodes(batchcodee)
       setBatched(batched);
       setBatchedEnd(batchedEnd);
     });
@@ -96,7 +102,7 @@ export const ViewAssignedLecturers = () => {
                   )}
                 </td>
                 <td>{batch.course}</td>
-                <td>{batch.batchCode}</td>
+                <td>{batchcodes[batch.batchCode]}</td>
                 <td>{batch.rate}</td>
                 <td>{batch.hours}</td>
                 <td>{batch.remaining_hours}</td>

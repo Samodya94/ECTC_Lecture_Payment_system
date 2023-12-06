@@ -19,6 +19,44 @@ const createCoverage = asyncHandler(async (req, res) => {
   } = req.body;
 
   try {
+    // Custom validation to check for overlapping time intervals
+    const existingCoverage = await Coverage.findOne({
+      lectureid,
+      date,
+      $or: [
+        {
+          $and: [
+            { startTime: { $lte: startTime } },
+            { endTime: { $gte: startTime } }
+          ]
+        },
+        {
+          $and: [
+            { startTime: { $lte: endTime } },
+            { endTime: { $gte: endTime } }
+          ]
+        },
+        {
+          $and: [
+            { startTime: { $gte: startTime } },
+            { endTime: { $lte: endTime } }
+          ]
+        }
+      ]
+    });
+
+    if (existingCoverage) {
+      res.status(400);
+      throw new Error('Coverage with overlapping time already exists');
+    }
+
+    // Additional custom validation for ensuring duration > 0
+    if (duration <= 0) {
+      res.status(400);
+      throw new Error('Duration must be greater than 0');
+    }
+
+    // Create coverage if validation passes
     const coverage = await Coverage.create({
       lectureid,
       courseName,
@@ -30,26 +68,23 @@ const createCoverage = asyncHandler(async (req, res) => {
       lectureCoverage,
     });
 
-    if (coverage) {
-      res.status(200).json({
-        coverageID: coverage._id,
-        lectureid: coverage.lectureid,
-        courseName: coverage.courseName,
-        batchCode: coverage.batchCode,
-        startTime: coverage.startTime,
-        endTime: coverage.endTime,
-        duration: coverage.duration,
-        date: coverage.date,
-        lectureCoverage: coverage.lectureCoverage,
-      });
-    } else {
-      res.status(400);
-      throw new Error("Invalid Course Details");
-    }
+    res.status(200).json({
+      coverageID: coverage._id,
+      lectureid: coverage.lectureid,
+      courseName: coverage.courseName,
+      batchCode: coverage.batchCode,
+      startTime: coverage.startTime,
+      endTime: coverage.endTime,
+      duration: coverage.duration,
+      date: coverage.date,
+      lectureCoverage: coverage.lectureCoverage,
+    });
   } catch (error) {
-    console.log(error.message);
+    console.error(error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
 
 const deleteCoverage = asyncHandler(async (req, res) => {
   const coverage = await Coverage.findById(req.params.id);

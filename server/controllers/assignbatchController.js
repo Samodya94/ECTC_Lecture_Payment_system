@@ -94,6 +94,23 @@ const getAssignedBatchById = asyncHandler(async (req, res) => {
     res.status(200).json(batch);
 });
 
+const getAssignedBatchCode = asyncHandler(async (req, res) => {
+    const {bcode} = req.params;
+
+    const batchcode = await AssignedBatch.findOne({
+        batchCode:bcode
+    })
+
+    if (!batchcode) {
+        res.status(404);
+        throw new Error('Assigned Batch not found');
+    }
+
+    res.status(200).json(batchcode);
+
+    
+});
+
 const getAssignedByLecture = (req, res) => {
     const { lecturerID } = req.params;
 
@@ -114,5 +131,6 @@ module.exports = {
     deleteAssignedBatch,
     getallAssignedBatches,
     getAssignedBatchById,
-    getAssignedByLecture
+    getAssignedByLecture,
+    getAssignedBatchCode
 };

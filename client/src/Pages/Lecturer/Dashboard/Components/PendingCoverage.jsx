@@ -8,6 +8,8 @@ export const PendingLecture = () => {
   const service = new Service();
   const [batched, setBatched] = useState({});
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [batchcodes,setBatchcodes] = useState([]);
+
 
   const currentMonth = currentDate.toLocaleString("default", { month: "long" });
   const currentYear = currentDate.getFullYear();
@@ -15,7 +17,19 @@ export const PendingLecture = () => {
   useEffect(() => {
     getViewCoverage();
     getBatch();
+    getdata();
   }, [lecturer]);
+
+  function getdata(){
+    const response = service.get("batch");
+    response.then((res)=>{
+      const batchcodee = res.data.reduce((ace, batch)=>{
+        ace[batch._id] = batch.batchCode;
+        return ace;
+      },{})
+      setBatchcodes(batchcodee);
+    })
+  }
 
   useEffect(() => {
     setCurrentDate(new Date());
@@ -75,7 +89,7 @@ export const PendingLecture = () => {
           {coverages.map((coverage) => (
             <tr key={coverage._id}>
               <td>{coverage.courseName}</td>
-              <td>{batched[coverage.batchCode]}</td>
+              <td>{batchcodes[coverage.batchCode]}</td>
               <td> {new Date(coverage.date).toLocaleDateString(
                     "en-US",
                     { year: "numeric", month: "numeric", day: "numeric" }

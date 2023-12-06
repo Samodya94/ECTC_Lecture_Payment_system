@@ -21,6 +21,7 @@ export const AddLectureCoverage = () => {
   const [remHours, setRemHours] = useState();
   const [updateremHours, setUpdateremHours] = useState(0)
   const [batches, setBatches] = useState([]);
+  const [assgbatch, setAssgBatches] = useState([]);
   const service = new Service();
 
  
@@ -28,7 +29,19 @@ export const AddLectureCoverage = () => {
     getLecturer();
     getAssignedBatches();
     calculateTimeDifference();
+    getdata();
   }, [lecturer]);
+
+  function getdata(){
+    const response = service.get("batch");
+    response.then((res)=>{
+      const batchcodee = res.data.reduce((ace, batch)=>{
+        ace[batch._id] = batch.batchCode;
+        return ace;
+      },{})
+      setAssgBatches(batchcodee);
+    })
+  }
 
   useEffect(()=>{
     getHours();
@@ -180,14 +193,14 @@ export const AddLectureCoverage = () => {
               >
                 <option> --Select Batch-- </option>
                 {batches.map((batch) => (
-                  <option key={batch._id} value={batch._id}>
-                    {batch.batchCode}
+                  <option key={batch._id} value={batch.batchCode}>
+                    {assgbatch[batch.batchCode]}
                     
                   </option>
                 ))}
               </select>
 
-              {remHours && remHours + " Hours remains"}
+              {remHours && remHours + " Hours remains" }
             </div>
           </div>
         </div>

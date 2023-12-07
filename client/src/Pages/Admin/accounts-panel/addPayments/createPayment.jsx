@@ -7,10 +7,21 @@ import Service from "../../../../utilities/httpService";
 import styles from "./createPayment.module.css";
 
 // Components
+import TableComponent from "./components/paymentTable";
 import InputField from "../../components/inputField";
 import PrimaryButton from "../../components/primaryButton";
 import InputFieldDis from "../../components/inputFieldDis";
+import InputNumField from "../../components/inputNumField";
 import InputNumFieldDis from "../../components/inputNumFieldDis";
+
+const tableColumns = [
+    "Course Name",
+    "Batch Code",
+    "Pay Month",
+    "Total Hours",
+    "Pay Rate",
+    "Coverage",
+];
 
 const CreatePayment = () => {
     const navigate = useNavigate();
@@ -19,213 +30,208 @@ const CreatePayment = () => {
 
     const service = useMemo(() => new Service(), []);
 
-    //get all courses and list them in the dropdown id:courseName name:courseName
-    useEffect(() => {
-        const respone = service.get(`course/`)
-        respone.then((res) => {
-            setCourseList(res.data);
-        }).catch((err) => {
-            alert(err);
-        })
-    }, [service]);
-
-    const [courseList, setCourseList] = useState([]);
-
-    const courseListAll = courseList.map((item) => {
-        return { _id: item.courseName, name: item.courseName + "  ( " + item.courseDuration + "months )" };
-    });
-
-    //get all branches and list them in the dropdown id:branchName name:branchName
-    useEffect(() => {
-        const respone = service.get(`branch/all`)
-        respone.then((res) => {
-            setBranchList(res.data);
-        }).catch((err) => {
-            alert(err);
-        })
-    }, [service]);
-
-    const [branchList, setBranchList] = useState([]);
-
-    const branchListAll = branchList.map((item) => {
-        return { _id: item.branchName, name: item.branchName };
-    });
-
-    const stateList = [
-        { _id: "Active", name: "Active" },
-        { _id: "Inactive", name: "Inactive" },
-    ];
-
+    const [lectureid, setLectureid] = useState("");
+    const [courseName, setCourseName] = useState("");
     const [batchCode, setBatchCode] = useState("");
-    const [course, setCourse] = useState("");
-    const [branch, setBranch] = useState("");
-    const [startDate, setStartDate] = useState("");
-    const [endDate, setEndDate] = useState("");
-    const [batchState, setBatchState] = useState("");
+    const [date, setDate] = useState("");
+    const [duration, setDuration] = useState(0);
+    const [lectureCoverage, setLectureCoverage] = useState([]);
+    const [totalHours, setTotalHours] = useState(0);
+    const [paymentAmount, setPaymentAmount] = useState(0);
+    const [document, setDocument] = useState("");
 
-    //get batch details and set them to the fields
+    const [initialDataLoaded, setInitialDataLoaded] = useState(false);
+
+    const [paymentData, setPaymentData] = useState({
+        date: '',
+        lectureid: '',
+        batchCode: '',
+        courseName: '',
+        rate: '',
+    });
+
     useEffect(() => {
-        function loadBatch() {
-            const response = service.get(`batch/${id}`);
-            response.then((res) => {
-                setBatchCode(res.data.batchCode);
-                setCourse(res.data.course);
-                setBranch(res.data.branch);
-                setStartDate(res.data.startDate);
-                setEndDate(res.data.endDate);
-                setBatchState(res.data.batchState);
-            }).catch((err) => {
+        async function loadApproveCoverage() {
+            try {
+                const response = await service.get(`coverage/${id}`);
+                const coverageData = response.data;
+                setLectureid(coverageData.lectureid);
+                setCourseName(coverageData.courseName);
+                setBatchCode(coverageData.batchCode);
+                setDate(coverageData.date);
+                setDuration(coverageData.duration);
+
+                // Fetch lecture name using lecture id
+                const lectureResponse = await service.get(`lecturer/${coverageData.lectureid}`);
+                const lectureName = lectureResponse.data.firstName + " " + lectureResponse.data.lastName;
+
+                //fetch batch code using assign batchcode
+                const batchResponse = await service.get(`assignbatch/${coverageData.batchCode}`);
+                const batchCode = batchResponse.data.batchCode;
+
+                const batchRes = await service.get(`batch/${batchCode}`);
+                const batch = batchRes.data.batchCode;
+
+                // Fetch rate using batchCode
+                const rateResponse = await service.get(`assignbatch/${coverageData.batchCode}`);
+                const rate = rateResponse.data.rate;
+
+                setPaymentData({
+                    date: coverageData.date.slice(0, 7),
+                    lectureid: lectureName,
+                    batchCode: batch,
+                    courseName: coverageData.courseName,
+                    rate: rate,
+                });
+                setInitialDataLoaded(true);
+            } catch (err) {
                 alert(err);
-            });
-        }
-
-        loadBatch();
-    }, [id, service]);
-
-    //update batch details
-    const data = {
-        batchCode: batchCode,
-        course: course,
-        branch: branch,
-        startDate: startDate,
-        endDate: endDate,
-        batchState: batchState,
-    };
-
-    //update batch details function
-    function editBatch(e) {
-        const respone = service.put(`batch`, id, data)
-        respone.then((res) => {
-            alert("Edit Successfull");
-            navigate('/admin/manage-batches');
-        })
-            .catch((err) => {
-                alert(err);
-            });
-        e.preventDefault();
-    }
-
-    // Handling the dropdown fields
-    const handleBranchChange = (e) => {
-        setBranch(e.target.value);
-    };
-
-    const handleCourseChange = (e) => {
-        setCourse(e.target.value);
-    };
-
-    const handleStateChange = (e) => {
-        setBatchState(e.target.value);
-    };
-
-    //function to get course duration
-    async function getCourseDuration(courseName) {
-        try {
-            const response = await service.get(`course/${courseName}`);
-            console.log(response.data.courseDuration);
-            return response.data.courseDuration;
-        } catch (err) {
-            console.log(err);
-            throw err; // rethrow the error to be caught by the calling function
-        }
-    }
-
-
-    //function to check course duration month > end date- start date 
-    async function checkCourseDuration(e) {
-        e.preventDefault();
-        try {
-            const duration = await getCourseDuration(data.course);
-            const start = new Date(data.startDate);
-            const end = new Date(data.endDate);
-            const diffTime = Math.abs(end - start);
-            const diffMonths = Math.ceil(diffTime / (1000 * 60 * 60 * 24 * 30));
-
-            console.log(diffMonths);
-            console.log(duration);
-
-            if (diffMonths < duration) {
-                alert("Batch Duration is less than the course duration");
-            } else {
-                editBatch(e);
             }
-        } catch (err) {
-            console.log(err);
         }
+
+        loadApproveCoverage();
+    }, [service, id]);
+
+    //get all coverages related to lectureid, batchcode, month and year 
+    useEffect(() => {
+        if (initialDataLoaded) {
+            async function loadCoverage() {
+                try {
+                    const month = date.slice(5, 7);
+                    const year = date.slice(0, 4);
+
+                    const response = await service.get(`coverage/${lectureid}/${batchCode}/${month}/${year}`);
+                    setLectureCoverage(response.data);
+                    //get total hours
+                    let total = 0;
+                    response.data.forEach((element) => {
+                        total += element.duration;
+                    });
+                    setTotalHours(total);
+                } catch (err) {
+                    alert(err);
+                }
+            }
+            loadCoverage();
+        }
+    }, [service, id, initialDataLoaded, lectureid, batchCode, date]);
+
+    function calculateDuration(duration) {
+        const hours = Math.floor(duration / 3600000);
+        const minutes = Math.floor((duration % 3600000) / 60000);
+
+        return `${hours}h : ${minutes}m`;
     }
+
+    const newPayment = {
+        lecturerId: lectureid,
+        coursename: courseName,
+        batchcode: batchCode,
+        month: date.slice(0, 7),
+        totalhours: totalHours,
+        paymentrate: paymentData.rate,
+        paidamount: paymentAmount,
+        document: document,
+        paymentDate: new Date(),
+        status: "Pending",
+    }
+
+    //create new payment function
+    function createPayment(e) {
+        e.preventDefault();
+        const response = service.post(`payment/`, newPayment);
+        response.then((res) => {
+            alert("New Payment Added");
+            updateCoverageStatus();
+            navigate('/admin/add-payments');
+        }).catch((err) => {
+            console.log(err);
+        })
+    }
+
+    //when createpayment each coverage paidstatus change to approved
+    function updateCoverageStatus() {
+        lectureCoverage.forEach((element) => {
+            console.log(element._id);
+            const newCoverage = {
+                paymentStatus: "Pending",
+            };
+            const response = service.put(`coverage`, element._id, newCoverage);
+            response.then((res) => {
+                console.log("Coverage Status Updated");
+            }).catch((err) => {
+                console.log(err);
+            })
+        });
+    }
+
+
 
     return (
         <>
             <div className={styles.container}>
                 <div className={styles.subContainer}>
                     <p className={styles.heading}>Create Payment</p>
-                    <form onSubmit={checkCourseDuration}>
+                    <form onSubmit={createPayment}>
                         <InputFieldDis
                             lable={"Month"}
                             placeholder={"Enter Month"}
-                            value={batchCode}
-                            setValue={setBatchCode}
+                            value={paymentData.date}
                             style={{ width: "300px" }}
                         />
                         <InputFieldDis
                             lable={"Lecturer Name"}
                             placeholder={"Enter Lecturer Name"}
-                            value={batchCode}
-                            setValue={setBatchCode}
+                            value={paymentData.lectureid}
                             style={{ width: "300px" }}
                         />
                         <InputFieldDis
                             lable={"Batch Code"}
                             placeholder={"Enter Batch Code"}
-                            value={batchCode}
-                            setValue={setBatchCode}
+                            value={paymentData.batchCode}
                             style={{ width: "300px" }}
                         />
                         <InputFieldDis
                             lable={"Course"}
                             placeholder={"Enter Course"}
-                            value={batchCode}
-                            setValue={setBatchCode}
+                            value={paymentData.courseName}
                             style={{ width: "300px" }}
                         />
                         <InputFieldDis
-                            lable={"Payment Rate"}
-                            placeholder={"Enter Payment Rate"}
-                            value={batchCode}
-                            setValue={setBatchCode}
+                            lable={"Rate"}
+                            placeholder={"Enter Rate"}
+                            value={paymentData.rate}
                             style={{ width: "300px" }}
                         />
 
-                        <InputNumFieldDis
+
+                        <InputFieldDis
                             lable={"No of Hours"}
                             placeholder={"Enter No of Hours"}
-                            value={batchCode}
-                            setValue={setBatchCode}
+                            value={calculateDuration(totalHours)}
                             style={{ width: "300px" }}
-                            disabled={true}
                         />
 
-                        <InputField
+                        <InputNumField
                             lable={"Payment Amount"}
                             placeholder={"Enter Payment Amount"}
-                            value={batchCode}
-                            setValue={setBatchCode}
+                            setValue={setPaymentAmount}
                             style={{ width: "300px" }}
                         />
 
                         <InputField
                             lable={"Document"}
                             placeholder={"Enter Document"}
-                            value={batchCode}
-                            setValue={setBatchCode}
+                            value={''}
+                            setValue={setDocument}
                             style={{ width: "300px" }}
                         />
 
                         <InputField
                             lable={"Payment Date"}
                             placeholder={"Enter Payment Date"}
-                            value={startDate}
-                            setValue={setStartDate}
+                            value={''}
+                            setValue={''}
                             style={{ width: "300px" }}
                         />
 
@@ -244,6 +250,9 @@ const CreatePayment = () => {
                             />
                         </div>
                     </form>
+                </div>
+                <div>
+                    <TableComponent columns={tableColumns} rows={lectureCoverage} />
                 </div>
             </div>
         </>

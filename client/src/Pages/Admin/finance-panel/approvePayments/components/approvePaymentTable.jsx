@@ -203,16 +203,6 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  RS. {row.hourlyPayment}
-                </TableCell>
-                <TableCell
-                  style={{
-                    width: 140,
-                    border: "1px solid #ccc",
-                    padding: "5px 16px",
-                  }}
-                  align="left"
-                >
                   RS. {row.totalPayment}
                 </TableCell>
                 <TableCell

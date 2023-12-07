@@ -78,7 +78,6 @@ const tableColumns = [
   "Month",
   "Total Hours",
   "Payment Rate",
-  "Hourly Payment",
   "Total Payment",
   "Lecture Coverages",
   "Documents",

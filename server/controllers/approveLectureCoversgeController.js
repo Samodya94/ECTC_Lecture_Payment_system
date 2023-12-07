@@ -114,6 +114,7 @@ const putCoverage = asyncHandler(async (req, res) => {
   );
 
   res.status(200).json(updatedCoverage);
+  console.log(updatedCoverage);
 });
 
 //get all status = Not Approved
@@ -198,6 +199,7 @@ const getCoverageByLecIdAndBatchCode = asyncHandler(async (req, res) => {
   const lecid = req.params.lecid;
   const batchcode = req.params.batchcode;
   const status = "Approved";
+  const paymentStatus = "Not Approved";
 
   const currentMonth = req.params.month;
   const currentYear = req.params.year;
@@ -229,7 +231,20 @@ const getCoverageByLecIdAndBatchCode = asyncHandler(async (req, res) => {
       $lt: endDate,
     },
     status: status,
+    paymentStatus: paymentStatus,
   });
+  res.status(200).json(coverage);
+});
+
+//get all status = Approved and paymentStatus = Not Approved
+const getPaymentNotApproved = asyncHandler(async (req, res) => {
+  const coverage = await Coverage.find({ paymentStatus: "Not Approved", status: "Approved" });
+  res.status(200).json(coverage);
+});
+
+//get all status = Approved and paymentStatus = Pending
+const getPaymentPending = asyncHandler(async (req, res) => {
+  const coverage = await Coverage.find({ paymentStatus: "Pending", status: "Approved" });
   res.status(200).json(coverage);
 });
 
@@ -245,4 +260,6 @@ module.exports = {
   getCoverageNotApprovedByMonth,
   getCoverageApprovedByLecturer,
   getCoverageByLecIdAndBatchCode,
+  getPaymentNotApproved,
+  getPaymentPending,
 };

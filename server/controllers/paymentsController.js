@@ -42,11 +42,18 @@ const createPayment = asyncHandler(async (req, res) => {
     res.status(201).json(createdPayment);
 });
 
+//get all status = Pending
+const getPaymentPending= asyncHandler(async (req, res) => {
+    const payment = await Payment.find({ status: "Pending" });
+    res.status(200).json(payment);
+  });
+
 module.exports = {
     getPayments,
     getPaymentById,
     putPayment,
     createPayment,
+    getPaymentPending
 };
 
 

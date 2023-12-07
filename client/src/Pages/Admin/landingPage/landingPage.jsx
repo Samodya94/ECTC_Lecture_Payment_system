@@ -87,7 +87,7 @@ const LandingPage = () => {
 
           {/* Accounts Routes */}
           <Route path="add-payments" element={<AddPayments />} />
-          <Route path="add-payments/create-payment" element={<CreatePayment />} />
+          <Route path="add-payments/create-payment/:id" element={<CreatePayment />} />
           <Route path="confirmed-payments" element={<ConfirmedPayments />} />
           <Route path="finalized-payments" element={<FinalizedPayments />} />
 

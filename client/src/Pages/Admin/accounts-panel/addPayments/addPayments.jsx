@@ -10,50 +10,6 @@ import PendingTableComponent from "./components/approvalPendingTable";
 
 import Service from "../../../../utilities/httpService";
 
-// Sample data for table
-const data = [
-  {
-    lecturerName: "Asha Madushani",
-    branch: "Kandy",
-    courseName: "Python",
-    batchCode: "PYTHON/K/07",
-    payMonth: "2023-09",
-    payRate: "30% Rate",
-  },
-  {
-    lecturerName: "Asha Madushani",
-    branch: "Kandy",
-    courseName: "Python",
-    batchCode: "PYTHON/K/07",
-    payMonth: "2023-09",
-    payRate: "30% Rate",
-  },
-  {
-    lecturerName: "Asha Madushani",
-    branch: "Kandy",
-    courseName: "Python",
-    batchCode: "PYTHON/K/07",
-    payMonth: "2023-09",
-    payRate: "30% Rate",
-  },
-  {
-    lecturerName: "Asha Madushani",
-    branch: "Kandy",
-    courseName: "Python",
-    batchCode: "PYTHON/K/07",
-    payMonth: "2023-09",
-    payRate: "30% Rate",
-  },
-  {
-    lecturerName: "Asha Madushani",
-    branch: "Kandy",
-    courseName: "Python",
-    batchCode: "PYTHON/K/07",
-    payMonth: "2023-09",
-    payRate: "30% Rate",
-  },
-];
-
 const tableColumns = [
   "Lecturer Name",
   "Branch",

@@ -27,7 +27,6 @@ const getCourseByName = asyncHandler(async (req, res) => {
 
 const createCourse = asyncHandler(async (req, res) => {
     const { courseName, courseFee, courseDuration } = req.body;
-    console.log(courseName, courseFee, courseDuration);
 
     if (!courseName || !courseFee || !courseDuration) {
         res.status(400);

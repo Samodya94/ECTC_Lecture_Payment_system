@@ -1,4 +1,9 @@
+import { useState } from "react";
+
 export const Coverage_History = () => {
+  const [month, selectedMonth] = useState("");
+  const [year,setYear]= useState("")
+
   return (
     <div className="coverage_history">
         <h2 className="">Lecture Coverage History</h2>

@@ -12,7 +12,6 @@ export const useLogout = () => {
         Cookies.remove('username')
         Cookies.remove('userLevel')
         Cookies.remove('token')
-
         dispatch({ type: 'LOGOUT' })
 
         navigate('/admin-login');

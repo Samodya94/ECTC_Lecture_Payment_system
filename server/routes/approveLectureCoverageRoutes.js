@@ -8,6 +8,7 @@ const { createCoverage,
     getCoverageNotApproved,
     getCoverageApproved,
     getLecCoverageNotApproved,
+    getSelectedCoverageByLecIdAndBatchCode,
     getCoverageNotApprovedByMonth,
     getCoverageApprovedByLecturer,
     getCoverageByLecIdAndBatchCode } = require('../controllers/approveLectureCoversgeController');
@@ -21,5 +22,6 @@ router.get('/approved/:lecid', getCoverageApprovedByLecturer)
 router.get('/lecnotApproved/:lecid', getLecCoverageNotApproved);
 router.get('/notapprovedbymonth/:lecid', getCoverageNotApprovedByMonth);
 router.get('/:lecid/:batchcode/:month/:year', getCoverageByLecIdAndBatchCode);
+router.get('/:lecid/:batchcode',getSelectedCoverageByLecIdAndBatchCode )
 
 module.exports = router;

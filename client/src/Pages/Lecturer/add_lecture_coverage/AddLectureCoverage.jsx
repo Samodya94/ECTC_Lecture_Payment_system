@@ -3,6 +3,7 @@ import { PendingCoverages } from "./component/pending_coverages";
 import { RejectedCoverages } from "./component/rejected_coverages";
 import { useLecAuthContext } from "../../../hooks/useLecAuthContext";
 import Service from "../../../utilities/httpService";
+import { useNavigate } from "react-router";
 
 // import './lec.css'
 export const AddLectureCoverage = () => {
@@ -22,37 +23,23 @@ export const AddLectureCoverage = () => {
   const [updateremHours, setUpdateremHours] = useState(0);
   const [batches, setBatches] = useState([]);
   const [assgbatch, setAssgBatches] = useState([]);
-  
+  const [coverages, setCoverages] = useState([]);
 
   const [refreshPendingCoverages, setRefreshPendingCoverages] = useState(false);
   const [refreshRejectedCoverages, setRefreshRejectedCoverages] = useState(false);
   const service = new Service();
+  const navigate = useNavigate() 
 
   useEffect(() => {
     getLecturer();
     getAssignedBatches();
     calculateTimeDifference();
     getdata();
+    getPendingCoverages();
     calculateRemHours()
   }, [lecturer,refreshPendingCoverages]);
 
-  useEffect(() => {
-    getPendingCoverages();
-  }, [refreshPendingCoverages]);
-
-  const getPendingCoverages = () => {
-    try {
-      
-      const response = service.get("coverage/lecnotApproved", lecturer.id);
-      const updatedCoverages = response.data;
-      setCoverages(updatedCoverages);
-  
-    } catch (error) {
-      console.error("Error fetching pending coverages:", error);
-    }
-  };
-
-  function getdata() {
+   function getdata() {
     const response = service.get("batch");
     response.then((res) => {
       const batchcodee = res.data.reduce((ace, batch) => {
@@ -62,6 +49,25 @@ export const AddLectureCoverage = () => {
       setAssgBatches(batchcodee);
     });
   }
+
+  useEffect(() => {
+    
+    getPendingCoverages(); 
+  }, [refreshPendingCoverages]);
+
+  const getPendingCoverages = () => {
+    if (lecturer) {
+      const lecid = lecturer.id;
+      const respone = service.get("coverage/lecnotApproved", lecid);
+      respone
+        .then((res) => {
+          setCoverages(res.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
 
   useEffect(() => {
     getHours();
@@ -172,7 +178,7 @@ export const AddLectureCoverage = () => {
       .then((res) => {
         console.log(res);
         alert("Coverage Added");
-        window.location.reload()
+        navigate('../add_coverage')
       })
       .catch((error) => {
         alert(error.message)

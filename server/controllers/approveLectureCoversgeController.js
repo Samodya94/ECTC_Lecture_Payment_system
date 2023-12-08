@@ -184,8 +184,8 @@ const getCoverageNotApprovedByMonth = asyncHandler(async (req, res) => {
 
 const getCoverageHistory = asyncHandler(async (req, res) => {
   const lecid = req.params.lecid;
-  const {currentMonth,currentYear }= req.body
-  
+  const { currentMonth, currentYear } = req.body
+
 
   if (isNaN(currentMonth) || isNaN(currentYear)) {
     return res.status(500).json({ error: "Invalid current month or year" });
@@ -206,7 +206,7 @@ const getCoverageHistory = asyncHandler(async (req, res) => {
     `${currentYear}-${currentMonth}-${lastDayOfMonth}T23:59:59.999Z`
   );
 
-    const coverage = await Coverage.find({
+  const coverage = await Coverage.find({
     lectureid: lecid,
     date: {
       $exists: true,
@@ -239,8 +239,9 @@ const getCoverageApprovedByLecturer = asyncHandler(async (req, res) => {
 const getCoverageByLecIdAndBatchCode = asyncHandler(async (req, res) => {
   const lecid = req.params.lecid;
   const batchcode = req.params.batchcode;
+  const paymentStatus = req.params.paymentStatus;
   const status = "Approved";
-  const paymentStatus = "Not Approved";
+
 
   const currentMonth = req.params.month;
   const currentYear = req.params.year;

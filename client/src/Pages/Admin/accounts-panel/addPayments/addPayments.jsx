@@ -75,10 +75,35 @@ const AddPayments = () => {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    console.log(selectedMonth, selectedYear);
+    if (selectedMonth === "" && selectedYear === "") {
+      getApprovedCoverages();
+      getPendingCoverages();
+    }
+    else {
+      const response = approvedCoverages.filter((item) => {
+        const date = new Date(item.date);
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+        return month === parseInt(selectedMonth) && year === parseInt(selectedYear);
+      });
+      setApprovedCoverages(response);
+      const response1 = pendingCoverages.filter((item) => {
+        const date = new Date(item.date);
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+        return month === parseInt(selectedMonth) && year === parseInt(selectedYear);
+      });
+      setPendingCoverages(response1);
+    }
   };
 
-
+  const handleReset = (e) => {
+    e.preventDefault();
+    setSelectedMonth("");
+    setSelectedYear("");
+    getApprovedCoverages();
+    getPendingCoverages();
+  };
 
   return (
     <>
@@ -91,6 +116,9 @@ const AddPayments = () => {
           />
           <button className={styles.button} type="submit">
             View
+          </button>
+          <button className={styles.button} onClick={handleReset}>
+            Reset
           </button>
         </form>
         <div>

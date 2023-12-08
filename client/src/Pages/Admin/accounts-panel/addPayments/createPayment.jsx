@@ -39,6 +39,7 @@ const CreatePayment = () => {
     const [totalHours, setTotalHours] = useState(0);
     const [paymentAmount, setPaymentAmount] = useState(0);
     const [document, setDocument] = useState("");
+    const [paymentStatus, setPaymentStatus] = useState("");
 
     const [initialDataLoaded, setInitialDataLoaded] = useState(false);
 
@@ -60,6 +61,7 @@ const CreatePayment = () => {
                 setBatchCode(coverageData.batchCode);
                 setDate(coverageData.date);
                 setDuration(coverageData.duration);
+                setPaymentStatus(coverageData.paymentStatus);
 
                 // Fetch lecture name using lecture id
                 const lectureResponse = await service.get(`lecturer/${coverageData.lectureid}`);
@@ -100,7 +102,7 @@ const CreatePayment = () => {
                     const month = date.slice(5, 7);
                     const year = date.slice(0, 4);
 
-                    const response = await service.get(`coverage/${lectureid}/${batchCode}/${month}/${year}`);
+                    const response = await service.get(`coverage/${lectureid}/${batchCode}/${month}/${year}/${paymentStatus}`);
                     setLectureCoverage(response.data);
                     //get total hours
                     let total = 0;
@@ -114,7 +116,7 @@ const CreatePayment = () => {
             }
             loadCoverage();
         }
-    }, [service, id, initialDataLoaded, lectureid, batchCode, date]);
+    }, [service, id, initialDataLoaded, lectureid, batchCode, date, paymentStatus]);
 
     function calculateDuration(duration) {
         const hours = Math.floor(duration / 3600000);
@@ -133,7 +135,7 @@ const CreatePayment = () => {
         paidamount: paymentAmount,
         document: document,
         paymentDate: new Date(),
-        status: "Pending",
+        status: "Not Approved",
     }
 
     //create new payment function
@@ -154,7 +156,7 @@ const CreatePayment = () => {
         lectureCoverage.forEach((element) => {
             console.log(element._id);
             const newCoverage = {
-                paymentStatus: "Not Approved",
+                paymentStatus: "Pending",
             };
             const response = service.put(`coverage`, element._id, newCoverage);
             response.then((res) => {

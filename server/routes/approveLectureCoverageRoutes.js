@@ -20,6 +20,6 @@ router.get('/:id', getCoverageById);
 router.get('/approved/:lecid', getCoverageApprovedByLecturer)
 router.get('/lecnotApproved/:lecid', getLecCoverageNotApproved);
 router.get('/notapprovedbymonth/:lecid', getCoverageNotApprovedByMonth)
-router.get('/',getCoverageNotApprovedByHistory)
+router.get('/', getCoverageHistory)
 
 module.exports = router;

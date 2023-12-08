@@ -180,35 +180,45 @@ const getCoverageNotApprovedByMonth = asyncHandler(async (req, res) => {
   res.status(200).json(coverage);
 });
 
-const getCoverageNotApprovedByHistory = asyncHandler(async (req, res) => {
+const getCoverageHistory = asyncHandler(async (req, res) => {
   const lecid = req.params.lecid;
-  const {currentMonth,currentYear }= req.body
-  
+  const {currentMonth, currentYear} = req.body
+
+   if (isNaN(currentMonth) || isNaN(currentYear)) {
+    return res.status(500).json({ error: 'Invalid current month or year' });
+  }
+
+  let nextMonth = currentMonth + 1;
+  let nextYear = currentYear;
+
+  // Check if it's December (12), in which case the next month is January of the next year
+  if (nextMonth > 12) {
+    nextMonth = 1;
+    nextYear++;
+  }
+
+  console.log(nextMonth)
+  console.log(nextYear)
+
+  const startDate = new Date(`${currentYear}-${currentMonth}-01T00:00:00.000Z`);
+  const lastDayOfMonth = new Date(currentYear, currentMonth, 0).getDate();
+  const endDate = new Date(`${currentYear}-${currentMonth}-${lastDayOfMonth}T23:59:59.999Z`);
+
+  console.log(endDate)
 
   const coverage = await Coverage.find({
     status: "Not Approved",
     lectureid: lecid,
     date: {
-      $gte: new Date(`${currentYear}-${currentMonth}-01`),
-      $lt: new Date(`${currentYear}-${currentMonth + 1}-01`),
+      $exists: true,
+      $type: 'date',
+      $gte: startDate,
+      $lt: endDate,
     },
   });
 
   res.status(200).json(coverage);
 });
-//get all status = Approved
-const getCoverageApproved = asyncHandler(async (req, res) => {
-  const coverage = await Coverage.find({ status: "Approved" });
-  res.status(200).json(coverage);
-});
-
-const getCoverageApprovedByLecturer = asyncHandler(async (req, res) => {
-  const lecid = req.params.lecid
-
-  const coverage = await Coverage.find({ status: "Approved", lectureid: lecid });
-  res.status(200).json(coverage);
-});
-
 //get coverage by lectureid, batchcode, month and year
 const getCoverageByLecIdAndBatchCode = asyncHandler(async (req, res) => {
   const lecid = req.params.lecid;
@@ -259,6 +269,6 @@ module.exports = {
   getCoverageApproved,
   getLecCoverageNotApproved,
   getCoverageNotApprovedByMonth,
-  getCoverageApprovedByLecturer,
-  getCoverageNotApprovedByHistory
+  getCoverageByLecIdAndBatchCode,
+  getCoverageHistory
 };

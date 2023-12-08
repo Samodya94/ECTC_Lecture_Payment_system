@@ -48,12 +48,24 @@ const getPaymentPending= asyncHandler(async (req, res) => {
     res.status(200).json(payment);
   });
 
+const getPaymentsByLecturer = asyncHandler(async (req,res) =>{
+    const lecid = req.params
+
+    const   payment = Payment.find({
+        lecturerId: lecid,
+        status:"Approved"
+    })
+
+    res.status(200).json(payment)
+})
+
 module.exports = {
     getPayments,
     getPaymentById,
     putPayment,
     createPayment,
-    getPaymentPending
+    getPaymentPending,
+    getPaymentsByLecturer
 };
 
 

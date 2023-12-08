@@ -15,6 +15,13 @@ const createLog = asyncHandler(async (req,res) =>{
     
 })
 
+const getLecLog = asyncHandler(async(req,res) =>{
+    const lecLog = await LecLog.find()
+
+    res(200).json(lecLog)
+})
+
 module.exports = {
-    createLog
+    createLog,
+    get
 }

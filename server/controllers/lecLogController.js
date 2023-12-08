@@ -29,8 +29,21 @@ const getLogByUser = asyncHandler(async(req,res)=>{
     res.status(200).json(leclog)
 })
 
+const getRecentLogByUser = asyncHandler(async (req, res) => {
+    const user = req.params.user;
+
+    // Find the 10 most recent records, sorted in descending order by the createdAt field (assuming you have a createdAt field in your schema)
+    const leclog = await LecLog.find({ lecUsername: user })
+        .sort({ createdAt: -1 }) // Sort in descending order based on createdAt
+        .limit(10); // Limit the result to 10 records
+
+    res.status(200).json(leclog);
+});
+
+
 module.exports = {
     createLog,
     getLecLog,
-    getLogByUser
+    getLogByUser,
+    getRecentLogByUser
 }

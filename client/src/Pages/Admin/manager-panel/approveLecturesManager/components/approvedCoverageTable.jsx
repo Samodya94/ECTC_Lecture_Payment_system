@@ -166,6 +166,22 @@ const TableComponent = ({ rows, columns }) => {
     getBatch();
   }, [rows, service]);
 
+  //get batch batchCode from batched batchCode
+  const [batchCodes, setBatchCodes] = React.useState({});
+
+  React.useEffect(() => {
+    const getBatchCode = async () => {
+      const response = await service.get("batch");
+      const batches = response.data.reduce((acc, batch) => {
+        acc[batch._id] = batch.batchCode;
+        return acc;
+      }, {});
+      setBatchCodes(batches);
+    };
+
+    getBatchCode();
+  }, [rows, service]);
+
   return (
     <>
       <TableContainer
@@ -219,7 +235,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {batched[row.batchCode]}
+                  {batchCodes[batched[row.batchCode]]}
                 </TableCell>
                 <TableCell
                   style={{

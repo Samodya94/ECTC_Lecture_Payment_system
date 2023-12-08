@@ -6,17 +6,29 @@ import { Link } from "react-router-dom";
 import { FaTrashCan } from "react-icons/fa6"
 import { FaEdit } from "react-icons/fa"
 
-export const PendingCoverages = () => {
+export const PendingCoverages = ({refresh, triggerRefresh}) => {
   const [coverages, setCoverages] = useState([]);
   const { lecturer } = useLecAuthContext();
   const service = new Service();
-  const [batched, setBatched] = useState({});
-
+  const [assgbatches, setAssgBatches] = useState([]);
   useEffect(() => {
     getViewCoverage();
-    getBatch()
-    formatDuration()
-  }, [lecturer]);
+    formatDuration();
+    getdata();
+  }, [lecturer,refresh]);
+
+  
+
+  function getdata(){
+    const response = service.get("batch");
+    response.then((res)=>{
+      const batchcode = res.data.reduce((ace, batch)=>{
+        ace[batch._id] = batch.batchCode;
+        return ace;
+      },{})
+      setAssgBatches(batchcode);
+    })
+  }
 
   const getViewCoverage = () => {
     if (lecturer) {
@@ -32,17 +44,17 @@ export const PendingCoverages = () => {
     }
   };
 
-  function getBatch() {
-    const response = service.get("assignbatch");
-    response.then((res) => {
-      const batches = res.data.reduce((acc, batch) => {
-        acc[batch._id] = batch.batchCode;
-        return acc;
-      }, {});
-      setBatched(batches);
-      
-    });
-  };
+  const removeCoverage= async (id) =>{
+   
+    const response = service.delete('coverage',id)
+    
+    response.then(()=>{
+      alert("Record Deleted successfully")
+      triggerRefresh()
+    }).catch((err)=>{
+      console.log(err);
+    })
+  }
 
   const formatDuration = (milliseconds) => {
     if (!milliseconds) {
@@ -74,7 +86,7 @@ export const PendingCoverages = () => {
             coverages.map((coverage) =>(
                 <tr key={coverage._id}>
                     <td>{coverage.courseName}</td>
-                    <td>{batched[coverage.batchCode]}</td>
+                    <td>{assgbatches[coverage.batchCode]}</td>
                     <td>{new Date(coverage.date).toLocaleDateString(
                     "en-US",
                     { year: "numeric", month: "numeric", day: "numeric" }
@@ -83,8 +95,13 @@ export const PendingCoverages = () => {
                     <td>{coverage.endTime}</td>
                     <td>{formatDuration(coverage.duration)}</td>
                     <td>{coverage.lectureCoverage}</td>
-                    <td className="text-center"><div className="row p-2 text-center w-100"><Link to={`../edit_coverage/${coverage._id}`} className="btn btn-primary w-25"><FaEdit/></Link>
-                        <button className="btn btn-danger mx-1 w-25"><FaTrashCan/></button></div>
+                    <td className="text-center"><div className="row p-2 text-center w-100">
+                      <Link to={`../edit_coverage/${coverage._id}`} 
+                        className="btn btn-primary w-25"><FaEdit/>
+                      </Link>
+                        <button className="btn btn-danger mx-1 w-25"
+                          onClick={()=> removeCoverage(coverage._id)}
+                        ><FaTrashCan/></button></div>
                     </td>
                 </tr>
             ))}

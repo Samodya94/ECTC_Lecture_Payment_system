@@ -16,7 +16,7 @@ const MiniLecSideNav = () => {
         <div className="sidenav_link1"><Link to="dash"><AiFillHome/></Link></div>
         <div className="sidenav_link1"><Link to="add_coverage"><FaPlus/></Link></div>
         <div className="sidenav_link1"><Link to="Coverage_History"><FaTableList/></Link></div>
-        <div className="sidenav_link1"><Link to=""><BsFillEyeFill/></Link></div>
+        <div className="sidenav_link1"><Link to="lec_pay_history"><BsFillEyeFill/></Link></div>
         <div className="sidenav_link1"><Link to="change_password"><FaKey/></Link></div>
         <div className="sidenav_link1"><Link to="mark_attendance"><IoIosPeople /></Link></div>
         <div className="sidenav_link1"><Link to="change_password"><PiStudentBold /></Link></div>

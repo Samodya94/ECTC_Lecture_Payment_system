@@ -329,7 +329,7 @@ table {
 .error{
     background: #a30303;
     padding: 10px 15px;
-    width: 40%;
+    min-width: 40%;
     color: #fff;
     font-weight: 800;
     font-family: 'Poppins', 'sans';
@@ -367,8 +367,12 @@ table {
     font-size: 1.3rem;
     font-weight: 700;
 }
-@media (max-width: 2500px) {
+@media (max-width: 1700px) {
 
+    .change_password{
+        width: 80%;
+        margin: auto;
+    }
     .sidenav-lec {
         flex: 3;
     }
@@ -399,7 +403,7 @@ table {
     
 }
 
-@media (max-width: 2200px) {
+@media (max-width: 1500px) {
 
     .sidenav-lec,
     .min-sidenav2 {

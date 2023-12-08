@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState, useCallback, useEffect, useMemo } from "react";
 
 // Styles
 import styles from "./addPayments.module.css";
@@ -7,6 +7,8 @@ import styles from "./addPayments.module.css";
 import TableComponent from "./components/addPaymentTable";
 import MonthSelector from "../../components/monthSelectorField";
 import PendingTableComponent from "./components/approvalPendingTable";
+
+import Service from "../../../../utilities/httpService";
 
 // Sample data for table
 const data = [
@@ -65,6 +67,22 @@ const tableColumns = [
 const AddPayments = () => {
   const [selectedMonth, setSelectedMonth] = useState("");
   const [selectedYear, setSelectedYear] = useState("");
+  const [approvedCoverages, setApprovedCoverages] = useState([]);
+  const service = useMemo(() => new Service(), []);
+
+  const getApprovedCoverages = useCallback(async () => {
+    try {
+      const response = await service.get("/coverage/approved");
+      setApprovedCoverages(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [service]);
+
+  useEffect(() => {
+    getApprovedCoverages();
+  }, [getApprovedCoverages]);
+
 
   const handleDateChange = (event) => {
     const selectedValue = event.target.value;
@@ -81,6 +99,8 @@ const AddPayments = () => {
     console.log(selectedMonth, selectedYear);
   };
 
+
+
   return (
     <>
       <div className={styles.container}>
@@ -95,7 +115,7 @@ const AddPayments = () => {
           </button>
         </form>
         <div>
-          <TableComponent columns={tableColumns} rows={data} />
+          <TableComponent columns={tableColumns} rows={approvedCoverages} />
         </div>
         <p className={styles.heading} style={{ marginTop: "50px" }}>
           Approval Pending Payments

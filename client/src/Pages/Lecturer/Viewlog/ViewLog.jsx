@@ -7,15 +7,17 @@ export const ViewLog =()=>{
 
     const { lecturer } = useLecAuthContext()
     const service = new Service();
-    const [ip, setIP] = useState("");
+    const [country,setCountry] = useState('') 
+    const [city,setCity] = useState('')
+    const [ip,setIp] = useState('')
 
     const [firstName,setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
 
     useEffect(()=>{
         getLecturer();
-        getData();
     },[lecturer])
+
 
     const getLecturer = () =>{
         if(lecturer){
@@ -30,12 +32,17 @@ export const ViewLog =()=>{
         }
     }
 
-    const getData = async () => {
-        const res = await axios.get("https://api.ipify.org/?format=json");
-        console.log(res.data);
-        setIP(res.data.ip);
-        console.log(res.data)
-      };
+    useEffect(()=>{
+        getdata()
+    },[])
+
+    const getdata = async () =>{
+        const response = await axios.get(`https://ipapi.co/json/`)
+        console.log(response.data)
+        setIp(response.data.ip)
+        setCountry(response.data.country_name)
+        setCity(response.data.city)
+      }
 
     return(
         <div className="logDetails">
@@ -54,6 +61,9 @@ export const ViewLog =()=>{
                     <div className="log_datcard">
                     <div className="card-top">
                        Your IP: {ip}
+                    </div>
+                    <div className="card-top">
+                        from: {city + ", " +country}
                     </div>
                     </div>
                     

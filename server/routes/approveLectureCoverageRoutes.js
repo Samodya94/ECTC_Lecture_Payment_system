@@ -10,7 +10,7 @@ const { createCoverage,
     getLecCoverageNotApproved,
     getCoverageNotApprovedByMonth,
     getCoverageApprovedByLecturer,
-    getCoverageHistory ,
+    getCoverageHistory,
     getCoverageByLecIdAndBatchCode,
     getPaymentNotApproved,
     getPaymentPending } = require('../controllers/approveLectureCoversgeController');
@@ -25,7 +25,7 @@ router.get('/lecnotApproved/:lecid', getLecCoverageNotApproved);
 router.get('/notapprovedbymonth/:lecid', getCoverageNotApprovedByMonth);
 router.get('/leccoverageHistory/:lecid', getCoverageHistory);
 router.get('/notapprovedbymonth/:lecid', getCoverageNotApprovedByMonth);
-router.get('/:lecid/:batchcode/:month/:year', getCoverageByLecIdAndBatchCode);
+router.get('/:lecid/:batchcode/:month/:year/:paymentStatus', getCoverageByLecIdAndBatchCode);
 router.get('/pay/paymentnotapproved', getPaymentNotApproved);
 router.get('/pay/paymentpending', getPaymentPending);
 

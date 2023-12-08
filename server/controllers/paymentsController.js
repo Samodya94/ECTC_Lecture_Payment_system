@@ -49,11 +49,39 @@ const getPaymentPending= asyncHandler(async (req, res) => {
   });
 
 const getPaymentsByLecturer = asyncHandler(async (req,res) =>{
-    const lecid = req.params
+    const lecid = req.params.lecid;
+    // const {currentMonth,currentYear }= req.body
 
-    const   payment = Payment.find({
+    // if (isNaN(currentMonth) || isNaN(currentYear)) {
+    //     return res.status(500).json({ error: "Invalid current month or year" });
+    //   }
+    
+    //   let nextMonth = currentMonth + 1;
+    //   let nextYear = currentYear;
+    
+    //   // Check if it's December (12), in which case the next month is January of the next year
+    //   if (nextMonth > 12) {
+    //     nextMonth = 1;
+    //     nextYear++;
+    //   }
+    
+    //   const startDate = new Date(`${currentYear}-${currentMonth}-01T00:00:00.000Z`);
+    //   const lastDayOfMonth = new Date(currentYear, currentMonth, 0).getDate();
+    //   const endDate = new Date(
+    //     `${currentYear}-${currentMonth}-${lastDayOfMonth}T23:59:59.999Z`
+    //   );
+    
+
+
+    const   payment = await Payment.find({
         lecturerId: lecid,
-        status:"Approved"
+        status:"Approved",       
+        // date: {
+        //     $exists: true,
+        //     $type: "date",
+        //     $gte: startDate,
+        //     $lt: endDate,
+        //   },
     })
 
     res.status(200).json(payment)

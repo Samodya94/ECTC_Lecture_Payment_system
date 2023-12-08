@@ -4,12 +4,14 @@ const { getPayments,
         getPaymentById, 
         putPayment, 
         createPayment,
-        getPaymentPending} = require('../controllers/paymentsController');
+        getPaymentPending,
+        getPaymentsByLecturer} = require('../controllers/paymentsController');
 
 router.post('/', createPayment).get('/', getPayments);
 router.put('/:id', putPayment);
 router.get('/pendingpayment', getPaymentPending);
 router.get('/:id', getPaymentById);
+router.get('/pay/:lecid',getPaymentsByLecturer)
 
 
 

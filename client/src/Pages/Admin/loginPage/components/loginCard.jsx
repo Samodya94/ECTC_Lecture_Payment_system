@@ -16,13 +16,13 @@ import { Link } from "react-router-dom";
 const LoginCard = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const { login } = useLogin();
+  const { login, error } = useLogin();
 
   const handleSubmit = async (e) => {
     e.preventDefault()
 
     await login(username, password)
-  }
+  };
 
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
@@ -74,6 +74,23 @@ const LoginCard = () => {
               }}
             />
           </form>
+
+          {/* Error Message */}
+          {error && (
+            <div
+              style={{
+                backgroundColor: "red",
+                color: "white",
+                fontWeight: "bold",
+                fontSize: "14px",
+                marginTop: "15px",
+                textAlign: "center",
+                padding: "10px",
+              }}
+            >
+              {error}
+            </div>
+          )}
 
           {/* Buttons */}
           <Link to="/lec-login"><PrimaryButton

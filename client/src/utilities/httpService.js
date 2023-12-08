@@ -19,21 +19,21 @@ axiosInstance.interceptors.response.use(
     },
     (err) => {
         if (err.response.status === 400) {
-            throw new Error("Bad Request");
+            throw new Error(err);
         } else if (err.response.status === 401) {
-            throw new Error("Unauthorized");
-        } else if (err.response.status === 403) {
-            throw new Error("Forbidden ");
+            throw new Error(err);
+        } else if (err.response === 403) {
+            throw new Error(err);
         } else if (err.response.status === 404) {
-            throw new Error("Not Found");
-        } else if (err.response.status === 408) {
-            throw new Error("Request Timeout");
+            throw new Error(err);
+        } else if (err.response === 408) {
+            throw new Error(err);
         } else if (err.response.status === 409) {
-            throw new Error("Already exist");
+            throw new Error(err);
         } else if (err.response.status === 500) {
-            throw new Error(" Internal Server Error");
+            throw new Error(err);
         } else {
-            throw new Error(err.message);
+            throw new Error(err);
         }
     },
 );

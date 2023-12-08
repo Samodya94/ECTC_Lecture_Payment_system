@@ -38,6 +38,11 @@ const coverageSchema = mongoose.Schema({
         required: [true],
         default: 'Not Approved'
     },
+    paymentStatus: {
+        type: String,
+        required: [true],
+        default: 'Not Approved'
+    },
 },
     {
         timestamps: true,

@@ -1,45 +1,59 @@
-const paymentsController = require('express').Router()
-const Payments = require('../model/Payments')
-const { verifyToken, verifyTokenAdmin } = require('../middlewares/verifyToken')
+const asyncHandler = require('express-async-handler');
+const Payment = require('../model/Payments')
 
 //get all
-paymentsController.get('/', verifyToken, async (req, res) => {
-    try {
+const getPayments = asyncHandler(async (req, res) => {
+    const payments = await Payment.find();
+    res.status(200).json(payments);
+});
 
-        const lecturers = await Lecturer.find(req.query)
-        return res.status(200).json(lecturers)
-    }
-    catch (error) {
-        console.error(error);
-    }
-})
+//get by id
+const getPaymentById = asyncHandler(async (req, res) => {
+    const payment = await Payment.findById(req.params.id);
 
-//get one
-paymentsController.get('/find/:id', verifyToken, async (req, res) => {
-    try {
-        const paymentsId = req.params.id
-        const payments = await Payments.findById(paymentsId)
-        if (!payments) {
-            return res.status(500).json({ msg: "No payments with such ID!" })
-        }
-        return res.status(200).json(payments)
+    if (!payment) {
+        res.status(404);
+        throw new Error('Payment not found');
     }
-    catch (error) {
-        console.error(error);
-    }
-})
 
-//create payments
-paymentsController.post('/add', verifyTokenAdmin, async (req, res) => {
-    try {
-        console.log("Success");
-        const newPayments = await Payments.create({ ...req.body })
-        console.log("Success");
-        return res.status(201).json(newPayments)
-    }
-    catch (error) {
-        console.error(error);
-    }
-})
+    res.status(200).json(payment);
+});
 
-module.exports = paymentsController
+//put payment
+const putPayment = asyncHandler(async (req, res) => {
+    const payment = await Payment.findById(req.params.id);
+
+    if (!payment) {
+        res.status(404);
+        throw new Error('Details not found');
+    }
+
+    const updatedPayment = await Payment.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+    });
+
+    res.status(200).json(updatedPayment);
+});
+
+//create payment
+const createPayment = asyncHandler(async (req, res) => {
+    const payment = new Payment(req.body);
+    const createdPayment = await payment.save();
+    res.status(201).json(createdPayment);
+});
+
+//get all status = Pending
+const getPaymentPending= asyncHandler(async (req, res) => {
+    const payment = await Payment.find({ status: "Pending" });
+    res.status(200).json(payment);
+  });
+
+module.exports = {
+    getPayments,
+    getPaymentById,
+    putPayment,
+    createPayment,
+    getPaymentPending
+};
+
+

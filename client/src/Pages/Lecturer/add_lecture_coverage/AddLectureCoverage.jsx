@@ -13,75 +13,94 @@ export const AddLectureCoverage = () => {
   const [stime, setStime] = useState("");
   const [etime, setEtime] = useState("");
   const [course, setCourse] = useState("");
-  const [duration, setDuratuion] = useState("")
+  const [duration, setDuratuion] = useState("");
   const [date, setDate] = useState("");
   const [coverage, setCoverage] = useState("");
   const [seconds, setSeconds] = useState(0);
   const { lecturer } = useLecAuthContext();
-  const [remHours, setRemHours] = useState();
-  const [updateremHours, setUpdateremHours] = useState(0)
+  const [remHours, setRemHours] = useState("");
+  const [updateremHours, setUpdateremHours] = useState(0);
   const [batches, setBatches] = useState([]);
   const [assgbatch, setAssgBatches] = useState([]);
+
+
+  const [refreshPendingCoverages, setRefreshPendingCoverages] = useState(false);
+  const [refreshRejectedCoverages, setRefreshRejectedCoverages] = useState(false);
   const service = new Service();
 
- 
   useEffect(() => {
     getLecturer();
     getAssignedBatches();
     calculateTimeDifference();
     getdata();
-  }, [lecturer]);
+    calculateRemHours()
+  }, [lecturer, refreshPendingCoverages]);
 
-  function getdata(){
+  useEffect(() => {
+    getPendingCoverages();
+  }, [refreshPendingCoverages]);
+
+  const getPendingCoverages = () => {
+    try {
+
+      const response = service.get("coverage/lecnotApproved", lecturer.id);
+      const updatedCoverages = response.data;
+      setCoverage(updatedCoverages);
+
+    } catch (error) {
+      console.error("Error fetching pending coverages:", error);
+    }
+  };
+
+  function getdata() {
     const response = service.get("batch");
-    response.then((res)=>{
-      const batchcodee = res.data.reduce((ace, batch)=>{
+    response.then((res) => {
+      const batchcodee = res.data.reduce((ace, batch) => {
         ace[batch._id] = batch.batchCode;
         return ace;
-      },{})
+      }, {});
       setAssgBatches(batchcodee);
-    })
+    });
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     getHours();
-    calculateRemHours();
-    
-  },[batchCode])
 
-  useEffect(()=>{
+  }, [batchCode]);
+
+  useEffect(() => {
     calculateTimeDifference();
-   
-  })
+  },);
 
-  function calculateRemHours(){
-    if(seconds && duration){
+  function calculateRemHours() {
+    if (seconds && duration) {
       const ms = seconds - duration;
-      setUpdateremHours(ms);
-      
 
+      console.log(ms);
     }
+    console.log(seconds);
   }
 
-  const getHours =()=>{
+  const getHours = () => {
     const id = batchCode;
 
-      const response = service.get(`assignbatch`, id);
-      response
-        .then((res) => {
-          console.log(res.data);
-          let ms =res.data.remaining_hours*1000*60*60;
-          setRemHours(ms)
-          setCourse(res.data.course);
-          setSeconds(ms);
-          calculateRemHours();
-        })
-        .catch((error) => {
-          console.log(error, "Failed to Fetch information");
-        });
-  }
+    const response = service.get(`assignbatch/assigncode`, id);
+    response
+      .then((res) => {
+        const ms = res.data.remaining_hours;
+        const hours = Math.floor(ms / (1000 * 60 * 60));
+        const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
+        const remTime = hours + " Hours and " + minutes + " minutes remaining";
+        setRemHours(remTime);
+        setCourse(res.data.course);
+        setSeconds(ms);
 
-
+        return hours + " Hours and" + minutes + "minutes remaining";
+      })
+      .catch((error) => {
+        console.log(error, "Failed to Fetch information");
+      });
+  };
 
   const getLecturer = (e) => {
     if (lecturer) {
@@ -90,7 +109,7 @@ export const AddLectureCoverage = () => {
       const response = service.get(`lecturer/${id}`);
       response
         .then((res) => {
-          console.log(res.data);
+
           setFname(res.data.firstName);
           setLname(res.data.lastName);
         })
@@ -106,7 +125,7 @@ export const AddLectureCoverage = () => {
       const response = service.get(`assignbatch/bylecture`, id);
       response
         .then((res) => {
-          console.log(res.data);
+
           setBatches(res.data);
         })
         .catch((error) => {
@@ -125,43 +144,46 @@ export const AddLectureCoverage = () => {
       const minutes = Math.floor(
         (timeDiffInMillis % (1000 * 60 * 60)) / (1000 * 60)
       );
-        setDuratuion(timeDiffInMillis)
-      calculateRemHours();
+      setDuratuion(timeDiffInMillis);
+      console.log(timeDiffInMillis)
     }
-
-    return "";
   };
 
   const handleSubmit = async (e) => {
-
     e.preventDefault();
 
-    const lecid= lecturer.id;
+    // setRefreshPendingCoverages((prev) => !prev);
+    setRefreshRejectedCoverages((prev) => !prev);
+
+    const lecid = lecturer.id;
     const data = {
-      lectureid:lecid,
-      courseName:course,
-      batchCode:batchCode,
-      startTime:stime,
-      endTime:etime,
-      duration:duration,
-      date:date,
-      lectureCoverage:coverage,
-    }
+      lectureid: lecid,
+      courseName: course,
+      batchCode: batchCode,
+      startTime: stime,
+      endTime: etime,
+      duration: duration,
+      date: date,
+      lectureCoverage: coverage,
+    };
 
-    console.log()
-
-    const respone = service.post('coverage', data)
-    respone.then((res) => {
+    const respone = service.post("coverage", data);
+    respone
+      .then((res) => {
         console.log(res);
-        alert('Coverage Added');
-        window.location.reload();
-        
-    }).catch((error) => {
-        console.error('Error with adding data:', error);
-    });
+        alert("Coverage Added");
+        window.location.reload()
+      })
+      .catch((error) => {
+        alert(error.message)
+        console.error("Error with adding data:", error);
+      });
+  };
 
+  const triggerRefresh = () => {
+    setRefreshPendingCoverages((prev) => !prev);
+  };
 
-}
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -195,12 +217,10 @@ export const AddLectureCoverage = () => {
                 {batches.map((batch) => (
                   <option key={batch._id} value={batch.batchCode}>
                     {assgbatch[batch.batchCode]}
-                    
                   </option>
                 ))}
               </select>
-
-              {remHours && remHours + " Hours remains" }
+              {batchCode ? remHours : ""}
             </div>
           </div>
         </div>
@@ -236,27 +256,27 @@ export const AddLectureCoverage = () => {
           <div className="col-md-6 ">
             <div className="input_fields">
               Date :
-              <input 
-                className="form-control mb-3" 
+              <input
+                className="form-control mb-3"
                 type="date"
                 value={date}
-                onChange={(e)=>{
-                  setDate(e.target.value)
+                onChange={(e) => {
+                  setDate(e.target.value);
                 }}
-                 />
+              />
             </div>
           </div>
           <div className="col-md-6">
             <div className="input_fields ">
               Coverage :
-              <textarea 
-                className="form-control mb-2" 
+              <textarea
+                className="form-control mb-2"
                 rows={2}
                 value={coverage}
-                onChange={(e)=>{
-                  setCoverage(e.target.value)
+                onChange={(e) => {
+                  setCoverage(e.target.value);
                 }}
-                >
+              >
                 {stime}
               </textarea>
             </div>
@@ -267,15 +287,15 @@ export const AddLectureCoverage = () => {
               <button className="btn btn-primary">Add Coverage</button>
             </div>
             &nbsp; {duration && duration}
-            {seconds +" " + updateremHours}
           </div>
         </div>
       </form>
       <div className="my-2">
-        <PendingCoverages />
+        <PendingCoverages refresh={refreshPendingCoverages} triggerRefresh={triggerRefresh} />
+
       </div>
       <div className="my-2">
-        <RejectedCoverages />
+        <RejectedCoverages refresh={refreshRejectedCoverages} />
       </div>
     </div>
   );

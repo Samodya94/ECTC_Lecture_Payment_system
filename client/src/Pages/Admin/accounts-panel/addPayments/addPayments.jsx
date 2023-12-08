@@ -10,50 +10,6 @@ import PendingTableComponent from "./components/approvalPendingTable";
 
 import Service from "../../../../utilities/httpService";
 
-// Sample data for table
-const data = [
-  {
-    lecturerName: "Asha Madushani",
-    branch: "Kandy",
-    courseName: "Python",
-    batchCode: "PYTHON/K/07",
-    payMonth: "2023-09",
-    payRate: "30% Rate",
-  },
-  {
-    lecturerName: "Asha Madushani",
-    branch: "Kandy",
-    courseName: "Python",
-    batchCode: "PYTHON/K/07",
-    payMonth: "2023-09",
-    payRate: "30% Rate",
-  },
-  {
-    lecturerName: "Asha Madushani",
-    branch: "Kandy",
-    courseName: "Python",
-    batchCode: "PYTHON/K/07",
-    payMonth: "2023-09",
-    payRate: "30% Rate",
-  },
-  {
-    lecturerName: "Asha Madushani",
-    branch: "Kandy",
-    courseName: "Python",
-    batchCode: "PYTHON/K/07",
-    payMonth: "2023-09",
-    payRate: "30% Rate",
-  },
-  {
-    lecturerName: "Asha Madushani",
-    branch: "Kandy",
-    courseName: "Python",
-    batchCode: "PYTHON/K/07",
-    payMonth: "2023-09",
-    payRate: "30% Rate",
-  },
-];
-
 const tableColumns = [
   "Lecturer Name",
   "Branch",
@@ -64,15 +20,25 @@ const tableColumns = [
   "Action",
 ];
 
+const tableColumns1 = [
+  "Lecturer Name",
+  "Branch",
+  "Course Name",
+  "Batch Code",
+  "Pay Month",
+  "Pay Rate",
+];
+
 const AddPayments = () => {
   const [selectedMonth, setSelectedMonth] = useState("");
   const [selectedYear, setSelectedYear] = useState("");
   const [approvedCoverages, setApprovedCoverages] = useState([]);
+  const [pendingCoverages, setPendingCoverages] = useState([]);
   const service = useMemo(() => new Service(), []);
 
   const getApprovedCoverages = useCallback(async () => {
     try {
-      const response = await service.get("/coverage/approved");
+      const response = await service.get("/coverage/pay/paymentnotapproved");
       setApprovedCoverages(response.data);
     } catch (error) {
       console.log(error);
@@ -82,6 +48,19 @@ const AddPayments = () => {
   useEffect(() => {
     getApprovedCoverages();
   }, [getApprovedCoverages]);
+
+  const getPendingCoverages = useCallback(async () => {
+    try {
+      const response = await service.get("/coverage/pay/paymentpending");
+      setPendingCoverages(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [service]);
+
+  useEffect(() => {
+    getPendingCoverages();
+  }, [getPendingCoverages]);
 
 
   const handleDateChange = (event) => {
@@ -122,7 +101,7 @@ const AddPayments = () => {
           {selectedYear ? ` - ${selectedYear} / ${selectedMonth}` : ""}
         </p>
         <div>
-          <PendingTableComponent columns={tableColumns} rows={[]} />
+          <PendingTableComponent columns={tableColumns1} rows={pendingCoverages} />
         </div>
       </div>
     </>

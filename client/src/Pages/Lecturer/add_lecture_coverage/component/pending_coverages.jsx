@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { FaTrashCan } from "react-icons/fa6"
 import { FaEdit } from "react-icons/fa"
 
-export const PendingCoverages = () => {
+export const PendingCoverages = ({refresh, triggerRefresh}) => {
   const [coverages, setCoverages] = useState([]);
   const { lecturer } = useLecAuthContext();
   const service = new Service();
@@ -15,7 +15,7 @@ export const PendingCoverages = () => {
     getViewCoverage();
     formatDuration();
     getdata();
-  }, [lecturer]);
+  }, [lecturer,refresh]);
 
   
 
@@ -26,7 +26,6 @@ export const PendingCoverages = () => {
         ace[batch._id] = batch.batchCode;
         return ace;
       },{})
-      console.log(batchcode)
       setAssgBatches(batchcode);
     })
   }
@@ -45,17 +44,17 @@ export const PendingCoverages = () => {
     }
   };
 
-  // function getBatch() {
-  //   const response = service.get("assignbatch");
-  //   response.then((res) => {
-  //     const batches = res.data.reduce((acc, batch) => {
-  //       acc[batch._id] = batch.batchCode;
-  //       return acc;
-  //     }, {});
-  //     setBatched(batches);
-      
-  //   });
-  // };
+  const removeCoverage= async (id) =>{
+   
+    const response = service.delete('coverage',id)
+    
+    response.then(()=>{
+      alert("Record Deleted successfully")
+      triggerRefresh()
+    }).catch((err)=>{
+      console.log(err);
+    })
+  }
 
   const formatDuration = (milliseconds) => {
     if (!milliseconds) {
@@ -96,8 +95,13 @@ export const PendingCoverages = () => {
                     <td>{coverage.endTime}</td>
                     <td>{formatDuration(coverage.duration)}</td>
                     <td>{coverage.lectureCoverage}</td>
-                    <td className="text-center"><div className="row p-2 text-center w-100"><Link to={`../edit_coverage/${coverage._id}`} className="btn btn-primary w-25"><FaEdit/></Link>
-                        <button className="btn btn-danger mx-1 w-25"><FaTrashCan/></button></div>
+                    <td className="text-center"><div className="row p-2 text-center w-100">
+                      <Link to={`../edit_coverage/${coverage._id}`} 
+                        className="btn btn-primary w-25"><FaEdit/>
+                      </Link>
+                        <button className="btn btn-danger mx-1 w-25"
+                          onClick={()=> removeCoverage(coverage._id)}
+                        ><FaTrashCan/></button></div>
                     </td>
                 </tr>
             ))}

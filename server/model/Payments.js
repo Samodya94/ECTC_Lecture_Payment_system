@@ -41,6 +41,16 @@ const PaymentsSchema = new mongoose.Schema({
         required: false,
     },
 
+    paymentDate: {
+        type: Date,
+        required: false,
+    },
+
+    status: {
+        type: String,
+        required: false,
+    },
+
 }, {
     timestamps: true,
 

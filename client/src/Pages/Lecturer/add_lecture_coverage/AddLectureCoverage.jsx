@@ -22,7 +22,7 @@ export const AddLectureCoverage = () => {
   const [updateremHours, setUpdateremHours] = useState(0);
   const [batches, setBatches] = useState([]);
   const [assgbatch, setAssgBatches] = useState([]);
-  
+
 
   const [refreshPendingCoverages, setRefreshPendingCoverages] = useState(false);
   const [refreshRejectedCoverages, setRefreshRejectedCoverages] = useState(false);
@@ -34,7 +34,7 @@ export const AddLectureCoverage = () => {
     calculateTimeDifference();
     getdata();
     calculateRemHours()
-  }, [lecturer,refreshPendingCoverages]);
+  }, [lecturer, refreshPendingCoverages]);
 
   useEffect(() => {
     getPendingCoverages();
@@ -42,11 +42,11 @@ export const AddLectureCoverage = () => {
 
   const getPendingCoverages = () => {
     try {
-      
+
       const response = service.get("coverage/lecnotApproved", lecturer.id);
       const updatedCoverages = response.data;
-      setCoverages(updatedCoverages);
-  
+      setCoverage(updatedCoverages);
+
     } catch (error) {
       console.error("Error fetching pending coverages:", error);
     }
@@ -65,7 +65,7 @@ export const AddLectureCoverage = () => {
 
   useEffect(() => {
     getHours();
-    
+
   }, [batchCode]);
 
   useEffect(() => {
@@ -75,8 +75,8 @@ export const AddLectureCoverage = () => {
   function calculateRemHours() {
     if (seconds && duration) {
       const ms = seconds - duration;
-      
-     console.log(ms);
+
+      console.log(ms);
     }
     console.log(seconds);
   }
@@ -90,11 +90,11 @@ export const AddLectureCoverage = () => {
         const ms = res.data.remaining_hours;
         const hours = Math.floor(ms / (1000 * 60 * 60));
         const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
-        const remTime= hours + " Hours and " + minutes + " minutes remaining";
+        const remTime = hours + " Hours and " + minutes + " minutes remaining";
         setRemHours(remTime);
         setCourse(res.data.course);
         setSeconds(ms);
-        
+
         return hours + " Hours and" + minutes + "minutes remaining";
       })
       .catch((error) => {
@@ -109,7 +109,7 @@ export const AddLectureCoverage = () => {
       const response = service.get(`lecturer/${id}`);
       response
         .then((res) => {
-          
+
           setFname(res.data.firstName);
           setLname(res.data.lastName);
         })
@@ -125,7 +125,7 @@ export const AddLectureCoverage = () => {
       const response = service.get(`assignbatch/bylecture`, id);
       response
         .then((res) => {
-          
+
           setBatches(res.data);
         })
         .catch((error) => {
@@ -183,7 +183,7 @@ export const AddLectureCoverage = () => {
   const triggerRefresh = () => {
     setRefreshPendingCoverages((prev) => !prev);
   };
-  
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -220,7 +220,7 @@ export const AddLectureCoverage = () => {
                   </option>
                 ))}
               </select>
-              {batchCode ? remHours: ""}
+              {batchCode ? remHours : ""}
             </div>
           </div>
         </div>
@@ -295,7 +295,7 @@ export const AddLectureCoverage = () => {
 
       </div>
       <div className="my-2">
-        <RejectedCoverages refresh={refreshRejectedCoverages}/>
+        <RejectedCoverages refresh={refreshRejectedCoverages} />
       </div>
     </div>
   );

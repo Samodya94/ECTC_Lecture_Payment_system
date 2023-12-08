@@ -120,6 +120,22 @@ const getCoverageNotApprovedByMonth = asyncHandler(async (req, res) => {
   res.status(200).json(coverage);
 });
 
+const getCoverageNotApprovedByHistory = asyncHandler(async (req, res) => {
+  const lecid = req.params.lecid;
+  const {currentMonth,currentYear }= req.body
+  
+
+  const coverage = await Coverage.find({
+    status: "Not Approved",
+    lectureid: lecid,
+    date: {
+      $gte: new Date(`${currentYear}-${currentMonth}-01`),
+      $lt: new Date(`${currentYear}-${currentMonth + 1}-01`),
+    },
+  });
+
+  res.status(200).json(coverage);
+});
 //get all status = Approved
 const getCoverageApproved = asyncHandler(async (req, res) => {
   const coverage = await Coverage.find({ status: "Approved" });
@@ -144,4 +160,5 @@ module.exports = {
   getLecCoverageNotApproved,
   getCoverageNotApprovedByMonth,
   getCoverageApprovedByLecturer,
+  getCoverageNotApprovedByHistory
 };

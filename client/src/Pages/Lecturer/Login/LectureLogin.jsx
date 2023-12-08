@@ -22,7 +22,7 @@ const LectureLogin =()=>{
             <div className="lec-logo">
                 <img src={logo} />
                 <div>
-                    Ewis Career Training Centre
+                    ECTC|PDP <br></br> Lecture Login
                 </div>
             </div>
             <div className="lec-loginform">

@@ -9,7 +9,8 @@ const { createCoverage,
     getCoverageApproved,
     getLecCoverageNotApproved,
     getCoverageNotApprovedByMonth,
-    getCoverageApprovedByLecturer } = require('../controllers/approveLectureCoversgeController');
+    getCoverageApprovedByLecturer,
+    getCoverageNotApprovedByHistory } = require('../controllers/approveLectureCoversgeController');
 
 router.post('/', createCoverage).get('/', getCoverage);
 router.put('/:id', putCoverage).delete('/:id', deleteCoverage);
@@ -19,5 +20,6 @@ router.get('/:id', getCoverageById);
 router.get('/approved/:lecid', getCoverageApprovedByLecturer)
 router.get('/lecnotApproved/:lecid', getLecCoverageNotApproved);
 router.get('/notapprovedbymonth/:lecid', getCoverageNotApprovedByMonth)
+router.get('/',getCoverageNotApprovedByHistory)
 
 module.exports = router;

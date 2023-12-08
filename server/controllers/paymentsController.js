@@ -48,6 +48,12 @@ const getPaymentPending = asyncHandler(async (req, res) => {
     res.status(200).json(payment);
 });
 
+//get all status = Approved
+const getPaymentApproved = asyncHandler(async (req, res) => {
+    const payment = await Payment.find({ status: "Approved" });
+    res.status(200).json(payment);
+});
+
 const getPaymentsByLecturer = asyncHandler(async (req, res) => {
     const lecid = req.params
 
@@ -65,7 +71,8 @@ module.exports = {
     putPayment,
     createPayment,
     getPaymentPending,
-    getPaymentsByLecturer
+    getPaymentsByLecturer,
+    getPaymentApproved
 };
 
 

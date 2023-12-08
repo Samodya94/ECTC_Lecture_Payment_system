@@ -154,7 +154,7 @@ const CreatePayment = () => {
         lectureCoverage.forEach((element) => {
             console.log(element._id);
             const newCoverage = {
-                paymentStatus: "Pending",
+                paymentStatus: "Not Approved",
             };
             const response = service.put(`coverage`, element._id, newCoverage);
             response.then((res) => {

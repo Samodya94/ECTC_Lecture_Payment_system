@@ -23,7 +23,8 @@ app.use('/api/lecturer', require('./routes/lecturerRoutes'));
 app.use('/api/coverage', require('./routes/approveLectureCoverageRoutes'));
 app.use('/api/assignbatch', require('./routes/AssignBatchesRoutes'));
 app.use('/api/payment', require('./routes/paymentRoutes'));
-app.use('/api/lecLog', require('./routes/lecturerlogRoutes'))
+app.use('/api/lecLog', require('./routes/lecturerlogRoutes'));
+app.use('/api/loginDetails', require('./routes/loginDetailsRoutes'));
 
 //Lecturer Routes
 app.use('/api/Lecturer/course', lecturerUser, require('./routes/courseRoutes'));

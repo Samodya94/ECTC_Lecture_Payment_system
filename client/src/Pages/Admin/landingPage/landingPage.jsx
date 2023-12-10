@@ -39,6 +39,7 @@ import CreatePayment from "../accounts-panel/addPayments/createPayment";
 // User Level == finance components
 import ApprovePaymentsFinance from "../finance-panel/approvePayments/approvePayments";
 import RollbackPayments from "../finance-panel/rollbackPayments/rollbackPayments";
+import ApprovePaymentCoverages from "../finance-panel/approvePayments/approvedCoverages";
 
 const LandingPage = () => {
   const [expanded, setExpanded] = useState(true);
@@ -93,6 +94,7 @@ const LandingPage = () => {
 
           {/* Finance Routes */}
           <Route path="approve-payments-finance" element={<ApprovePaymentsFinance />} />
+          <Route path="approve-payments-finance/view-coverages/:id" element={<ApprovePaymentCoverages />} />
           <Route path="rollback-payments" element={<RollbackPayments />} />
         </Routes>
       </div>

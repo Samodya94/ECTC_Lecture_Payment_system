@@ -36,6 +36,7 @@ import ConfirmedPayments from "../accounts-panel/confirmedPayments/confirmedPaym
 import AddPayments from "../accounts-panel/addPayments/addPayments";
 import FinalizedPayments from "../accounts-panel/finalizedPayments/finalizedPayments";
 import CreatePayment from "../accounts-panel/addPayments/createPayment";
+import EditPayment from "../accounts-panel/addPayments/editPayment";
 
 // User Level == finance components
 import ApprovePaymentsFinance from "../finance-panel/approvePayments/approvePayments";
@@ -91,6 +92,7 @@ const LandingPage = () => {
           {/* Accounts Routes */}
           <Route path="add-payments" element={<AddPayments />} />
           <Route path="add-payments/create-payment/:id" element={<CreatePayment />} />
+          <Route path="add-payments/edit-payment/:id" element={<EditPayment />} />
           <Route path="confirmed-payments" element={<ConfirmedPayments />} />
           <Route path="finalized-payments" element={<FinalizedPayments />} />
 

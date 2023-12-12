@@ -71,12 +71,10 @@ const EditPayment = () => {
                 const lectureResponse = await service.get(`lecturer/${paymentData.lecturerId}`);
                 const lectureName = lectureResponse.data.firstName + " " + lectureResponse.data.lastName;
 
-                //fetch batch code using assign batchcode
-                const batchResponse = await service.get(`assignbatch/${paymentData.batchcode}`);
-                const batchCode = batchResponse.data.batchCode;
+                // Fetch batchCode using batchCode
+                const batchResponse = await service.get(`batch/${paymentData.batchcode}`);
+                const batch = batchResponse.data.batchCode;
 
-                const batchRes = await service.get(`batch/${batchCode}`);
-                const batch = batchRes.data.batchCode;
 
                 setPaidData({
                     date: paymentData.month,

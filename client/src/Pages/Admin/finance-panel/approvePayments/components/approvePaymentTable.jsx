@@ -185,6 +185,24 @@ const TableComponent = ({ rows, columns }) => {
     });
   }, [rows, lecturerNames, service]);
 
+  //update batch details function
+  const updatePayment = (id) => {
+    const data = {
+      status: "Approved",
+    };
+    console.log("Data to be sent:", data);
+
+    const response = service.put(`payment`, id, data);
+    response
+      .then((res) => {
+        alert("Payment Approved");
+        window.location.reload();
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
+
   return (
     <>
       <TableContainer
@@ -311,7 +329,11 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="center"
                 >
-                  <button className={styles.approveBtn}> Approve </button>
+                  <button className={styles.approveBtn} 
+                   onClick={() =>
+                    updatePayment(row._id)
+                  }
+                  > Approve </button>
                 </TableCell>
               </TableRow>
             ))}

@@ -17,6 +17,7 @@ import ManageLecturers from "../admin-panel/manageLecturersAdmin/manageLecturers
 import ManageBatches from "../admin-panel/manageBatchesAdmin/manageBatches";
 import UpdateBatches from "../admin-panel/manageBatchesAdmin/updateBatches";
 import AddBranches from "../admin-panel/manageBranchesAdmin/addBranches";
+import LoginDetails from "../login-details/LoginDetails";
 
 // User Level == admin components
 import ApprovePayments from "../admin-panel/approvePaymentsAdmin/approvePayments";
@@ -70,6 +71,7 @@ const LandingPage = () => {
 
           {/* Common Routes */}
           <Route path="dashboard" element={<AdminDashboard />} />
+          <Route path="login-details" element={<LoginDetails />} />
 
           {/* Admin Routes */}
           <Route path="approve-payments" element={<ApprovePayments />} />

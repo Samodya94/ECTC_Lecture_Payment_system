@@ -14,7 +14,7 @@ export const useLogout = () => {
         Cookies.remove('token')
         dispatch({ type: 'LOGOUT' })
 
-        navigate('/admin-login');
+        navigate('/');
 
     }
 

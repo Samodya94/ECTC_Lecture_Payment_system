@@ -18,8 +18,8 @@ const MiniLecSideNav = () => {
         <div className="sidenav_link1"><Link to="Coverage_History"><FaTableList/></Link></div>
         <div className="sidenav_link1"><Link to="lec_pay_history"><BsFillEyeFill/></Link></div>
         <div className="sidenav_link1"><Link to="change_password"><FaKey/></Link></div>
-        <div className="sidenav_link1"><Link to="mark_attendance"><IoIosPeople /></Link></div>
-        <div className="sidenav_link1"><Link to="change_password"><PiStudentBold /></Link></div>
+        {/* <div className="sidenav_link1"><Link to="mark_attendance"><IoIosPeople /></Link></div>
+        <div className="sidenav_link1"><Link to="change_password"><PiStudentBold /></Link></div> */}
         <div className="sidenav_link1"><Link to="view_log"><BsBookFill/> </Link></div>
       </div>
     </div>

@@ -12,7 +12,8 @@ export const EditCoverage = () => {
     const [stime, setStime] = useState("");
     const [etime, setEtime] = useState("");
     const [course, setCourse] = useState("");
-    const [duration, setDuratuion] = useState("")
+    const [duration, setDuration] = useState("")
+    const [nDuration,setnDuration] = useState('')
     const [date, setDate] = useState("");
     const [coverage, setCoverage] = useState("");
     const [seconds, setSeconds] = useState(0);
@@ -21,6 +22,8 @@ export const EditCoverage = () => {
     
     const [updateremHours, setUpdateremHours] = useState(0)
     const [batches, setBatches] = useState([]);
+    const [batchid, setBatchid] = useState();
+    const [assgbatch, setAssgBatches] = useState([]);
     const service = new Service();
 
     const { lecid } = useParams()
@@ -28,12 +31,45 @@ export const EditCoverage = () => {
   useEffect(() => {
     getLecturer();
     getAssignedBatches();
-    
-  }, [lecturer]);
+    getBatch();
+    getdata();
+    GetCoverage();
+  },[]);
 
   useEffect(()=>{
-    GetCoverage();
-  })
+    calculateTimeDifference();
+  },[stime,etime])
+
+ 
+
+  function getdata() {
+    const response = service.get("batch");
+    response.then((res) => {
+      const batchcodee = res.data.reduce((ace, batch) => {
+        ace[batch._id] = batch.batchCode;
+        return ace;
+      }, {});
+      setAssgBatches(batchcodee);
+    });
+  }
+
+  const calculateTimeDifference = () => {
+    if (stime && etime) {
+      const startTime = new Date(`1970-01-01T${stime}`);
+      const endTime = new Date(`1970-01-01T${etime}`);
+      const timeDiffInMillis = endTime - startTime;
+      // Convert time difference to hours and minutes
+      const hours = Math.floor(timeDiffInMillis / (1000 * 60 * 60));
+      const minutes = Math.floor(
+        (timeDiffInMillis % (1000 * 60 * 60)) / (1000 * 60)
+      );
+      const ms = duration - timeDiffInMillis
+      setnDuration(timeDiffInMillis);
+      console.log(ms)
+    }
+  };
+
+
 
   const getLecturer = (e) => {
     if (lecturer) {
@@ -62,6 +98,7 @@ export const EditCoverage = () => {
             setStime(res.data.startTime)
             setEtime(res.data.endTime)
             setDate(res.data.date)
+            setDuration(res.data.duration)
             setCoverage(res.data.lectureCoverage)
           })
           .catch((error) => {
@@ -69,6 +106,14 @@ export const EditCoverage = () => {
           });
       }
   };
+
+  const getBatch = ()=>{
+    const response = service.get("batch",batchCode);
+    response.then((res)=>{
+      console.log(res.data.batchCode);
+      setBatchid(res.data.batchCode);
+    })
+  }
 
   const getAssignedBatches = (e) => {
     if (lecturer) {
@@ -91,7 +136,6 @@ export const EditCoverage = () => {
 
     if (lecturer) {
       const id = lecid;
-      
       const data = {
         
       };
@@ -106,11 +150,20 @@ export const EditCoverage = () => {
     }
   }
 
+  const formatDate = (inputDate) => {
+    const dateObject = new Date(inputDate);
+    const year = dateObject.getFullYear();
+    const month = String(dateObject.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const day = String(dateObject.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  };
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
         <div className="add_coverage">
-          <h1>Add Lecture Coverages</h1>
+          <h1>Edit Lecture Coverages</h1>
         </div>
         <div className="row m-auto my-3">
           <div className="col-md-6 ">
@@ -126,7 +179,7 @@ export const EditCoverage = () => {
          
           <div className="col-md-6">
             <div className="input_fields ">
-              Select Batch :
+              Select Batch :{batchid}
               <select
                 className="form-control"
                 value={batchCode}
@@ -134,11 +187,10 @@ export const EditCoverage = () => {
                   setBatchCode(e.target.value);
                 }}
               >
-                <option> --Select Batch-- </option>
+                <option>--Select Batch --</option>
                 {batches.map((batch) => (
-                  <option key={batch._id} value={batch._id}>
-                    {batch.batchCode}
-                    
+                  <option key={batch._id} value={batch.batchCode}>
+                    {assgbatch[batch.batchCode]}
                   </option>
                 ))}
               </select>
@@ -180,10 +232,8 @@ export const EditCoverage = () => {
               <input
                 className="form-control mb-3"
                 type="date"
-                value={new Date(coverage.date).toLocaleDateString(
-                    "en-US",
-                    { year: "numeric", month: "numeric", day: "numeric" })}
-                onChange={(e)=>{
+                value={formatDate(date)}
+                onChange={(e) =>{
                     setDate(e.target.value)
                 }}
               />

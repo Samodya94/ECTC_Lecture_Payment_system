@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState, useMemo, useCallback, useEffect } from "react";
 
 // Styles
 import styles from "./finalizedPayments.module.css";
@@ -8,54 +8,7 @@ import TableComponent from "./components/finalizedPaymentTable";
 import DropdownInput from "./components/dropdownInput";
 import MonthSelector from "../../components/monthSelectorField";
 
-// Sample data for table
-const data = [
-  {
-    lecturerName: "Asha Madushani",
-    courseName: "OOC (L) WEnd",
-    batchCode: "OOC(Lab)-Asha-July 2023(Weekend)",
-    Month: "2023-10",
-    totalHours: "2h : 0m",
-    payRate: "Hourly Rate",
-    payAmount: "10000",
-  },
-  {
-    lecturerName: "Asha Madushani",
-    courseName: "OOC (L) WEnd",
-    batchCode: "OOC(Lab)-Asha-July 2023(Weekend)",
-    Month: "2023-10",
-    totalHours: "2h : 0m",
-    payRate: "Hourly Rate",
-    payAmount: "10000",
-  },
-  {
-    lecturerName: "Asha Madushani",
-    courseName: "OOC (L) WEnd",
-    batchCode: "OOC(Lab)-Asha-July 2023(Weekend)",
-    Month: "2023-10",
-    totalHours: "2h : 0m",
-    payRate: "Hourly Rate",
-    payAmount: "10000",
-  },
-  {
-    lecturerName: "Asha Madushani",
-    courseName: "OOC (L) WEnd",
-    batchCode: "OOC(Lab)-Asha-July 2023(Weekend)",
-    Month: "2023-10",
-    totalHours: "2h : 0m",
-    payRate: "Hourly Rate",
-    payAmount: "10000",
-  },
-  {
-    lecturerName: "Asha Madushani",
-    courseName: "OOC (L) WEnd",
-    batchCode: "OOC(Lab)-Asha-July 2023(Weekend)",
-    Month: "2023-10",
-    totalHours: "2h : 0m",
-    payRate: "Hourly Rate",
-    payAmount: "10000",
-  },
-];
+import Service from "../../../../utilities/httpService";
 
 const tableColumns = [
   "Lecturer Name",
@@ -66,12 +19,6 @@ const tableColumns = [
   "Payment Rate",
   "Pay Amount",
   "Documents",
-];
-
-const lecturerList = [
-  { _id: "1", name: "Asha Madushani" },
-  { _id: "2", name: "Dammika Priyasad" },
-  { _id: "3", name: "Charith Athulgala" },
 ];
 
 const FinalizedPayments = () => {
@@ -93,10 +40,81 @@ const FinalizedPayments = () => {
     setLecturer(e.target.value);
   };
 
+  const service = useMemo(() => new Service(), []);
+
+  const [approvedPayment, setApprovedPayment] = useState([]);
+
+  const getApprovedPayments = useCallback(async () => {
+    try {
+      const response = await service.get("/payment/approvedpayment");
+      setApprovedPayment(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+    , [service]);
+
+  useEffect(() => {
+    getApprovedPayments();
+  }, [getApprovedPayments]);
+
+
+  //get lecturer name list from lecturer collection
+  useEffect(() => {
+    const respone = service.get(`lecturer/`)
+    respone.then((res) => {
+      setLecturerList(res.data);
+    }).catch((err) => {
+      alert(err);
+    })
+  }, [service]);
+
+  const [lecturerList, setLecturerList] = useState([]);
+
+  const lecturerListAll = lecturerList.map((item) => {
+    return { _id: item._id, name: item.firstName + " " + item.lastName };
+  });
+
   const handleSearch = (e) => {
     e.preventDefault();
-    console.log(selectedMonth, selectedYear, lecturer);
+    if (lecturer === "" && selectedMonth === "" && selectedYear === "") {
+      getApprovedPayments();
+    }
+    else if (lecturer === "" && selectedMonth !== "" && selectedYear !== "") {
+      const response = approvedPayment.filter((item) => {
+        const date = new Date(item.month);
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+        return (month === parseInt(selectedMonth) && year === parseInt(selectedYear));
+      });
+      setApprovedPayment(response);
+    }
+    else if (lecturer !== "" && selectedMonth === "" && selectedYear === "") {
+      const response = approvedPayment.filter((item) => {
+        return (item.lecturerId === lecturer);
+      });
+      setApprovedPayment(response);
+    }
+    else if (lecturer !== "" && selectedMonth !== "" && selectedYear !== "") {
+      const response = approvedPayment.filter((item) => {
+        const date = new Date(item.month);
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+        return (item.lecturerId === lecturer && month === parseInt(selectedMonth) && year === parseInt(selectedYear));
+      });
+      setApprovedPayment(response);
+    }
   };
+
+  const handleReset = (e) => {
+    e.preventDefault();
+    setLecturer("");
+    setSelectedMonth("");
+    setSelectedYear("");
+    getApprovedPayments();
+  };
+
+
 
   return (
     <>
@@ -108,7 +126,7 @@ const FinalizedPayments = () => {
             style={{ width: "300px", marginLeft: "0px" }}
           />
           <DropdownInput
-            list={lecturerList}
+            list={lecturerListAll}
             handleOptionChange={handleOptionChange}
             selectedBranch={lecturer}
             style={{ width: "300px" }}
@@ -116,9 +134,12 @@ const FinalizedPayments = () => {
           <button className={styles.button} type="submit">
             View
           </button>
+          <button className={styles.button} onClick={handleReset}>
+            Reset
+          </button>
         </form>
         <div>
-          <TableComponent columns={tableColumns} rows={data} />
+          <TableComponent columns={tableColumns} rows={approvedPayment} />
         </div>
       </div>
     </>

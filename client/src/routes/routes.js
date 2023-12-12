@@ -27,8 +27,8 @@ const AllRoutes = () => {
 
         {/* Protected Routes */}
         <Route path="/" element={<App />}>
-          <Route path="/admin/*" element={user ? <LandingPage /> : <Navigate to="/" replace />} />
-          <Route path="/lecture/*" element={lecturer ? <LecHome /> : <Navigate to="/lec-login" replace />} />
+          <Route path="/admin/*" element={<LandingPage />} />
+          <Route path="/lecture/*" element={lecturer ? <LecHome /> : <Navigate to="/lec-login" />} />
         </Route>
 
       </Routes>

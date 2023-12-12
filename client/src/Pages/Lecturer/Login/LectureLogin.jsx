@@ -4,6 +4,7 @@ import logo from '../../../assets/logo.jpg'
 import { useNavigate } from "react-router";
 import { useLecLogin } from "../../../hooks/useLecLogin";
 import axios from "axios";
+import Service from "../../../utilities/httpService";
 
 const LectureLogin =()=>{
 
@@ -14,11 +15,27 @@ const LectureLogin =()=>{
     const [ip,setIp] = useState('')
     const navigate = useNavigate()
     const {login, isLoading, error } = useLecLogin()
+    const service = new Service()
 
     const handleLogin= async (e) => {
         e.preventDefault()
     
         await login(username,password)
+
+
+        const data = {
+            lecUsername:username,
+            ipaddress:ip,
+            city:city,
+            country:country,
+        }
+
+        const response = service.post('lecLog',data)
+        response.then(()=>{
+            console.log(data)
+        }).catch((err)=>{
+            console.log(err)
+        })
     }
 
     useEffect(()=>{

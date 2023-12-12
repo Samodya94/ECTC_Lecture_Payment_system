@@ -42,11 +42,37 @@ const createPayment = asyncHandler(async (req, res) => {
     res.status(201).json(createdPayment);
 });
 
+//get all status = Pending
+const getPaymentPending = asyncHandler(async (req, res) => {
+    const payment = await Payment.find({ status: "Not Approved" });
+    res.status(200).json(payment);
+});
+
+//get all status = Approved
+const getPaymentApproved = asyncHandler(async (req, res) => {
+    const payment = await Payment.find({ status: "Approved" });
+    res.status(200).json(payment);
+});
+
+const getPaymentsByLecturer = asyncHandler(async (req, res) => {
+    const lecid = req.params
+
+    const payment = Payment.find({
+        lecturerId: lecid,
+        status: "Approved"
+    })
+
+    res.status(200).json(payment)
+})
+
 module.exports = {
     getPayments,
     getPaymentById,
     putPayment,
     createPayment,
+    getPaymentPending,
+    getPaymentsByLecturer,
+    getPaymentApproved
 };
 
 

@@ -23,12 +23,16 @@ export const useLecLogin = () => {
             setIsLoading(false)
             setError(json.error)
         }
+
+
         if(response.ok){
             //save the user to local storage
             localStorage.setItem('lecturer', JSON.stringify(json))
 
             //update Authcontext
             dispatch({type: 'LOGIN', payload: json})
+
+           
             setIsLoading(false)
         }
         

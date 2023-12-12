@@ -27,33 +27,33 @@ const createCoverage = asyncHandler(async (req, res) => {
         {
           $and: [
             { startTime: { $lte: startTime } },
-            { endTime: { $gte: startTime } }
-          ]
+            { endTime: { $gte: startTime } },
+          ],
         },
         {
           $and: [
             { startTime: { $lte: endTime } },
-            { endTime: { $gte: endTime } }
-          ]
+            { endTime: { $gte: endTime } },
+          ],
         },
         {
           $and: [
             { startTime: { $gte: startTime } },
-            { endTime: { $lte: endTime } }
-          ]
-        }
-      ]
+            { endTime: { $lte: endTime } },
+          ],
+        },
+      ],
     });
 
     if (existingCoverage) {
       res.status(400);
-      throw new Error('Coverage with overlapping time already exists');
+      throw new Error("Coverage with overlapping time already exists");
     }
 
     // Additional custom validation for ensuring duration > 0
     if (duration <= 0) {
       res.status(400);
-      throw new Error('Duration must be greater than 0');
+      throw new Error("Duration must be greater than 0");
     }
 
     // Create coverage if validation passes
@@ -81,10 +81,9 @@ const createCoverage = asyncHandler(async (req, res) => {
     });
   } catch (error) {
     console.error(error.message);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
-
 
 const deleteCoverage = asyncHandler(async (req, res) => {
   const coverage = await Coverage.findById(req.params.id);
@@ -114,6 +113,7 @@ const putCoverage = asyncHandler(async (req, res) => {
   );
 
   res.status(200).json(updatedCoverage);
+  console.log(updatedCoverage);
 });
 
 //get all status = Not Approved
@@ -123,7 +123,7 @@ const getCoverageNotApproved = asyncHandler(async (req, res) => {
 });
 
 const getCoverageById = asyncHandler(async (req, res) => {
-  const id = req.params.id
+  const id = req.params.id;
   const coverage = await Coverage.findOne({ _id: id });
   res.status(200).json(coverage);
 });
@@ -140,12 +140,12 @@ const getLecCoverageNotApproved = asyncHandler(async (req, res) => {
 const getCoverageNotApprovedByMonth = asyncHandler(async (req, res) => {
   const lecid = req.params.lecid;
   const currentDate = new Date();
-  console.log(currentDate)
+  console.log(currentDate);
   const currentMonth = currentDate.getMonth() + 1;
   const currentYear = currentDate.getFullYear();
 
   if (isNaN(currentMonth) || isNaN(currentYear)) {
-    return res.status(500).json({ error: 'Invalid current month or year' });
+    return res.status(500).json({ error: "Invalid current month or year" });
   }
 
   let nextMonth = currentMonth + 1;
@@ -159,19 +159,48 @@ const getCoverageNotApprovedByMonth = asyncHandler(async (req, res) => {
 
   const startDate = new Date(`${currentYear}-${currentMonth}-01T00:00:00.000Z`);
   const lastDayOfMonth = new Date(currentYear, currentMonth, 0).getDate();
-  const endDate = new Date(`${currentYear}-${currentMonth}-${lastDayOfMonth}T23:59:59.999Z`);
+  const endDate = new Date(
+    `${currentYear}-${currentMonth}-${lastDayOfMonth}T23:59:59.999Z`
+  );
 
   const coverage = await Coverage.find({
     status: "Not Approved",
     lectureid: lecid,
     date: {
       $exists: true,
-      $type: 'date',
+      $type: "date",
       $gte: startDate,
       $lt: endDate,
     },
   });
 
+  res.status(200).json(coverage);
+});
+
+const getCoverageHistory = asyncHandler(async (req, res) => {
+  const lecid = req.params.lecid;
+  const currentMonth = req.params.currentMonth
+  const currentYear = req.params.currentYear
+  
+
+ 
+
+  // Check if it's December (12), in which case the next month is January of the next year
+  
+  const startDate = new Date(`${currentYear}-${currentMonth}-01T00:00:00.000Z`);
+  const lastDayOfMonth = new Date(currentYear, currentMonth, 0).getDate();
+  const endDate = new Date(
+    `${currentYear}-${currentMonth}-${lastDayOfMonth}T23:59:59.999Z`
+  );
+  console.log(startDate)
+    const coverage = await Coverage.find({
+    lectureid: lecid,
+    date: {
+      $exists: true,
+      $gte: startDate,
+      $lt: endDate,
+    },
+  });
   res.status(200).json(coverage);
 });
 
@@ -182,9 +211,12 @@ const getCoverageApproved = asyncHandler(async (req, res) => {
 });
 
 const getCoverageApprovedByLecturer = asyncHandler(async (req, res) => {
-  const lecid = req.params.lecid
+  const lecid = req.params.lecid;
 
-  const coverage = await Coverage.find({ status: "Approved", lectureid: lecid });
+  const coverage = await Coverage.find({
+    status: "Approved",
+    lectureid: lecid,
+  });
   res.status(200).json(coverage);
 });
 
@@ -192,12 +224,13 @@ const getCoverageApprovedByLecturer = asyncHandler(async (req, res) => {
 const getCoverageByLecIdAndBatchCode = asyncHandler(async (req, res) => {
   const lecid = req.params.lecid;
   const status = "Approved";
+  const paymentStatus = "Not Approved";
 
   const currentMonth = req.params.month;
   const currentYear = req.params.year;
 
   if (isNaN(currentMonth) || isNaN(currentYear)) {
-    return res.status(500).json({ error: 'Invalid current month or year' });
+    return res.status(500).json({ error: "Invalid current month or year" });
   }
 
   let nextMonth = currentMonth + 1;
@@ -211,17 +244,38 @@ const getCoverageByLecIdAndBatchCode = asyncHandler(async (req, res) => {
 
   const startDate = new Date(`${currentYear}-${currentMonth}-01T00:00:00.000Z`);
   const lastDayOfMonth = new Date(currentYear, currentMonth, 0).getDate();
-  const endDate = new Date(`${currentYear}-${currentMonth}-${lastDayOfMonth}T23:59:59.999Z`);
+  const endDate = new Date(
+    `${currentYear}-${currentMonth}-${lastDayOfMonth}T23:59:59.999Z`
+  );
 
   const coverage = await Coverage.find({
     lectureid: lecid,
     date: {
       $exists: true,
-      $type: 'date',
+      $type: "date",
       $gte: startDate,
       $lt: endDate,
     },
     status: status,
+    paymentStatus: paymentStatus,
+  });
+  res.status(200).json(coverage);
+});
+
+//get all status = Approved and paymentStatus = Not Approved
+const getPaymentNotApproved = asyncHandler(async (req, res) => {
+  const coverage = await Coverage.find({
+    paymentStatus: "Not Approved",
+    status: "Approved",
+  });
+  res.status(200).json(coverage);
+});
+
+//get all status = Approved and paymentStatus = Pending
+const getPaymentPending = asyncHandler(async (req, res) => {
+  const coverage = await Coverage.find({
+    paymentStatus: "Pending",
+    status: "Approved",
   });
   res.status(200).json(coverage);
 });
@@ -238,4 +292,7 @@ module.exports = {
   getCoverageNotApprovedByMonth,
   getCoverageApprovedByLecturer,
   getCoverageByLecIdAndBatchCode,
+  getPaymentNotApproved,
+  getPaymentPending,
+  getCoverageHistory
 };

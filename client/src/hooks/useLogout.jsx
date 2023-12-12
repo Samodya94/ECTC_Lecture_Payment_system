@@ -15,7 +15,7 @@ export const useLogout = () => {
 
         dispatch({ type: 'LOGOUT' })
 
-        navigate('/admin-login');
+        navigate('/');
 
     }
 

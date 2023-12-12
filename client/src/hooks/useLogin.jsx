@@ -36,9 +36,6 @@ export const useLogin = () => {
             Cookies.set('token', json.token, { expires: 7, secure: true })
             dispatch({ type: 'LOGIN', payload: json })
 
-            //redirect to admin dashboard
-            window.location.href = "/admin/dashboard"
-
             setIsLoading(false)
 
         }

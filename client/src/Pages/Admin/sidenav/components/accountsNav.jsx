@@ -10,6 +10,7 @@ import AutoStoriesOutlinedIcon from "@mui/icons-material/AutoStoriesOutlined";
 import PaidOutlinedIcon from "@mui/icons-material/PaidOutlined";
 import CreditScoreOutlinedIcon from "@mui/icons-material/CreditScoreOutlined";
 import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
+import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 
 const AccountsNav = ({ expanded }) => {
   const navigate = useNavigate();
@@ -79,6 +80,18 @@ const AccountsNav = ({ expanded }) => {
             <ReceiptOutlinedIcon />
             {/* Display name when expanded */}
             {expanded && <span className={styles.span}>Payment Records</span>}
+          </span>
+        </li>
+        <li
+          className={styles.li}
+          style={{ whiteSpace: "nowrap" }}
+          onClick={() => navigate("login-details")}
+        >
+          <span className={styles.liContainer}>
+            {/* Icon */}
+            <PersonOutlineOutlinedIcon />
+            {/* Display name when expanded */}
+            {expanded && <span className={styles.span}>View Logins</span>}
           </span>
         </li>
       </ul>

@@ -12,12 +12,14 @@ import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined
 
 const AdminNav = ({ expanded, setExpanded }) => {
   const [configurationExpanded, setConfigurationExpanded] = useState(false);
+  const [loginsExpanded, setLoginsExpanded] = useState(false);
 
   const navigate = useNavigate();
 
   useEffect(() => {
     if (!expanded) {
       setConfigurationExpanded(false);
+      setLoginsExpanded(false);
     }
   }, [expanded]);
 
@@ -26,6 +28,13 @@ const AdminNav = ({ expanded, setExpanded }) => {
       setExpanded(!expanded);
     }
     setConfigurationExpanded(!configurationExpanded);
+  };
+
+  const toggleLogins = () => {
+    if (!expanded) {
+      setExpanded(!expanded);
+    }
+    setLoginsExpanded(!loginsExpanded);
   };
 
   return (
@@ -113,16 +122,41 @@ const AdminNav = ({ expanded, setExpanded }) => {
             </li>
           </ul>
         )}
-        <li className={styles.li}>
+
+        <li className={styles.li} onClick={toggleLogins}>
           <span className={styles.liContainer}>
             <PersonOutlineOutlinedIcon />
-            {expanded && (
-              <span className={styles.span} style={{ whiteSpace: "nowrap" }}>
-                View Logins
-              </span>
-            )}
+            {expanded && <span className={styles.span}>View Logins</span>}
           </span>
+          {loginsExpanded
+            ? expanded && <span className={styles.span}>&#9650;</span>
+            : expanded && <span className={styles.span}>&#9660;</span>}
         </li>
+        {/* Sub-links for configurations */}
+        {loginsExpanded && (
+          <ul className={`${styles.subMenu}`}>
+            <li
+              className={styles.li}
+              style={{ whiteSpace: "nowrap" }}
+              onClick={() => {
+                setLoginsExpanded(!loginsExpanded);
+                navigate("login-details");
+              }}
+            >
+              - My Logins
+            </li>
+            <li
+              className={styles.li}
+              style={{ whiteSpace: "nowrap" }}
+              onClick={() => {
+                setLoginsExpanded(!loginsExpanded);
+                navigate("login-details");
+              }}
+            >
+              - All Users
+            </li>
+          </ul>
+        )}
       </ul>
     </>
   );

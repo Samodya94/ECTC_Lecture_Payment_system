@@ -1,11 +1,16 @@
 import Cookies from 'js-cookie';
 import { useState } from 'react';
 import { useAuthContext } from "./useAuthContext";
+import axios from 'axios';
+
+import Service from '../utilities/httpService';
 
 export const useLogin = () => {
     const [error, setError] = useState(null)
     const [isLoading, setIsLoading] = useState(null)
     const { dispatch } = useAuthContext()
+
+    const service = new Service();
 
     const login = async (username, password) => {
 
@@ -27,6 +32,26 @@ export const useLogin = () => {
             console.log(json.message)
         }
         if (response.ok) {
+            //get logDetails
+            const getdata = async () => {
+                const response = await axios.get(`https://ipapi.co/json/`)
+                const ip = response.data.ip;
+                const country = response.data.country_name;
+                const city = response.data.city;
+
+                const newLog = {
+                    ipaddress: ip,
+                    country: country,
+                    city: city,
+                    username: username,
+
+                };
+
+                console.log(newLog);
+
+                const response2 = service.post('loginDetails/', newLog);
+            }
+            getdata();
 
             //save the user to local storage
 
@@ -35,9 +60,6 @@ export const useLogin = () => {
             Cookies.set('userLevel', json.userLevel, { expires: 7, secure: true })
             Cookies.set('token', json.token, { expires: 7, secure: true })
             dispatch({ type: 'LOGIN', payload: json })
-
-            //redirect to admin dashboard
-            window.location.href = "/admin/dashboard"
 
             setIsLoading(false)
 

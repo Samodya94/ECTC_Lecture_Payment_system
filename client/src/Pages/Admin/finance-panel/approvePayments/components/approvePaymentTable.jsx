@@ -1,9 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
- 
+
 import Service from "../../../../../utilities/httpService";
- 
+
 // MUI Table components
 import {
   Box,
@@ -18,36 +19,36 @@ import {
   Paper,
   IconButton,
 } from "@mui/material";
- 
+
 // Icons
 import FirstPageIcon from "@mui/icons-material/FirstPage";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
- 
+
 // Styles
 import styles from "./approvePaymentTable.module.css";
- 
+
 function TablePaginationActions(props) {
   const theme = useTheme();
   const { count, page, rowsPerPage, onPageChange } = props;
- 
+
   const handleFirstPageButtonClick = (event) => {
     onPageChange(event, 0);
   };
- 
+
   const handleBackButtonClick = (event) => {
     onPageChange(event, page - 1);
   };
- 
+
   const handleNextButtonClick = (event) => {
     onPageChange(event, page + 1);
   };
- 
+
   const handleLastPageButtonClick = (event) => {
     onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
   };
- 
+
   return (
     <Box sx={{ flexShrink: 0, ml: 2.5 }}>
       <IconButton
@@ -89,59 +90,45 @@ function TablePaginationActions(props) {
     </Box>
   );
 }
- 
+
 TablePaginationActions.propTypes = {
   count: PropTypes.number.isRequired,
   onPageChange: PropTypes.func.isRequired,
   page: PropTypes.number.isRequired,
   rowsPerPage: PropTypes.number.isRequired,
 };
- 
+
 const TableComponent = ({ rows, columns }) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
- 
+
+  const navigate = useNavigate();
+
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
- 
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
- 
+
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
- 
+
   function calculateDuration(duration) {
     const hours = Math.floor(duration / 3600000);
     const minutes = Math.floor((duration % 3600000) / 60000);
- 
+
     return `${hours}h : ${minutes}m`;
   }
- 
+
   const service = React.useMemo(() => new Service(), []);
- 
-  //get batch batchCode from coverage batchCode
-  const [batched, setBatched] = React.useState({});
- 
-  React.useEffect(() => {
-    const getBatch = async () => {
-      const response = await service.get("assignbatch");
-      const batches = response.data.reduce((acc, batch) => {
-        acc[batch._id] = batch.batchCode;
-        return acc;
-      }, {});
-      setBatched(batches);
-    };
- 
-    getBatch();
-  }, [rows, service]);
- 
+
   //get batch batchCode from batched batchCode
   const [batchCodes, setBatchCodes] = React.useState({});
- 
+
   React.useEffect(() => {
     const getBatchCode = async () => {
       const response = await service.get("batch");
@@ -151,12 +138,12 @@ const TableComponent = ({ rows, columns }) => {
       }, {});
       setBatchCodes(batches);
     };
- 
+
     getBatchCode();
   }, [rows, service]);
- 
+
   const [lecturerNames, setLecturerNames] = React.useState({});
- 
+
   React.useEffect(() => {
     const getLecturerName = async (id) => {
       try {
@@ -174,14 +161,14 @@ const TableComponent = ({ rows, columns }) => {
         }));
       }
     };
- 
+
     rows.forEach((row) => {
       if (!lecturerNames[row.lecturerId]) {
         getLecturerName(row.lecturerId);
       }
     });
   }, [rows, lecturerNames, service]);
- 
+
   return (
     <>
       <TableContainer
@@ -235,7 +222,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {batchCodes[batched[row.batchcode]]}
+                  {batchCodes[row.batchcode]}
                 </TableCell>
                 <TableCell
                   style={{
@@ -285,7 +272,9 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="center"
                 >
-                  <button className={styles.viewBtn}> View </button>
+                  <button className={styles.viewBtn}
+                    onClick={() => navigate(`view-coverages/${row._id}`)}
+                  > View </button>
                 </TableCell>
                 <TableCell
                   style={{
@@ -295,7 +284,8 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="center"
                 >
-                  <button className={styles.viewBtn}> View </button>
+                  <button className={styles.viewBtn}
+                  > View </button>
                 </TableCell>
                 <TableCell
                   style={{
@@ -338,6 +328,5 @@ const TableComponent = ({ rows, columns }) => {
     </>
   );
 };
- 
+
 export default TableComponent;
- 

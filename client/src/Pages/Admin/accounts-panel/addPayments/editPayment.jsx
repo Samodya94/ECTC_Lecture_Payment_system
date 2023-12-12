@@ -22,7 +22,7 @@ const tableColumns = [
     "Coverage",
 ];
 
-const CreatePayment = () => {
+const EditPayment = () => {
     const navigate = useNavigate();
     const Param = useParams();
     const id = Param.id;
@@ -33,51 +33,55 @@ const CreatePayment = () => {
     const [courseName, setCourseName] = useState("");
     const [batchCode, setBatchCode] = useState("");
     const [date, setDate] = useState("");
+    const [duration, setDuration] = useState(0);
     const [lectureCoverage, setLectureCoverage] = useState([]);
-    const [totalHours, setTotalHours] = useState(0);
     const [paymentAmount, setPaymentAmount] = useState(0);
     const [document, setDocument] = useState("");
-    const [paymentStatus, setPaymentStatus] = useState("");
+    const [rate, setRate] = useState("");
+    const [paymentStatus, setPaymentStatus] = useState("Pending");
+    const [paidDate, setPaidDate] = useState("");
 
     const [initialDataLoaded, setInitialDataLoaded] = useState(false);
 
-    const [paymentData, setPaymentData] = useState({
+    const [paidData, setPaidData] = useState({
         date: '',
         lectureid: '',
         batchCode: '',
         courseName: '',
         rate: '',
+        totalhours: '',
     });
 
     useEffect(() => {
         async function loadApproveCoverage() {
             try {
-                const response = await service.get(`coverage/${id}`);
-                const coverageData = response.data;
-                setLectureid(coverageData.lectureid);
-                setCourseName(coverageData.courseName);
-                setBatchCode(coverageData.batchCode);
-                setDate(coverageData.date);
-                setPaymentStatus(coverageData.paymentStatus);
+                const response = await service.get(`payment/${id}`);
+                const paymentData = response.data;
+                setLectureid(paymentData.lecturerId);
+                setCourseName(paymentData.coursename);
+                setBatchCode(paymentData.batchcode);
+                setDate(paymentData.month);
+                setDuration(paymentData.totalhours);
+                setPaymentAmount(paymentData.paidamount);
+                setRate(paymentData.paymentrate);
+                setDocument(paymentData.document);
+                setPaidDate(paymentData.paymentDate);
 
                 // Fetch lecture name using lecture id
-                const lectureResponse = await service.get(`lecturer/${coverageData.lectureid}`);
+                const lectureResponse = await service.get(`lecturer/${paymentData.lecturerId}`);
                 const lectureName = lectureResponse.data.firstName + " " + lectureResponse.data.lastName;
 
                 // Fetch batchCode using batchCode
-                const batchResponse = await service.get(`batch/${coverageData.batchCode}`);
+                const batchResponse = await service.get(`batch/${paymentData.batchcode}`);
                 const batch = batchResponse.data.batchCode;
 
-                // Fetch rate using batchCode
-                const rateResponse = await service.get(`assignbatch/bylecture/${coverageData.lectureid}/${coverageData.batchCode}`);
-                const rate = rateResponse.data.rate;
 
-                setPaymentData({
-                    date: coverageData.date.slice(0, 7),
+                setPaidData({
+                    date: paymentData.month,
                     lectureid: lectureName,
                     batchCode: batch,
-                    courseName: coverageData.courseName,
-                    rate: rate,
+                    courseName: paymentData.coursename,
+                    rate: paymentData.paymentrate,
                 });
                 setInitialDataLoaded(true);
             } catch (err) {
@@ -98,12 +102,6 @@ const CreatePayment = () => {
 
                     const response = await service.get(`coverage/${lectureid}/${batchCode}/${month}/${year}/${paymentStatus}`);
                     setLectureCoverage(response.data);
-                    //get total hours
-                    let total = 0;
-                    response.data.forEach((element) => {
-                        total += element.duration;
-                    });
-                    setTotalHours(total);
                 } catch (err) {
                     alert(err);
                 }
@@ -123,80 +121,61 @@ const CreatePayment = () => {
         lecturerId: lectureid,
         coursename: courseName,
         batchcode: batchCode,
-        month: date.slice(0, 7),
-        totalhours: totalHours,
-        paymentrate: paymentData.rate,
+        month: date,
+        totalhours: duration,
+        paymentrate: rate,
         paidamount: paymentAmount,
         document: document,
-        paymentDate: new Date(),
+        paymentDate: paidDate,
         status: "Not Approved",
     }
 
     //create new payment function
-    function createPayment(e) {
+    function editPayment(e) {
         e.preventDefault();
-        const response = service.post(`payment/`, newPayment);
+        const response = service.put(`payment`, id, newPayment);
         response.then((res) => {
-            alert("New Payment Added");
-            updateCoverageStatus();
+            alert("Payment Updated");
             navigate('/admin/add-payments');
         }).catch((err) => {
             console.log(err);
         })
     }
 
-    //when createpayment each coverage paidstatus change to approved
-    function updateCoverageStatus() {
-        lectureCoverage.forEach((element) => {
-            console.log(element._id);
-            const newCoverage = {
-                paymentStatus: "Pending",
-            };
-            const response = service.put(`coverage`, element._id, newCoverage);
-            response.then((res) => {
-                console.log("Coverage Status Updated");
-            }).catch((err) => {
-                console.log(err);
-            })
-        });
-    }
-
-
-
     return (
         <>
             <div className={styles.container}>
                 <div className={styles.subContainer}>
-                    <p className={styles.heading}>Create Payment</p>
-                    <form onSubmit={createPayment}>
+                    <p className={styles.heading}>Edit Payment</p>
+                    <form onSubmit={editPayment}>
                         <InputFieldDis
                             lable={"Month"}
                             placeholder={"Enter Month"}
-                            value={paymentData.date}
+                            value={date}
                             style={{ width: "300px" }}
                         />
                         <InputFieldDis
                             lable={"Lecturer Name"}
                             placeholder={"Enter Lecturer Name"}
-                            value={paymentData.lectureid}
+                            value={paidData.lectureid}
                             style={{ width: "300px" }}
                         />
                         <InputFieldDis
                             lable={"Batch Code"}
                             placeholder={"Enter Batch Code"}
-                            value={paymentData.batchCode}
+                            value={paidData.batchCode}
                             style={{ width: "300px" }}
                         />
                         <InputFieldDis
                             lable={"Course"}
                             placeholder={"Enter Course"}
-                            value={paymentData.courseName}
+                            value={courseName}
                             style={{ width: "300px" }}
                         />
                         <InputFieldDis
                             lable={"Rate"}
                             placeholder={"Enter Rate"}
-                            value={paymentData.rate}
+                            value={rate}
                             style={{ width: "300px" }}
                         />
 
@@ -204,13 +183,14 @@ const CreatePayment = () => {
                         <InputFieldDis
                             lable={"No of Hours"}
                             placeholder={"Enter No of Hours"}
-                            value={calculateDuration(totalHours)}
+                            value={calculateDuration(duration)}
                             style={{ width: "300px" }}
                         />
 
                         <InputNumField
                             lable={"Payment Amount"}
                             placeholder={"Enter Payment Amount"}
+                            value={paymentAmount}
                             setValue={setPaymentAmount}
                             style={{ width: "300px" }}
                         />
@@ -218,7 +198,7 @@ const CreatePayment = () => {
                         <InputField
                             lable={"Document"}
                             placeholder={"Enter Document"}
-                            value={''}
+                            value={document}
                             setValue={setDocument}
                             style={{ width: "300px" }}
                         />
@@ -226,15 +206,15 @@ const CreatePayment = () => {
                         <InputField
                             lable={"Payment Date"}
                             placeholder={"Enter Payment Date"}
-                            value={''}
-                            setValue={''}
+                            value={paidDate.slice(0, 10)}
+                            setValue={setPaidDate}
                             style={{ width: "300px" }}
                         />
 
 
                         <div style={{ display: "flex", justifyContent: "center" }}>
                             <PrimaryButton
-                                label={"Make Payment"}
+                                label={"Edit Payment"}
                                 type={"submit"}
                                 style={{
                                     backgroundColor: "#5A84AE",
@@ -270,4 +250,4 @@ const CreatePayment = () => {
     );
 };
 
-export default CreatePayment;
+export default EditPayment;

@@ -22,12 +22,12 @@ const AllRoutes = () => {
     <Router>
       <Routes>
         {/* Unprotected Routes */}
-        <Route path="/" element={!user ? <AdminLogin /> : <Navigate to="/admin/dashboard" />} />
+        <Route path="/" element={!user ? <AdminLogin /> : <Navigate to="/admin" />} />
         <Route path="/lec-login" element={!lecturer ? <LectureLogin /> : <Navigate to="/lecture" />} />
 
         {/* Protected Routes */}
         <Route path="/" element={<App />}>
-          <Route path="/admin/*" element={user ? <LandingPage /> : <AdminLogin />} />
+          <Route path="/admin/*" element={<LandingPage />} />
           <Route path="/lecture/*" element={lecturer ? <LecHome /> : <Navigate to="/lec-login" />} />
         </Route>
 

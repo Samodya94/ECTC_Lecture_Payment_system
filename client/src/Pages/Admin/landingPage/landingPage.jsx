@@ -17,6 +17,7 @@ import ManageLecturers from "../admin-panel/manageLecturersAdmin/manageLecturers
 import ManageBatches from "../admin-panel/manageBatchesAdmin/manageBatches";
 import UpdateBatches from "../admin-panel/manageBatchesAdmin/updateBatches";
 import AddBranches from "../admin-panel/manageBranchesAdmin/addBranches";
+import LoginDetails from "../login-details/LoginDetails";
 
 // User Level == admin components
 import ApprovePayments from "../admin-panel/approvePaymentsAdmin/approvePayments";
@@ -35,10 +36,12 @@ import ConfirmedPayments from "../accounts-panel/confirmedPayments/confirmedPaym
 import AddPayments from "../accounts-panel/addPayments/addPayments";
 import FinalizedPayments from "../accounts-panel/finalizedPayments/finalizedPayments";
 import CreatePayment from "../accounts-panel/addPayments/createPayment";
+import EditPayment from "../accounts-panel/addPayments/editPayment";
 
 // User Level == finance components
 import ApprovePaymentsFinance from "../finance-panel/approvePayments/approvePayments";
 import RollbackPayments from "../finance-panel/rollbackPayments/rollbackPayments";
+import ApprovePaymentCoverages from "../finance-panel/approvePayments/approvedCoverages";
 
 const LandingPage = () => {
   const [expanded, setExpanded] = useState(true);
@@ -69,6 +72,7 @@ const LandingPage = () => {
 
           {/* Common Routes */}
           <Route path="dashboard" element={<AdminDashboard />} />
+          <Route path="login-details" element={<LoginDetails />} />
 
           {/* Admin Routes */}
           <Route path="approve-payments" element={<ApprovePayments />} />
@@ -88,11 +92,13 @@ const LandingPage = () => {
           {/* Accounts Routes */}
           <Route path="add-payments" element={<AddPayments />} />
           <Route path="add-payments/create-payment/:id" element={<CreatePayment />} />
+          <Route path="add-payments/edit-payment/:id" element={<EditPayment />} />
           <Route path="confirmed-payments" element={<ConfirmedPayments />} />
           <Route path="finalized-payments" element={<FinalizedPayments />} />
 
           {/* Finance Routes */}
           <Route path="approve-payments-finance" element={<ApprovePaymentsFinance />} />
+          <Route path="approve-payments-finance/view-coverages/:id" element={<ApprovePaymentCoverages />} />
           <Route path="rollback-payments" element={<RollbackPayments />} />
         </Routes>
       </div>

@@ -3,9 +3,9 @@ import { useLecAuthContext } from "./useLecAuthContext";
 
 
 export const useLecLogout = () => {
-    const { dispatch }= useLecAuthContext()
+    const { dispatch } = useLecAuthContext()
     const navigate = useNavigate();
-    
+
     const logout = () => {
         localStorage.removeItem('lecturer')
         
@@ -13,5 +13,5 @@ export const useLecLogout = () => {
         navigate('/')
     }
 
-    return {logout}
+    return { logout }
 }

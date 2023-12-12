@@ -26,7 +26,7 @@ import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
 
 // Styles
-import styles from "./addPaymentTable.module.css";
+import styles from "./approvePaymentTable.module.css";
 
 function TablePaginationActions(props) {
     const theme = useTheme();
@@ -123,45 +123,22 @@ const TableComponent = ({ rows, columns }) => {
         return `${hours}h : ${minutes}m`;
     }
 
-    //get batch batchCode from batched batchCode
-    const [batchCodes, setBatchCodes] = React.useState({});
-
-    React.useEffect(() => {
-        const getBatchCode = async () => {
-            const response = await service.get("batch");
-            const batches = response.data.reduce((acc, batch) => {
-                acc[batch._id] = batch.batchCode;
-                return acc;
-            }, {});
-            setBatchCodes(batches);
-        };
-
-        getBatchCode();
-    }, [rows, service]);
-
 
     //get pay rate from coverage batchCode
-    const [assignbatch, setAssignBatch] = React.useState({});
+    const [payRates, setPayRates] = React.useState({});
 
     React.useEffect(() => {
-        const getRate = async (lectureid, batchCode) => {
-            const response = await service.get(`assignbatch/bylecture/${lectureid}/${batchCode}`);
-            const rate = response.data.rate;
-            console.log(rate)
-            setAssignBatch((prevNames) => ({
-                ...prevNames,
-                [batchCode]: rate,
-            }));
-
+        const getRate = async () => {
+            const response = await service.get("assignbatch");
+            const batches = response.data.reduce((acc, batch) => {
+                acc[batch._id] = batch.rate;
+                return acc;
+            }, {});
+            setPayRates(batches);
         };
 
-        rows.forEach((row) => {
-            if (!assignbatch[row.batchCode]) {
-                getRate(row.lectureid, row.batchCode);
-            }
-        });
-    }
-        , [rows, assignbatch, service]);
+        getRate();
+    }, [rows, service]);
 
     return (
         <>
@@ -196,27 +173,27 @@ const TableComponent = ({ rows, columns }) => {
                                         padding: "5px 16px",
                                     }}
                                 >
-                                    {row.courseName}
-                                </TableCell>
-                                <TableCell
-                                    style={{
-                                        width: 140,
-                                        border: "1px solid #ccc",
-                                        padding: "5px 16px",
-                                    }}
-                                    align="left"
-                                >
-                                    {batchCodes[row.batchCode]}
-                                </TableCell>
-                                <TableCell
-                                    style={{
-                                        width: 140,
-                                        border: "1px solid #ccc",
-                                        padding: "5px 16px",
-                                    }}
-                                    align="left"
-                                >
                                     {row.date.slice(0, 10)}
+                                </TableCell>
+                                <TableCell
+                                    style={{
+                                        width: 140,
+                                        border: "1px solid #ccc",
+                                        padding: "5px 16px",
+                                    }}
+                                    align="left"
+                                >
+                                    {row.startTime}
+                                </TableCell>
+                                <TableCell
+                                    style={{
+                                        width: 140,
+                                        border: "1px solid #ccc",
+                                        padding: "5px 16px",
+                                    }}
+                                    align="left"
+                                >
+                                    {row.endTime}
                                 </TableCell>
                                 <TableCell
                                     style={{
@@ -236,7 +213,7 @@ const TableComponent = ({ rows, columns }) => {
                                     }}
                                     align="left"
                                 >
-                                    {assignbatch[row.batchCode] || "Loading..."}
+                                    {payRates[row.batchCode]}
                                 </TableCell>
                                 <TableCell
                                     style={{

@@ -175,22 +175,6 @@ const TableComponent = ({ rows, columns }) => {
   }, [rows, branches, service]);
 
 
-  //get batch batchCode from coverage batchCode 
-  const [batched, setBatched] = React.useState({});
-
-  React.useEffect(() => {
-    const getBatch = async () => {
-      const response = await service.get("assignbatch");
-      const batches = response.data.reduce((acc, batch) => {
-        acc[batch._id] = batch.batchCode;
-        return acc;
-      }, {});
-      setBatched(batches);
-    };
-
-    getBatch();
-  }, [rows, service]);
-
   //get batch batchCode from batched batchCode
   const [batchCodes, setBatchCodes] = React.useState({});
 
@@ -209,21 +193,27 @@ const TableComponent = ({ rows, columns }) => {
 
 
   //get pay rate from coverage batchCode
-  const [payRates, setPayRates] = React.useState({});
+  const [assignbatch, setAssignBatch] = React.useState({});
 
   React.useEffect(() => {
-    const getRate = async () => {
-      const response = await service.get("assignbatch");
-      const batches = response.data.reduce((acc, batch) => {
-        acc[batch._id] = batch.rate;
-        return acc;
-      }, {});
-      setPayRates(batches);
+    const getRate = async (lectureid, batchCode) => {
+      const response = await service.get(`assignbatch/bylecture/${lectureid}/${batchCode}`);
+      const rate = response.data.rate;
+      console.log(rate)
+      setAssignBatch((prevNames) => ({
+        ...prevNames,
+        [batchCode]: rate,
+      }));
+
     };
 
-    getRate();
-  }, [rows, service]);
-
+    rows.forEach((row) => {
+      if (!assignbatch[row.batchCode]) {
+        getRate(row.lectureid, row.batchCode);
+      }
+    });
+  }
+    , [rows, assignbatch, service]);
 
   return (
     <>
@@ -288,7 +278,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {batchCodes[batched[row.batchCode]]}
+                  {batchCodes[row.batchCode]}
                 </TableCell>
                 <TableCell
                   style={{
@@ -308,7 +298,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {payRates[row.batchCode]}
+                  {assignbatch[row.batchCode] || "Loading..."}
                 </TableCell>
                 <TableCell
                   style={{

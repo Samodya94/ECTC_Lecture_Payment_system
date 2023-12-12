@@ -194,8 +194,8 @@ const getCoverageHistory = asyncHandler(async (req, res) => {
   const endDate = new Date(
     `${currentYear}-${currentMonth}-${lastDayOfMonth}T23:59:59.999Z`
   );
-  console.log(startDate)
-    const coverage = await Coverage.find({
+
+  const coverage = await Coverage.find({
     lectureid: lecid,
     date: {
       $exists: true,
@@ -225,8 +225,10 @@ const getCoverageApprovedByLecturer = asyncHandler(async (req, res) => {
 //get coverage by lectureid, batchcode, month and year
 const getCoverageByLecIdAndBatchCode = asyncHandler(async (req, res) => {
   const lecid = req.params.lecid;
+  const batchcode = req.params.batchcode;
+  const paymentStatus = req.params.paymentStatus;
   const status = "Approved";
-  const paymentStatus = "Not Approved";
+
 
   const currentMonth = req.params.month;
   const currentYear = req.params.year;

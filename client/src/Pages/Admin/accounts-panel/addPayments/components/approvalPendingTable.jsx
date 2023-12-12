@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { useTheme } from "@mui/material/styles";
+import { useNavigate } from "react-router-dom";
 
 // MUI Table components
 import {
@@ -114,7 +115,33 @@ const PendingTableComponent = ({ rows, columns }) => {
     setPage(0);
   };
 
+  const navigate = useNavigate();
+
+  function calculateDuration(duration) {
+    const hours = Math.floor(duration / 3600000);
+    const minutes = Math.floor((duration % 3600000) / 60000);
+
+    return `${hours}h : ${minutes}m`;
+  }
+
   const service = React.useMemo(() => new Service(), []);
+
+
+  //get batch batchCode from batched batchCode
+  const [batchCodes, setBatchCodes] = React.useState({});
+
+  React.useEffect(() => {
+    const getBatchCode = async () => {
+      const response = await service.get("batch");
+      const batches = response.data.reduce((acc, batch) => {
+        acc[batch._id] = batch.batchCode;
+        return acc;
+      }, {});
+      setBatchCodes(batches);
+    };
+
+    getBatchCode();
+  }, [rows, service]);
 
   const [lecturerNames, setLecturerNames] = React.useState({});
 
@@ -137,89 +164,11 @@ const PendingTableComponent = ({ rows, columns }) => {
     };
 
     rows.forEach((row) => {
-      if (!lecturerNames[row.lectureid]) {
-        getLecturerName(row.lectureid);
+      if (!lecturerNames[row.lecturerId]) {
+        getLecturerName(row.lecturerId);
       }
     });
   }, [rows, lecturerNames, service]);
-
-  //get lecturer branch from lecturer id
-  const [branches, setBranches] = React.useState({});
-
-  React.useEffect(() => {
-    const getBranchName = async (id) => {
-      try {
-        const response = await service.get(`lecturer/${id}`);
-        const branch = response.data.branch;
-        setBranches((prevNames) => ({
-          ...prevNames,
-          [id]: branch,
-        }));
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setBranches((prevNames) => ({
-          ...prevNames,
-          [id]: "", // Set an empty string or handle the error as needed
-        }));
-      }
-    };
-
-    rows.forEach((row) => {
-      if (!branches[row.lectureid]) {
-        getBranchName(row.lectureid);
-      }
-    });
-  }, [rows, branches, service]);
-
-
-  //get batch batchCode from coverage batchCode 
-  const [batched, setBatched] = React.useState({});
-
-  React.useEffect(() => {
-    const getBatch = async () => {
-      const response = await service.get("assignbatch");
-      const batches = response.data.reduce((acc, batch) => {
-        acc[batch._id] = batch.batchCode;
-        return acc;
-      }, {});
-      setBatched(batches);
-    };
-
-    getBatch();
-  }, [rows, service]);
-
-  //get batch batchCode from batched batchCode
-  const [batchCodes, setBatchCodes] = React.useState({});
-
-  React.useEffect(() => {
-    const getBatchCode = async () => {
-      const response = await service.get("batch");
-      const batches = response.data.reduce((acc, batch) => {
-        acc[batch._id] = batch.batchCode;
-        return acc;
-      }, {});
-      setBatchCodes(batches);
-    };
-
-    getBatchCode();
-  }, [rows, service]);
-
-
-  //get pay rate from coverage batchCode
-  const [payRates, setPayRates] = React.useState({});
-
-  React.useEffect(() => {
-    const getRate = async () => {
-      const response = await service.get("assignbatch");
-      const batches = response.data.reduce((acc, batch) => {
-        acc[batch._id] = batch.rate;
-        return acc;
-      }, {});
-      setPayRates(batches);
-    };
-
-    getRate();
-  }, [rows, service]);
   return (
     <>
       <TableContainer
@@ -257,7 +206,7 @@ const PendingTableComponent = ({ rows, columns }) => {
                       padding: "5px 16px",
                     }}
                   >
-                    {lecturerNames[row.lectureid] || "Loading..."}
+                    {lecturerNames[row.lecturerId] || "Loading..."}
                   </TableCell>
                   <TableCell
                     style={{
@@ -267,7 +216,7 @@ const PendingTableComponent = ({ rows, columns }) => {
                     }}
                     align="left"
                   >
-                    {branches[row.lectureid] || "Loading..."}
+                    {row.coursename}
                   </TableCell>
                   <TableCell
                     style={{
@@ -277,7 +226,7 @@ const PendingTableComponent = ({ rows, columns }) => {
                     }}
                     align="left"
                   >
-                    {row.courseName}
+                    {batchCodes[row.batchcode]}
                   </TableCell>
                   <TableCell
                     style={{
@@ -287,7 +236,7 @@ const PendingTableComponent = ({ rows, columns }) => {
                     }}
                     align="left"
                   >
-                    {batchCodes[batched[row.batchCode]]}
+                    {row.month}
                   </TableCell>
                   <TableCell
                     style={{
@@ -297,7 +246,7 @@ const PendingTableComponent = ({ rows, columns }) => {
                     }}
                     align="left"
                   >
-                    {row.date.slice(0, 7)}
+                    {calculateDuration(row.totalhours)}
                   </TableCell>
                   <TableCell
                     style={{
@@ -307,7 +256,28 @@ const PendingTableComponent = ({ rows, columns }) => {
                     }}
                     align="left"
                   >
-                    {payRates[row.batchCode]}
+                    {row.paymentrate}
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      width: 140,
+                      border: "1px solid #ccc",
+                      padding: "5px 16px",
+                    }}
+                    align="left"
+                  >
+                    RS. {row.paidamount}
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      width: 140,
+                      border: "1px solid #ccc",
+                      padding: "5px 16px",
+                    }}
+                    align="center"
+                  >
+                    <button className={styles.approveBtn}
+                      onClick={() => navigate(`edit-payment/${row._id}`)}> Edit </button>
                   </TableCell>
                 </TableRow>
               ))}

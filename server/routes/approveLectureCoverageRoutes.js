@@ -11,7 +11,7 @@ const { createCoverage,
     getSelectedCoverageByLecIdAndBatchCode,
     getCoverageNotApprovedByMonth,
     getCoverageApprovedByLecturer,
-    getCoverageHistory ,
+    getCoverageHistory,
     getCoverageByLecIdAndBatchCode,
     getPaymentNotApproved,
     getPaymentPending } = require('../controllers/approveLectureCoversgeController');

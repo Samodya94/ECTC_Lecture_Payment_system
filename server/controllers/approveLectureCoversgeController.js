@@ -157,14 +157,9 @@ const getCoverageNotApprovedByMonth = asyncHandler(async (req, res) => {
     nextYear++;
   }
 
-  console.log(nextMonth)
-  console.log(nextYear)
-
   const startDate = new Date(`${currentYear}-${currentMonth}-01T00:00:00.000Z`);
   const lastDayOfMonth = new Date(currentYear, currentMonth, 0).getDate();
   const endDate = new Date(`${currentYear}-${currentMonth}-${lastDayOfMonth}T23:59:59.999Z`);
-
-  console.log(endDate)
 
   const coverage = await Coverage.find({
     status: "Not Approved",
@@ -196,7 +191,6 @@ const getCoverageApprovedByLecturer = asyncHandler(async (req, res) => {
 //get coverage by lectureid, batchcode, month and year
 const getCoverageByLecIdAndBatchCode = asyncHandler(async (req, res) => {
   const lecid = req.params.lecid;
-  const batchcode = req.params.batchcode;
   const status = "Approved";
 
   const currentMonth = req.params.month;
@@ -221,7 +215,6 @@ const getCoverageByLecIdAndBatchCode = asyncHandler(async (req, res) => {
 
   const coverage = await Coverage.find({
     lectureid: lecid,
-    batchCode: batchcode,
     date: {
       $exists: true,
       $type: 'date',

@@ -1,4 +1,16 @@
+import { useState,useEffect } from "react";
+import Service from "../../../../utilities/httpService";
+import { useLecAuthContext } from "../../../../hooks/useLecAuthContext";
+
+
 export const Coverage_History = () => {
+
+  const [coverages,setCoverages] = useState([])
+  const { lecturer } = useLecAuthContext();
+  const service = new Service();
+
+
+  
   return (
     <div className="coverage_history">
         <h2 className="">Lecture Coverage History</h2>

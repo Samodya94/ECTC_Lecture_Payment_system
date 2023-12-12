@@ -12,7 +12,6 @@ import InputField from "../../components/inputField";
 import PrimaryButton from "../../components/primaryButton";
 import InputFieldDis from "../../components/inputFieldDis";
 import InputNumField from "../../components/inputNumField";
-import InputNumFieldDis from "../../components/inputNumFieldDis";
 
 const tableColumns = [
     "Course Name",
@@ -34,7 +33,6 @@ const CreatePayment = () => {
     const [courseName, setCourseName] = useState("");
     const [batchCode, setBatchCode] = useState("");
     const [date, setDate] = useState("");
-    const [duration, setDuration] = useState(0);
     const [lectureCoverage, setLectureCoverage] = useState([]);
     const [totalHours, setTotalHours] = useState(0);
     const [paymentAmount, setPaymentAmount] = useState(0);
@@ -60,22 +58,18 @@ const CreatePayment = () => {
                 setCourseName(coverageData.courseName);
                 setBatchCode(coverageData.batchCode);
                 setDate(coverageData.date);
-                setDuration(coverageData.duration);
                 setPaymentStatus(coverageData.paymentStatus);
 
                 // Fetch lecture name using lecture id
                 const lectureResponse = await service.get(`lecturer/${coverageData.lectureid}`);
                 const lectureName = lectureResponse.data.firstName + " " + lectureResponse.data.lastName;
 
-                //fetch batch code using assign batchcode
-                const batchResponse = await service.get(`assignbatch/${coverageData.batchCode}`);
-                const batchCode = batchResponse.data.batchCode;
-
-                const batchRes = await service.get(`batch/${batchCode}`);
-                const batch = batchRes.data.batchCode;
+                // Fetch batchCode using batchCode
+                const batchResponse = await service.get(`batch/${coverageData.batchCode}`);
+                const batch = batchResponse.data.batchCode;
 
                 // Fetch rate using batchCode
-                const rateResponse = await service.get(`assignbatch/${coverageData.batchCode}`);
+                const rateResponse = await service.get(`assignbatch/bylecture/${coverageData.lectureid}/${coverageData.batchCode}`);
                 const rate = rateResponse.data.rate;
 
                 setPaymentData({

@@ -21,9 +21,9 @@ const getLoginDetails = asyncHandler(async (req, res) => {
 })
 
 const getLogByUser = asyncHandler(async (req, res) => {
-    const user = req.params.user
+    const username = req.params.username;
 
-    const loginDetail = await LoginDetails.find({ username: user })
+    const loginDetail = await LoginDetails.find({ username: username })
 
     res.status(200).json(loginDetail)
 })

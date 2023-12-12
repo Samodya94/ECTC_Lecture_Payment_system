@@ -250,6 +250,21 @@ const CreatePayment = () => {
                                     marginTop: "20px",
                                 }}
                             />
+                            <PrimaryButton
+                                label={"Cancel"}
+                                type={"button"}
+                                style={{
+                                    backgroundColor: "#F20C0C",
+                                    padding: "10px 20px",
+                                    fontWeight: "600",
+                                    fontSize: "0.9rem",
+                                    marginLeft: "20px",
+                                    marginTop: "20px",
+                                }}
+                                onClick={() => {
+                                    navigate("/admin/add-payments/");
+                                }}
+                            />
                         </div>
                     </form>
                 </div>

@@ -51,6 +51,11 @@ const PaymentsSchema = new mongoose.Schema({
         required: false,
     },
 
+    adminStatus: {
+        type: String,
+        required: false,
+    },
+
 }, {
     timestamps: true,
 

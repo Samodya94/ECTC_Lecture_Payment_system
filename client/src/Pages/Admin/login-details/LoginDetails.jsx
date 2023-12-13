@@ -22,7 +22,7 @@ const LoginDetails = () => {
     const service = useMemo(() => new Service(), []);
 
     const getLoginDetails = useCallback(() => {
-        const response = service.get(`loginDetails/${username}`);
+        const response = service.get(`loginDetails/recent/${username}`);
         response
             .then((res) => {
                 setLoginDetails(res.data);
@@ -49,7 +49,7 @@ const LoginDetails = () => {
     return (
         <>
             <div className={styles.container}>
-                <p className={styles.heading}>Login Details</p>
+                <p className={styles.heading}>Recent Login Details</p>
                 <div>
                     <TableComponent columns={tableColumns} rows={loginDetails} />
                 </div>

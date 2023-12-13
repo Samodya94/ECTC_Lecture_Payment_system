@@ -1,16 +1,12 @@
 const express = require('express');
 const router = express.Router();
+
 const {
     createLog,
-    
-    getLecLog,
-    getLogByUser,
-    getRecentLogByUser
+    getLecLog
 } = require('../controllers/lecLogController')
 
-router.post('/',createLog)
-router.get('/',getLecLog)
-router.get('/:user',getLogByUser)
-router.get('/recent/:user',getRecentLogByUser)
+router.get('/',getLecLog);
+router.post('/',createLog);
 
 module.exports = router

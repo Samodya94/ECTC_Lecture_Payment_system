@@ -7,11 +7,10 @@ export const ViewApprovedLecCov = () => {
   const { lecturer } = useLecAuthContext();
   const service = new Service();
   const [batched, setBatched] = useState({});
-
+  
   useEffect(() => {
     getViewCoverage();
     getBatch();
-    getdata();
   }, [lecturer]);
 
   function getBatch() {
@@ -26,16 +25,7 @@ export const ViewApprovedLecCov = () => {
     });
   }
 
-  function getdata(){
-    const response = service.get("batch");
-    response.then((res)=>{
-      const batchcode = res.data.reduce((ace, batch)=>{
-        ace[batch._id] = batch.batchCode;
-        return ace;
-      },{})
-      setAssgBatches(batchcode);
-    })
-  }
+  
 
   const getViewCoverage = () => {
     if (lecturer) {

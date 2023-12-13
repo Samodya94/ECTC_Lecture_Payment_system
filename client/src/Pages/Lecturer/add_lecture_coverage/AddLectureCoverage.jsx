@@ -36,27 +36,11 @@ export const AddLectureCoverage = () => {
     getAssignedBatches();
     calculateTimeDifference();
     getdata();
-    getPendingCoverages();
     calculateRemHours()
   }, [lecturer,refreshPendingCoverages]);
 
-  useEffect(() => {
-    getPendingCoverages();
-  }, [refreshPendingCoverages]);
 
-  const getPendingCoverages = () => {
-    try {
-      
-      const response = service.get("coverage/lecnotApproved", lecturer.id);
-      const updatedCoverages = response.data;
-      setCoverages(updatedCoverages);
-  
-    } catch (error) {
-      console.error("Error fetching pending coverages:", error);
-    }
-  };
-
-   function getdata() {
+ function getdata() {
     const response = service.get("batch");
     response.then((res) => {
       const batchcodee = res.data.reduce((ace, batch) => {
@@ -68,25 +52,20 @@ export const AddLectureCoverage = () => {
   }
 
   useEffect(() => {
-    
-    getPendingCoverages(); 
-  }, [refreshPendingCoverages]);
-
-  
-
-  useEffect(() => {
     getHours();
-
   }, [batchCode]);
 
   useEffect(() => {
     calculateTimeDifference();
-  },);
+    calculateRemHours()
+    
+  });
 
   function calculateRemHours() {
     if (seconds && duration) {
       const ms = seconds - duration;
       setUpdateremHours (ms);
+      console.log(ms);
     }
     console.log(seconds);
   }
@@ -95,7 +74,7 @@ export const AddLectureCoverage = () => {
 
   const getHours = () => {
     const id = batchCode;
-
+    console.log(id);
     const response = service.get(`assignbatch/assigncode`, id);
     response
       .then((res) => {
@@ -186,7 +165,13 @@ export const AddLectureCoverage = () => {
       .then((res) => {
         console.log(res);
         alert("Coverage Added");
-        window.location.reload()
+        const data = {
+          remaining_hours:updateremHours
+        }
+        const response1 = service.put('assignbatch/bcode',batchCode,data)
+        response1.then(()=>{
+          console.log("updated");
+        }) 
       })
       .catch((error) => {
         alert(error.message)

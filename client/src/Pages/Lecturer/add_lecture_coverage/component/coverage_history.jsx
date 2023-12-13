@@ -8,12 +8,24 @@ export const Coverage_History = () => {
   const [coverages,setCoverages] = useState([]);
   const [month,setMonth] = useState('');
   const [year, setYear] = useState('');
+  const [assgbatches, setAssgBatches] = useState([]);
   const { lecturer } = useLecAuthContext()
   const service = new Service();
 
-  // useEffect(()=>{
-  //   getCoverage();
-  // },[lecturer])
+  useEffect(()=>{
+    getdata();
+  },[coverages])
+
+  function getdata(){
+    const response = service.get("batch");
+    response.then((res)=>{
+      const batchcode = res.data.reduce((ace, batch)=>{
+        ace[batch._id] = batch.batchCode;
+        return ace;
+      },{})
+      setAssgBatches(batchcode);
+    })
+  }
 
   const getCoverage = async (e) =>{
 
@@ -27,6 +39,7 @@ export const Coverage_History = () => {
       const response = service.get(`coverage/leccoverageHistory/${lecid}/${selectedMonth}/${selectedYear}`)
         response.then((res)=>{
           console.log(res.data);
+          setCoverages(res.data)
         }).catch((err)=>{
           console.log(err)
         })
@@ -36,6 +49,15 @@ export const Coverage_History = () => {
    
 
   }
+
+  const formatDuration = (milliseconds) => {
+    if (!milliseconds) {
+      return "No data available";
+    }
+    const hours = Math.floor(milliseconds / (60 * 60 * 1000));
+    const minutes = Math.floor((milliseconds % (60 * 60 * 1000)) / (60 * 1000));
+    return `${hours} hr ${minutes} min`;
+  };
 
   const handleMonthChange = (event) => {
     // Extract the date value from the input and update the state
@@ -71,8 +93,22 @@ export const Coverage_History = () => {
             </tr>
           </thead>
           <tbody>
-            {coverages ? "": "No Data Available"}
-          </tbody>
+            {         
+            coverages.map((coverage) =>(
+                <tr key={coverage._id}>
+                    <td>{assgbatches[coverage.batchCode]}</td>
+                    <td>{new Date(coverage.date).toLocaleDateString(
+                    "en-US",
+                    { year: "numeric", month: "numeric", day: "numeric" }
+                  )}</td>
+                    <td>{coverage.startTime}</td>
+                    <td>{coverage.endTime}</td>
+                    <td>{formatDuration(coverage.duration)}</td>
+                    <td>{coverage.lectureCoverage}</td>
+                    
+                </tr>
+            ))}
+        </tbody>
         </table>
       </div>
     </div>

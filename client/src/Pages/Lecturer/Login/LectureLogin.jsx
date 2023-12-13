@@ -5,6 +5,7 @@ import { useNavigate } from "react-router";
 import { useLecLogin } from "../../../hooks/useLecLogin";
 import axios from "axios";
 import Service from "../../../utilities/httpService";
+import { Link } from "react-router-dom";
 
 const LectureLogin =()=>{
 
@@ -83,11 +84,13 @@ const LectureLogin =()=>{
                     />    
                 </div>
                 <div>
-                    <button className="leclog_button my-2">Login</button><br></br>
+                    <button className="leclog_button my-2">Login</button>
+                    <Link to="/" className="leclog_button backbtn my-2 mx-2">Back</Link>
+                    <br></br>
 
                     {error && <div className="error">{error}</div>}
 
-                    {city+" "+country+", your ip is "+ip}
+                  
                 </div>
                 </form>
             </div>

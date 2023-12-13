@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState, useMemo, useCallback, useEffect } from "react";
 
 // Styles
 import styles from "./rollbackPayments.module.css";
@@ -7,69 +7,7 @@ import styles from "./rollbackPayments.module.css";
 import TableComponent from "./components/paymentRollbackTable";
 import MonthSelector from "../../components/monthSelectorField";
 
-// Sample data for table
-const data = [
-  {
-    lecturerName: "Asha Madushani",
-    courseName: "ELS",
-    batchCode: "ELS - Susadi -BM - Sept 2023",
-    payMonth: "2023-09",
-    totalHours: "3h : 0m",
-    payRate: "Hourly Rate",
-    hourlyPayment: "3000",
-    totalPayment: "9000",
-  },
-  {
-    lecturerName: "Asha Madushani",
-    courseName: "ELS",
-    batchCode: "ELS - Susadi -BM - Sept 2023",
-    payMonth: "2023-09",
-    totalHours: "3h : 0m",
-    payRate: "Hourly Rate",
-    hourlyPayment: "3000",
-    totalPayment: "9000",
-  },
-  {
-    lecturerName: "Asha Madushani",
-    courseName: "ELS",
-    batchCode: "ELS - Susadi -BM - Sept 2023",
-    payMonth: "2023-09",
-    totalHours: "3h : 0m",
-    payRate: "Hourly Rate",
-    hourlyPayment: "3000",
-    totalPayment: "9000",
-  },
-  {
-    lecturerName: "Asha Madushani",
-    courseName: "ELS",
-    batchCode: "ELS - Susadi -BM - Sept 2023",
-    payMonth: "2023-09",
-    totalHours: "3h : 0m",
-    payRate: "Hourly Rate",
-    hourlyPayment: "3000",
-    totalPayment: "9000",
-  },
-  {
-    lecturerName: "Asha Madushani",
-    courseName: "ELS",
-    batchCode: "ELS - Susadi -BM - Sept 2023",
-    payMonth: "2023-09",
-    totalHours: "3h : 0m",
-    payRate: "Hourly Rate",
-    hourlyPayment: "3000",
-    totalPayment: "9000",
-  },
-  {
-    lecturerName: "Asha Madushani",
-    courseName: "ELS",
-    batchCode: "ELS - Susadi -BM - Sept 2023",
-    payMonth: "2023-09",
-    totalHours: "3h : 0m",
-    payRate: "Hourly Rate",
-    hourlyPayment: "3000",
-    totalPayment: "9000",
-  },
-];
+import Service from "../../../../utilities/httpService";
 
 const tableColumns = [
   "Lecturer Name",
@@ -78,8 +16,8 @@ const tableColumns = [
   "Month",
   "Total Hours",
   "Payment Rate",
-  "Hourly Payment",
   "Total Payment",
+  "Lecture Coverages",
   "Documents",
   "Action",
 ];
@@ -98,9 +36,45 @@ const RollbackPayments = () => {
     setSelectedYear(year);
   };
 
+  const service = useMemo(() => new Service(), []);
+
+  const [rollbackPayment, setRollbackPayment] = useState([]);
+
+  const getRollbackPayments = useCallback(async () => {
+    try {
+      const response = await service.get("/payment/rollbackpayment");
+      setRollbackPayment(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+    , [service]);
+
+  useEffect(() => {
+    getRollbackPayments();
+  }, [getRollbackPayments]);
+
   const handleSearch = (e) => {
     e.preventDefault();
-    console.log(selectedMonth, selectedYear);
+    if (selectedMonth === "" && selectedYear === "") {
+      getRollbackPayments();
+    }
+    else {
+      const response = rollbackPayment.filter((item) => {
+        const date = new Date(item.month);
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+        return month === parseInt(selectedMonth) && year === parseInt(selectedYear);
+      });
+      setRollbackPayment(response);
+    }
+  };
+
+  const handleReset = (e) => {
+    e.preventDefault();
+    setSelectedMonth("");
+    setSelectedYear("");
+    getRollbackPayments();
   };
 
   return (
@@ -115,9 +89,12 @@ const RollbackPayments = () => {
           <button className={styles.button} type="submit">
             View
           </button>
+          <button className={styles.button} onClick={handleReset}>
+            Reset
+          </button>
         </form>
         <div>
-          <TableComponent columns={tableColumns} rows={data} />
+          <TableComponent columns={tableColumns} rows={rollbackPayment} />
         </div>
       </div>
     </>

@@ -192,12 +192,13 @@ const getCoverageHistory = asyncHandler(async (req, res) => {
   const lecid = req.params.lecid;
   const currentMonth = req.params.currentMonth
   const currentYear = req.params.currentYear
-  
 
- 
+
+
+
 
   // Check if it's December (12), in which case the next month is January of the next year
-  
+
   const startDate = new Date(`${currentYear}-${currentMonth}-01T00:00:00.000Z`);
   const lastDayOfMonth = new Date(currentYear, currentMonth, 0).getDate();
   const endDate = new Date(
@@ -296,7 +297,7 @@ const getPaymentPending = asyncHandler(async (req, res) => {
 
 const getSelectedCoverageByLecIdAndBatchCode = asyncHandler(async (req, res) => {
   const { selectedMonth, selectedYear } = req.body;
-  const {  lecid } = req.params._id;
+  const { lecid } = req.params._id;
   const { batchcode } = req.params.batchCode
   const status = "Approved";
 

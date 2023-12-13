@@ -1,0 +1,19 @@
+@import url("../../../../../constants/fonts.css");
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--heading);
+  padding: 0.5rem 0;
+}
+
+.dropdown {
+  font-family: var(--heading);
+  border: 1px solid #d3d3d3;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  margin-left: 20px;
+  color: #545454;
+  outline: none;
+}

@@ -66,9 +66,9 @@ const putAssignBatch = asyncHandler(async (req, res) => {
 });
 
 const putAssignBatchbyBatchCode = asyncHandler(async (req, res) => {
-    const {batchCode} = req.params;
+    const { batchCode } = req.params;
 
-    const abatch = await AssignedBatch.findOne({batchCode:batchCode});
+    const abatch = await AssignedBatch.findOne({ batchCode: batchCode });
 
     if (!abatch) {
         res.status(404);

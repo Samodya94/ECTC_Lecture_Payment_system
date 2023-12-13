@@ -12,3 +12,21 @@
   margin: 0;
   margin-bottom: 0.8rem;
 }
+
+.searchContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.button {
+  height: fit-content;
+  background-color: #5a84ae;
+  border: none;
+  padding: 8px 20px;
+  margin-left: 20px;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+}

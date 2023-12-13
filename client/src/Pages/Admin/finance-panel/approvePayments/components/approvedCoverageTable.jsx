@@ -131,14 +131,14 @@ const TableComponent = ({ rows, columns }) => {
         const getRate = async () => {
             const response = await service.get("assignbatch");
             const batches = response.data.reduce((acc, batch) => {
-                acc[batch._id] = batch.rate;
+                acc[batch.batchCode] = batch.rate;
                 return acc;
             }, {});
             setPayRates(batches);
         };
 
         getRate();
-    }, [rows, service]);
+    }, [rows, service, payRates]);
 
     return (
         <>

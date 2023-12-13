@@ -1,6 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { useTheme } from "@mui/material/styles";
+import { useNavigate } from "react-router-dom";
+
+import Service from "../../../../../utilities/httpService";
 
 // MUI Table components
 import {
@@ -99,6 +102,8 @@ const TableComponent = ({ rows, columns }) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
+  const navigate = useNavigate();
+
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
@@ -111,6 +116,77 @@ const TableComponent = ({ rows, columns }) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
+  function calculateDuration(duration) {
+    const hours = Math.floor(duration / 3600000);
+    const minutes = Math.floor((duration % 3600000) / 60000);
+
+    return `${hours}h : ${minutes}m`;
+  }
+
+  const service = React.useMemo(() => new Service(), []);
+
+  //get batch batchCode from batched batchCode
+  const [batchCodes, setBatchCodes] = React.useState({});
+
+  React.useEffect(() => {
+    const getBatchCode = async () => {
+      const response = await service.get("batch");
+      const batches = response.data.reduce((acc, batch) => {
+        acc[batch._id] = batch.batchCode;
+        return acc;
+      }, {});
+      setBatchCodes(batches);
+    };
+
+    getBatchCode();
+  }, [rows, service]);
+
+  const [lecturerNames, setLecturerNames] = React.useState({});
+
+  React.useEffect(() => {
+    const getLecturerName = async (id) => {
+      try {
+        const response = await service.get(`lecturer/${id}`);
+        const lecturerName = response.data.firstName + " " + response.data.lastName;
+        setLecturerNames((prevNames) => ({
+          ...prevNames,
+          [id]: lecturerName,
+        }));
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setLecturerNames((prevNames) => ({
+          ...prevNames,
+          [id]: "", // Set an empty string or handle the error as needed
+        }));
+      }
+    };
+
+    rows.forEach((row) => {
+      if (!lecturerNames[row.lecturerId]) {
+        getLecturerName(row.lecturerId);
+      }
+    });
+  }, [rows, lecturerNames, service]);
+
+  //update batch details function
+  const updatePayment = (id) => {
+    const data = {
+      adminStatus: "Approved",
+    };
+    console.log("Data to be sent:", data);
+
+    const response = service.put(`payment`, id, data);
+    response
+      .then((res) => {
+        alert("Payment Approved");
+        window.location.reload();
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
+
   return (
     <>
       <TableContainer
@@ -122,6 +198,7 @@ const TableComponent = ({ rows, columns }) => {
             <TableRow className={styles.tHead}>
               {columns.map((column, index) => (
                 <TableCell
+                  key={index}
                   style={{ border: "1px solid #ccc", padding: "8px 16px" }}
                 >
                   <spna className={styles.tHead}>{column}</spna>
@@ -133,8 +210,8 @@ const TableComponent = ({ rows, columns }) => {
             {(rowsPerPage > 0
               ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               : rows
-            ).map((row) => (
-              <TableRow key={row.name} style={{ border: "1px solid #ccc" }}>
+            ).map((row, _id) => (
+              <TableRow key={row._id} style={{ border: "1px solid #ccc" }}>
                 <TableCell
                   component="th"
                   scope="row"
@@ -143,7 +220,7 @@ const TableComponent = ({ rows, columns }) => {
                     padding: "5px 16px",
                   }}
                 >
-                  {row.lecturerName}
+                  {lecturerNames[row.lecturerId] || "Loading..."}
                 </TableCell>
                 <TableCell
                   style={{
@@ -153,7 +230,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {row.courseName}
+                  {row.coursename}
                 </TableCell>
                 <TableCell
                   style={{
@@ -163,7 +240,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {row.batchCode}
+                  {batchCodes[row.batchcode]}
                 </TableCell>
                 <TableCell
                   style={{
@@ -173,7 +250,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {row.paymentMonth}
+                  {row.month}
                 </TableCell>
                 <TableCell
                   style={{
@@ -183,7 +260,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {row.totalHours}
+                  {calculateDuration(row.totalhours)}
                 </TableCell>
                 <TableCell
                   style={{
@@ -193,7 +270,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {row.paymentRate}
+                  {row.paymentrate}
                 </TableCell>
                 <TableCell
                   style={{
@@ -203,7 +280,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  RS. {row.payAmount}
+                  RS. {row.paidamount}
                 </TableCell>
                 <TableCell
                   style={{
@@ -213,7 +290,9 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="center"
                 >
-                  <button className={styles.viewBtn}> View </button>
+                  <button className={styles.viewBtn}
+                    onClick={() => navigate(`view-coverages/${row._id}`)}
+                  > View </button>
                 </TableCell>
                 <TableCell
                   style={{
@@ -223,7 +302,22 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="center"
                 >
-                  <button className={styles.approveBtn}> Approve </button>
+                  <button className={styles.viewBtn}
+                  > View </button>
+                </TableCell>
+                <TableCell
+                  style={{
+                    width: 140,
+                    border: "1px solid #ccc",
+                    padding: "5px 16px",
+                  }}
+                  align="center"
+                >
+                  <button className={styles.approveBtn}
+                    onClick={() =>
+                      updatePayment(row._id)
+                    }
+                  > Approve </button>
                 </TableCell>
               </TableRow>
             ))}

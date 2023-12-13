@@ -22,7 +22,6 @@ export const ViewAssignedLecturers = () => {
   function getBatch() {
     const response = service.get("batch");
     response.then((res) => {
-      console.log(res.data);
       const batchcodee = res.data.reduce((ace, batch)=>{
         ace[batch._id] = batch.batchCode;
         return ace;

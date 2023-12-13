@@ -53,7 +53,6 @@ export const PendingLecture = () => {
       const respone = service.get("coverage/notapprovedbymonth", lecid);
       respone
         .then((res) => {
-          console.log(res.data);
           setCoverages(res.data);
         })
         .catch((error) => {

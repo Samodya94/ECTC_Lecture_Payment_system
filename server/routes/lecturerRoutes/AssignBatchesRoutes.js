@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const { AssignBatch, putAssignBatch, deleteAssignedBatch, getallAssignedBatches, getAssignedBatchById, getAssignedByLecture } = require('../controllers/assignbatchController');
+const {
+    getAssignedByLecture,
+    getAssignedBatchByLecIdBatchCode,
+    getAssignedBatchCode } = require('../../controllers/assignbatchController');
 
-router.post('/', AssignBatch);
-router.get('/', getallAssignedBatches);
-router.put('/:id', putAssignBatch);
-router.delete('/:id', deleteAssignedBatch);
-router.get('/:id', getAssignedBatchById);
+router.get('/assigncode/:bcode', getAssignedBatchCode)
 router.get('/bylecture/:lecturerID', getAssignedByLecture);
+router.get('/bylecture/:lecturerID/:batchCode', getAssignedBatchByLecIdBatchCode);
 
 
 module.exports = router;

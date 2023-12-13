@@ -32,19 +32,22 @@ export const Coverage_History = () => {
     e.preventDefault()
     if(lecturer){
       const selectedMonth = new Date(month).getUTCMonth() + 1;
+      let newMonth = selectedMonth
+      if(selectedMonth<10){
+        newMonth = "0"+selectedMonth
+      }
       const selectedYear = new Date(month).getUTCFullYear();
       const lecid = lecturer.id
        
-
-      const response = service.get(`coverage/leccoverageHistory/${lecid}/${selectedMonth}/${selectedYear}`)
+      console.log(newMonth);
+      const response = service.get(`coverage/leccoverageHistory/${lecid}/${newMonth}/${selectedYear}`)
         response.then((res)=>{
           console.log(res.data);
           setCoverages(res.data)
         }).catch((err)=>{
           console.log(err)
         })
-        console.log(selectedMonth)
-        console.log(selectedYear)
+       
     }
    
 

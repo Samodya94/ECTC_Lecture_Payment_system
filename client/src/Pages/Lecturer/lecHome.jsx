@@ -25,6 +25,7 @@ import { UpdateAssigncoverage } from "./add_lecture_coverage/component/updateAss
 import Service from "../../utilities/httpService";
 import { EditCoverage } from "./add_lecture_coverage/component/EditCoverage";
 import { ViewLog } from "./Viewlog/ViewLog";
+import { AddCoverages } from "./add_lecture_coverage/component/AddCoverages";
 
 
 function LecHome() {
@@ -103,6 +104,7 @@ function LecHome() {
               <Route path="/lec-login" element={!lecturer ?<LectureLogin/> : <Navigate to=""/>}/>
               <Route path="dash" element={<Dashboard/>} />
               <Route path="add_coverage" element={<AddLectureCoverage/>} />
+              <Route path="add_coverages" element={<AddCoverages/>}/>
               <Route path="edit_coverage/:lecid" element={<EditCoverage/>}/>
               <Route path="change_password" element={<ChangePassword/>}/>
               <Route path="Coverage_History" element={<Coverage_History/>}/>

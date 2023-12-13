@@ -33,7 +33,6 @@ export const ViewApprovedLecCov = () => {
       const respone = service.get("coverage/approved", lecid);
       respone
         .then((res) => {
-          console.log(res.data);
           setCoverages(res.data);
         })
         .catch((error) => {

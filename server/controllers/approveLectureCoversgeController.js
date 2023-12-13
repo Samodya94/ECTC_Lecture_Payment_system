@@ -236,7 +236,6 @@ const getCoverageApprovedByLecturer = asyncHandler(async (req, res) => {
 //get coverage by lectureid, batchcode, month and year
 const getCoverageByLecIdAndBatchCode = asyncHandler(async (req, res) => {
   const lecid = req.params.lecid;
-  const batchcode = req.params.batchcode;
   const paymentStatus = req.params.paymentStatus;
   const status = "Approved";
 

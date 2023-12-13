@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { PendingCoverages } from "./component/pending_coverages";
 import { RejectedCoverages } from "./component/rejected_coverages";
 import { useLecAuthContext } from "../../../hooks/useLecAuthContext";
+import { startOfMonth, addDays, isBefore } from 'date-fns';
 import Service from "../../../utilities/httpService";
 import { useNavigate } from "react-router";
 
@@ -14,7 +15,6 @@ export const AddLectureCoverage = () => {
   const [stime, setStime] = useState("");
   const [etime, setEtime] = useState("");
   const [course, setCourse] = useState("");
-  const [batchid, setBatchid] = useState("");
   const [duration, setDuratuion] = useState("");
   const [date, setDate] = useState("");
   const [coverage, setCoverage] = useState("");
@@ -50,6 +50,7 @@ export const AddLectureCoverage = () => {
       const batchcodee = res.data.reduce((ace, batch) => {
         ace[batch._id] = batch.batchCode;
         return ace;
+        
       }, {});
       setAssgBatches(batchcodee);
     });
@@ -73,7 +74,6 @@ export const AddLectureCoverage = () => {
 
 const getHours = () => {
     const id = batchCode;
-    console.log(id);
     const response = service.get(`assignbatch/assigncode`, id);
     response
       .then((res) => {
@@ -139,7 +139,9 @@ const getHours = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
+    const handleSubmit = async (e) => {
+
+    navigate('../add_coverages');
     e.preventDefault();
     
     
@@ -170,6 +172,7 @@ const getHours = () => {
         const response1 = service.put('assignbatch/bcode',batchCode,data)
         response1.then(()=>{
           console.log("updated");
+          navigate('../add_coverages');
         }) 
       })
       .catch((error) => {
@@ -225,6 +228,8 @@ const getHours = () => {
             </div>
           </div>
         </div>
+          
+        
         <div className="row m-auto">
           <div className="col-md-6 ">
             <div className="input_fields">

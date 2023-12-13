@@ -39,6 +39,10 @@ export const AddLectureCoverage = () => {
     calculateRemHours()
   }, [lecturer,refreshPendingCoverages]);
 
+  useEffect(()=>{
+    triggerRefresh();
+  },[])
+
 
  function getdata() {
     const response = service.get("batch");
@@ -57,22 +61,17 @@ export const AddLectureCoverage = () => {
 
   useEffect(() => {
     calculateTimeDifference();
-    calculateRemHours()
-    
+    calculateRemHours()  
   });
 
   function calculateRemHours() {
     if (seconds && duration) {
       const ms = seconds - duration;
       setUpdateremHours (ms);
-      console.log(ms);
     }
-    console.log(seconds);
   }
 
-
-
-  const getHours = () => {
+const getHours = () => {
     const id = batchCode;
     console.log(id);
     const response = service.get(`assignbatch/assigncode`, id);
@@ -181,6 +180,8 @@ export const AddLectureCoverage = () => {
 
   const triggerRefresh = () => {
     setRefreshPendingCoverages((prev) => !prev);
+    setRefreshPendingCoverages((prev) => !prev);
+    setRefreshRejectedCoverages((prev) => !prev);
   };
 
   return (
@@ -288,7 +289,7 @@ export const AddLectureCoverage = () => {
             <div className="input_fields my-2">
               <button className="btn btn-primary">Add Coverage</button>
             </div>
-            &nbsp; {duration && duration}
+            &nbsp;
           </div>
         </div>
       </form>

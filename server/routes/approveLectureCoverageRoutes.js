@@ -13,8 +13,9 @@ const { createCoverage,
     getCoverageApprovedByLecturer,
     getCoverageHistory,
     getCoverageByLecIdAndBatchCode,
-    getPaymentNotApproved,
-    getPaymentPending } = require('../controllers/approveLectureCoversgeController');
+    getPaymentNotApproved,    
+    getPaymentPending, 
+    getLecCoverageRejected} = require('../controllers/approveLectureCoversgeController');
 
 router.post('/', createCoverage).get('/', getCoverage);
 router.put('/:id', putCoverage).delete('/:id', deleteCoverage);
@@ -23,6 +24,7 @@ router.get('/approved', getCoverageApproved);
 router.get('/:id', getCoverageById);
 router.get('/approved/:lecid', getCoverageApprovedByLecturer);
 router.get('/lecnotApproved/:lecid', getLecCoverageNotApproved);
+router.get('/Rejected/:lecid', getLecCoverageRejected);
 router.get('/leccoverageHistory/:lecid/:currentMonth/:currentYear', getCoverageHistory);
 router.get('/notapprovedbymonth/:lecid', getCoverageNotApprovedByMonth);
 router.get('/:lecid/:batchcode/:month/:year', getCoverageByLecIdAndBatchCode);

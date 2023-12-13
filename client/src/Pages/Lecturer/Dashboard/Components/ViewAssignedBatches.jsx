@@ -83,7 +83,7 @@ export const ViewAssignedLecturers = () => {
     <div className="assign_batches">
       <h1>Assigned Batches</h1>
       <table className="table table-bordered my-3">
-        <thead>
+        <thead className=" table-dark">
           <tr>
             <th>Batch Start Date</th>
             <th>Batch End Date</th>

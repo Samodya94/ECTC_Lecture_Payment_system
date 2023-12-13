@@ -55,8 +55,8 @@ export const ViewApprovedLecCov = () => {
   return (
     <div className="assign_batches">
       <h1>Pending Lectures</h1>
-      <table>
-        <thead>
+      <table className="table table-striped">
+        <thead className=" table-dark">
           <tr>
             <th>Course Name</th>
             <th>Batch Code</th>

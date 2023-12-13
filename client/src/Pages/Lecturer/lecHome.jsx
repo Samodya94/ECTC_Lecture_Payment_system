@@ -21,6 +21,7 @@ import { MarkAttendance } from "./Students/MarkAttendance";
 import { useLecAuthContext } from "../../hooks/useLecAuthContext"; 
 import { useLecLogout } from "../../hooks/useLecLogout";
 import  LectureLogin  from "./Login/LectureLogin";
+import { UpdateAssigncoverage } from "./add_lecture_coverage/component/updateAssigncoverage";
 import Service from "../../utilities/httpService";
 import { EditCoverage } from "./add_lecture_coverage/component/EditCoverage";
 import { ViewLog } from "./Viewlog/ViewLog";
@@ -107,6 +108,7 @@ function LecHome() {
               <Route path="Coverage_History" element={<Coverage_History/>}/>
               <Route path="lec_pay_history" element={<Lec_Payment_History/>}/>
               <Route path="mark_attendance" element={<MarkAttendance/>}/>
+              <Route path="update_assignid/:id" element={<UpdateAssigncoverage/>}/>
               <Route path="view_log" element={<ViewLog/>}/>
             </Routes>
           </div>

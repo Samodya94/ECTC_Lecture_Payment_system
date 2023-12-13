@@ -6,9 +6,9 @@ import styles from "./assignLecturers.module.css";
 
 // Components
 import InputFieldDis from "../../components/inputFieldDis";
+import InputField from "../../components/inputField";
 import PrimaryButton from "../../components/primaryButton";
 import DropdownField from "../../components/dropdownField";
-import InputNumField from "../../components/inputNumField";
 
 import Service from "../../../../utilities/httpService";
 
@@ -93,7 +93,7 @@ const ViewAssignedLecturers = () => {
     try {
       let course = "";
       batchCodeList.forEach((item) => {
-        if (item.batchCode === batchCode) {
+        if (item._id === batchCode) {
           course = item.course;
         }
       });
@@ -102,6 +102,14 @@ const ViewAssignedLecturers = () => {
       console.log(err);
     }
   }
+
+  function calculateDuration(duration) {
+    const hours = Math.floor(duration / 3600000);
+
+    return `${hours}`;
+  }
+
+
 
   //get assigend batch details and set them to the fields
   useEffect(() => {
@@ -113,7 +121,7 @@ const ViewAssignedLecturers = () => {
         setBatchCode(res.data.batchCode);
         setCourse(res.data.course);
         setRate(res.data.rate);
-        setHours(res.data.hours);
+        setHours(calculateDuration(res.data.hours));
       }).catch((err) => {
         alert(err);
       });
@@ -137,7 +145,7 @@ const ViewAssignedLecturers = () => {
           course: course,
           batchCode: batchCode,
           rate: rate,
-          hours: hours,
+          hours: hours * 3600000,
         };
 
         const response = service.put(`assignbatch`, id, assignBatch);
@@ -195,7 +203,7 @@ const ViewAssignedLecturers = () => {
             style={{ width: "318px" }}
           />
 
-          <InputNumField
+          <InputField
             lable={"No of Hours"}
             placeholder={"Enter No of Hours"}
             value={hours}

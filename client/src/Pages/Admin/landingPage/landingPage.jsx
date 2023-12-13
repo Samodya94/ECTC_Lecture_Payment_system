@@ -22,6 +22,7 @@ import LoginDetails from "../login-details/LoginDetails";
 // User Level == admin components
 import ApprovePayments from "../admin-panel/approvePaymentsAdmin/approvePayments";
 import ManageUsers from "../admin-panel/manageUsersAdmin/manageUsers";
+import AllLoginDetails from "../admin-panel/viewLoginsAdmin/LoginDetails";
 
 // User Level == manager components
 import ApproveLectures from "../manager-panel/approveLecturesManager/approveLectures";
@@ -84,6 +85,8 @@ const LandingPage = () => {
           <Route path="manage-batches/update/:id" element={<UpdateBatches />} />
           <Route path="manage-branches" element={<AddBranches />} />
           <Route path="manage-users" element={<ManageUsers />} />
+          <Route path="all-login-details" element={<AllLoginDetails />} />
+
 
           {/* Manager Routes */}
           <Route path="approve-lectures" element={<ApproveLectures />} />

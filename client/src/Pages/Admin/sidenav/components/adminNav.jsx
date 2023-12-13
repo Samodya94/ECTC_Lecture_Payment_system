@@ -150,7 +150,7 @@ const AdminNav = ({ expanded, setExpanded }) => {
               style={{ whiteSpace: "nowrap" }}
               onClick={() => {
                 setLoginsExpanded(!loginsExpanded);
-                navigate("login-details");
+                navigate("all-login-details");
               }}
             >
               - All Users

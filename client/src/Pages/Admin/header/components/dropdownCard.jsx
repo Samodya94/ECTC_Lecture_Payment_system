@@ -23,7 +23,7 @@ const DropdownCard = () => {
   return (
     <div className={styles.dropdownCard}>
       <ul className={styles.ul}>
-        <li className={styles.li} onClick={() => navigate("dashboard")}>
+        <li className={styles.li} onClick={() => navigate("profile")}>
           <span className={styles.liContainer}>
             {/* Icon */}
             <PersonOutlineOutlinedIcon />

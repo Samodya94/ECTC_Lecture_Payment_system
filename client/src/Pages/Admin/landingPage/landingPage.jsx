@@ -10,6 +10,7 @@ import styles from "./landingPage.module.css";
 import Header from "../header/header";
 import AdminSideNav from "../sidenav/adminSideNav";
 import AdminDashboard from "../dashboard/adminDashboard";
+import Profile from "../profile/profile";
 
 // Common components for Admin & Manager
 import ManageCourses from "../admin-panel/manageCoursesAdmin/manageCourses";
@@ -75,6 +76,7 @@ const LandingPage = () => {
           {/* Common Routes */}
           <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="login-details" element={<LoginDetails />} />
+          <Route path="profile" element={<Profile />} />
 
           {/* Admin Routes */}
           <Route path="approve-payments" element={<ApprovePayments />} />

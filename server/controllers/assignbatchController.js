@@ -65,6 +65,24 @@ const putAssignBatch = asyncHandler(async (req, res) => {
     res.status(200).json(updatedAssignedBatch);
 });
 
+const putAssignBatchbyBatchCode = asyncHandler(async (req, res) => {
+    const { batchCode } = req.params;
+
+    const abatch = await AssignedBatch.findOne({ batchCode: batchCode });
+
+    if (!abatch) {
+        res.status(404);
+        throw new Error('Details not found');
+    }
+
+    const updatedAssignedBatch = await AssignedBatch.findOneAndUpdate(req.params, req.body, {
+        new: true,
+    });
+
+    res.status(200).json(updatedAssignedBatch);
+});
+
+
 const deleteAssignedBatch = asyncHandler(async (req, res) => {
     const abatch = await AssignedBatch.findById(req.params.id);
 
@@ -147,5 +165,6 @@ module.exports = {
     getAssignedBatchById,
     getAssignedByLecture,
     getAssignedBatchCode,
-    getAssignedBatchByLecIdBatchCode
+    getAssignedBatchByLecIdBatchCode,
+    putAssignBatchbyBatchCode
 };

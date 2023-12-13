@@ -19,8 +19,8 @@ const LecSideNav = () => {
         <div className="sidenav_link"><Link to="Coverage_History"><FaTableList/> &nbsp; Lecture Coverages</Link></div>
         <div className="sidenav_link"><Link to="lec_pay_history"><BsFillEyeFill/> &nbsp; Payment History</Link></div>
         <div className="sidenav_link"><Link to="change_password"><FaKey/> &nbsp; Change Password</Link></div>
-        <div className="sidenav_link"><Link to="mark_attendance" disabled><IoIosPeople /> &nbsp; Student Attendance</Link></div>
-        <div className="sidenav_link"><Link to="change_password" disabled><PiStudentBold /> &nbsp; Student Grades</Link></div>
+        {/* <div className="sidenav_link"><Link to="mark_attendance" disabled><IoIosPeople /> &nbsp; Student Attendance</Link></div>
+        <div className="sidenav_link"><Link to="change_password" disabled><PiStudentBold /> &nbsp; Student Grades</Link></div> */}
         <div className="sidenav_link"><Link to="view_log">< BsBookFill/> &nbsp; View Logins</Link></div>
       </div>
     </div>

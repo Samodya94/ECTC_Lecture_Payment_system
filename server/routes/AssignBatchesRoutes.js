@@ -7,11 +7,14 @@ const { AssignBatch,
         getAssignedBatchById,
         getAssignedByLecture,
         getAssignedBatchCode,
-        getAssignedBatchByLecIdBatchCode } = require('../controllers/assignbatchController');
+        getAssignedBatchByLecIdBatchCode,
+        putAssignBatchbyBatchCode,
+        getAssignedBatchCode } = require('../controllers/assignbatchController');
 
 router.post('/', AssignBatch);
 router.get('/', getallAssignedBatches);
 router.put('/:id', putAssignBatch);
+router.put('/bcode/:batchCode', putAssignBatchbyBatchCode);
 router.delete('/:id', deleteAssignedBatch);
 router.get('/:id', getAssignedBatchById);
 router.get('/assigncode/:bcode', getAssignedBatchCode)

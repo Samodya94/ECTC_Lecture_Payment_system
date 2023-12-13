@@ -157,16 +157,11 @@ const getCoverageNotApprovedByMonth = asyncHandler(async (req, res) => {
     nextYear++;
   }
 
-  console.log(nextMonth);
-  console.log(nextYear);
-
   const startDate = new Date(`${currentYear}-${currentMonth}-01T00:00:00.000Z`);
   const lastDayOfMonth = new Date(currentYear, currentMonth, 0).getDate();
   const endDate = new Date(
     `${currentYear}-${currentMonth}-${lastDayOfMonth}T23:59:59.999Z`
   );
-
-  console.log(endDate);
 
   const coverage = await Coverage.find({
     status: "Not Approved",
@@ -184,21 +179,13 @@ const getCoverageNotApprovedByMonth = asyncHandler(async (req, res) => {
 
 const getCoverageHistory = asyncHandler(async (req, res) => {
   const lecid = req.params.lecid;
-  const { currentMonth, currentYear } = req.body
+  const currentMonth = req.params.currentMonth
+  const currentYear = req.params.currentYear
 
 
-  if (isNaN(currentMonth) || isNaN(currentYear)) {
-    return res.status(500).json({ error: "Invalid current month or year" });
-  }
 
-  let nextMonth = currentMonth + 1;
-  let nextYear = currentYear;
 
   // Check if it's December (12), in which case the next month is January of the next year
-  if (nextMonth > 12) {
-    nextMonth = 1;
-    nextYear++;
-  }
 
   const startDate = new Date(`${currentYear}-${currentMonth}-01T00:00:00.000Z`);
   const lastDayOfMonth = new Date(currentYear, currentMonth, 0).getDate();
@@ -210,12 +197,10 @@ const getCoverageHistory = asyncHandler(async (req, res) => {
     lectureid: lecid,
     date: {
       $exists: true,
-      $type: "date",
       $gte: startDate,
       $lt: endDate,
     },
   });
-
   res.status(200).json(coverage);
 });
 
@@ -267,7 +252,6 @@ const getCoverageByLecIdAndBatchCode = asyncHandler(async (req, res) => {
 
   const coverage = await Coverage.find({
     lectureid: lecid,
-    batchCode: batchcode,
     date: {
       $exists: true,
       $type: "date",

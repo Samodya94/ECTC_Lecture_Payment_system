@@ -13,6 +13,7 @@ export const AddLectureCoverage = () => {
   const [stime, setStime] = useState("");
   const [etime, setEtime] = useState("");
   const [course, setCourse] = useState("");
+  const [batchid, setBatchid] = useState("");
   const [duration, setDuratuion] = useState("");
   const [date, setDate] = useState("");
   const [coverage, setCoverage] = useState("");
@@ -75,11 +76,12 @@ export const AddLectureCoverage = () => {
   function calculateRemHours() {
     if (seconds && duration) {
       const ms = seconds - duration;
-
-      console.log(ms);
+      setUpdateremHours (ms);
     }
     console.log(seconds);
   }
+
+
 
   const getHours = () => {
     const id = batchCode;
@@ -151,8 +153,10 @@ export const AddLectureCoverage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // setRefreshPendingCoverages((prev) => !prev);
+    
+    
+   console.log(updateremHours)
+    setRefreshPendingCoverages((prev) => !prev);
     setRefreshRejectedCoverages((prev) => !prev);
 
     const lecid = lecturer.id;
@@ -172,6 +176,14 @@ export const AddLectureCoverage = () => {
       .then((res) => {
         console.log(res);
         alert("Coverage Added");
+
+        const data = {
+          remaining_hours:updateremHours
+        }
+        const response1 = service.put(`assignbatch/bcode`,batchCode,data)
+        response1.then((res)=>{
+          console.log("Records Updated");
+        })
         window.location.reload()
       })
       .catch((error) => {
@@ -211,6 +223,7 @@ export const AddLectureCoverage = () => {
                 value={batchCode}
                 onChange={(e) => {
                   setBatchCode(e.target.value);
+                  calculateRemHours()
                 }}
               >
                 <option> --Select Batch-- </option>
@@ -234,6 +247,7 @@ export const AddLectureCoverage = () => {
                 value={stime}
                 onChange={(e) => {
                   setStime(e.target.value);
+                  calculateRemHours()
                 }}
               />
             </div>
@@ -247,6 +261,7 @@ export const AddLectureCoverage = () => {
                 value={etime}
                 onChange={(e) => {
                   setEtime(e.target.value);
+                  calculateRemHours()
                 }}
               />
             </div>

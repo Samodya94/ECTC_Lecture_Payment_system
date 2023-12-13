@@ -22,6 +22,7 @@ router.get('/approved', getCoverageApproved);
 router.get('/:id', getCoverageById);
 router.get('/approved/:lecid', getCoverageApprovedByLecturer);
 router.get('/lecnotApproved/:lecid', getLecCoverageNotApproved);
+router.get('/leccoverageHistory/:lecid/:currentMonth/:currentYear', getCoverageHistory);
 router.get('/notapprovedbymonth/:lecid', getCoverageNotApprovedByMonth);
 router.get('/leccoverageHistory/:lecid', getCoverageHistory);
 router.get('/notapprovedbymonth/:lecid', getCoverageNotApprovedByMonth);

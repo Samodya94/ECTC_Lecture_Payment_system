@@ -97,13 +97,7 @@ function LecHome() {
             <Routes>
               <Route
                 path="/"
-                element={
-                  <div className="text-center mt-5">
-                 
-                    <h1>Select the page you want to access!</h1>
-                    <p>Use the side nav</p>
-                  </div>
-                }
+                element={<Dashboard/>}
               />
               <Route path="/lec-login" element={!lecturer ?<LectureLogin/> : <Navigate to=""/>}/>
               <Route path="dash" element={<Dashboard/>} />

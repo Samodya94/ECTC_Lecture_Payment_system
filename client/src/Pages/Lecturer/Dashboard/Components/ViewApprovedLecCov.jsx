@@ -11,18 +11,30 @@ export const ViewApprovedLecCov = () => {
   useEffect(() => {
     getViewCoverage();
     getBatch();
+    getdata();
   }, [lecturer]);
 
   function getBatch() {
-    const response = service.get("assignbatch");
-    response.then((res) => {
-      const batches = res.data.reduce((acc, batch) => {
-        acc[batch._id] = batch.batchCode;
-        return acc;
-      }, {});
+    const response = service.get("batch");
+    response.then((res)=>{
+      const batches = res.data.reduce((ace, batch)=>{
+        ace[batch._id] = batch.batchCode;
+        return ace;
+      },{})
       setBatched(batches);
       
     });
+  }
+
+  function getdata(){
+    const response = service.get("batch");
+    response.then((res)=>{
+      const batchcode = res.data.reduce((ace, batch)=>{
+        ace[batch._id] = batch.batchCode;
+        return ace;
+      },{})
+      setAssgBatches(batchcode);
+    })
   }
 
   const getViewCoverage = () => {

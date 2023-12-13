@@ -10,13 +10,30 @@ export const ViewLog =()=>{
     const [country,setCountry] = useState('') 
     const [city,setCity] = useState('')
     const [ip,setIp] = useState('')
+    const [logs,setLogs] = useState([])
 
     const [firstName,setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
 
+
     useEffect(()=>{
         getLecturer();
+        getLogDetails();
     },[lecturer])
+
+    const getLogDetails = () =>{
+        if(lecturer){
+            const lecName=lecturer.username
+            
+           const response = service.get('/leclog/recent',lecName)
+           response.then((res)=>{
+            console.log(res.data)
+            setLogs(res.data)
+           })
+        }else{
+           
+        }
+    }
 
 
     const getLecturer = () =>{
@@ -68,6 +85,37 @@ export const ViewLog =()=>{
                     </div>
                     
                 </div>
+            </div>
+
+            <div>
+                <h1>Recent Logins</h1>
+
+                <table className="table table-bordered">
+                    <thead className="table-dark">
+                        <tr>
+                            <th>IP</th>
+                            <th>From</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {logs ? logs.map((logdetail) => {
+                            const logDate = new Date(logdetail.createdAt);
+                            const formattedDate = logDate.toLocaleDateString();
+                            const formattedTime = logDate.toLocaleTimeString();
+
+                            return (
+                                <tr key={logdetail._id}>
+                                    <td>{logdetail.ipaddress}</td>
+                                    <td>{logdetail.city + ", " + logdetail.country}</td>
+                                    <td>{formattedDate}</td>
+                                    <td>{formattedTime}</td>
+                                </tr>
+                            );
+                        }) : "Hello"}
+                    </tbody>
+                </table>
             </div>
         </div>
     )

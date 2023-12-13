@@ -47,7 +47,7 @@ const AccountsNav = ({ expanded }) => {
         <li
           className={styles.li}
           style={{ whiteSpace: "nowrap" }}
-          onClick={() => navigate("approved-lectures")}
+          onClick={() => navigate("approved-lecture-coverages")}
         >
           <span className={styles.liContainer}>
             {/* Icon */}

@@ -81,7 +81,9 @@ const createCoverage = asyncHandler(async (req, res) => {
     });
   } catch (error) {
     console.error(error.message);
-    res.status(500).json({ error: "Internal Server Error" });
+
+    res.status(500).json({ error: error.message });
+
   }
 });
 
@@ -185,6 +187,7 @@ const getCoverageHistory = asyncHandler(async (req, res) => {
 
 
 
+
   // Check if it's December (12), in which case the next month is January of the next year
 
   const startDate = new Date(`${currentYear}-${currentMonth}-01T00:00:00.000Z`);
@@ -282,6 +285,35 @@ const getPaymentPending = asyncHandler(async (req, res) => {
   res.status(200).json(coverage);
 });
 
+const getSelectedCoverageByLecIdAndBatchCode = asyncHandler(async (req, res) => {
+  const { selectedMonth, selectedYear } = req.body;
+  const { lecid } = req.params._id;
+  const { batchcode } = req.params.batchCode
+  const status = "Approved";
+
+  if (isNaN(selectedMonth) || isNaN(selectedYear)) {
+    return res.status(500).json({ error: 'Invalid selected month or year' });
+  }
+
+  const startDate = new Date(`${selectedYear}-${selectedMonth}-01T00:00:00.000Z`);
+  const lastDayOfMonth = new Date(selectedYear, selectedMonth, 0).getDate();
+  const endDate = new Date(`${selectedYear}-${selectedMonth}-${lastDayOfMonth}T23:59:59.999Z`);
+
+  const coverage = await Coverage.find({
+    lectureid: lecid,
+    batchCode: batchcode,
+    date: {
+      $exists: true,
+      $type: 'date',
+      $gte: startDate,
+      $lt: endDate,
+    },
+    status: status,
+  });
+  res.status(200).json(coverage);
+});
+
+
 module.exports = {
   createCoverage,
   getCoverage,
@@ -290,6 +322,7 @@ module.exports = {
   deleteCoverage,
   getCoverageNotApproved,
   getCoverageApproved,
+  getSelectedCoverageByLecIdAndBatchCode,
   getLecCoverageNotApproved,
   getCoverageNotApprovedByMonth,
   getCoverageApprovedByLecturer,

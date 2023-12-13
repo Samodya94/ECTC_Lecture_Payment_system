@@ -10,6 +10,8 @@ export const ViewAssignedLecturers = () => {
   const [batchcodes,setBatchcodes] = useState([]);
   const [batched, setBatched] = useState({});
   const [batchedEnd, setBatchedEnd] = useState({});
+  const [remHours, setRemHours] = useState([]);
+  
 
   useEffect(() => {
     getLecturer();
@@ -46,12 +48,20 @@ export const ViewAssignedLecturers = () => {
       const response = service.get(`lecturer`, id);
       response
         .then((res) => {
-          console.log(res.data);
         })
         .catch((error) => {
           console.log(error, "Failed to Fetch Lecturer information");
         });
     }
+  };
+
+  const formatDuration = (milliseconds) => {
+    if (!milliseconds) {
+      return "No data available";
+    }
+    const hours = Math.floor(milliseconds / (60 * 60 * 1000));
+    const minutes = Math.floor((milliseconds % (60 * 60 * 1000)) / (60 * 1000));
+    return `${hours} hr ${minutes} min`;
   };
 
   const getAssignedBatches = (e) => {
@@ -61,7 +71,6 @@ export const ViewAssignedLecturers = () => {
       const response = service.get(`assignbatch/bylecture`, id);
       response
         .then((res) => {
-          console.log(res.data);
           setBatches(res.data);
         })
         .catch((error) => {
@@ -105,7 +114,7 @@ export const ViewAssignedLecturers = () => {
                 <td>{batchcodes[batch.batchCode]}</td>
                 <td>{batch.rate}</td>
                 <td>{batch.hours}</td>
-                <td>{batch.remaining_hours}</td>
+                <td>{formatDuration(batch.remaining_hours)}</td>
               </tr>
             ))}
         </tbody>

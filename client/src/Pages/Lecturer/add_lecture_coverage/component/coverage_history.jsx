@@ -43,8 +43,7 @@ export const Coverage_History = () => {
     setMonth(month);
   };
 
-  
-  return (
+    return (
     <div className="coverage_history">
         <h2 className="">Lecture Coverage History</h2>
       <div className="row w-100 p-5">

@@ -3,6 +3,7 @@ import { PendingCoverages } from "./component/pending_coverages";
 import { RejectedCoverages } from "./component/rejected_coverages";
 import { useLecAuthContext } from "../../../hooks/useLecAuthContext";
 import Service from "../../../utilities/httpService";
+import { useNavigate } from "react-router";
 
 // import './lec.css'
 export const AddLectureCoverage = () => {
@@ -23,11 +24,12 @@ export const AddLectureCoverage = () => {
   const [updateremHours, setUpdateremHours] = useState(0);
   const [batches, setBatches] = useState([]);
   const [assgbatch, setAssgBatches] = useState([]);
-
+  
 
   const [refreshPendingCoverages, setRefreshPendingCoverages] = useState(false);
   const [refreshRejectedCoverages, setRefreshRejectedCoverages] = useState(false);
   const service = new Service();
+  const navigate = useNavigate() 
 
   useEffect(() => {
     getLecturer();
@@ -35,25 +37,10 @@ export const AddLectureCoverage = () => {
     calculateTimeDifference();
     getdata();
     calculateRemHours()
-  }, [lecturer, refreshPendingCoverages]);
+  }, [lecturer,refreshPendingCoverages]);
 
-  useEffect(() => {
-    getPendingCoverages();
-  }, [refreshPendingCoverages]);
 
-  const getPendingCoverages = () => {
-    try {
-
-      const response = service.get("coverage/lecnotApproved", lecturer.id);
-      const updatedCoverages = response.data;
-      setCoverage(updatedCoverages);
-
-    } catch (error) {
-      console.error("Error fetching pending coverages:", error);
-    }
-  };
-
-  function getdata() {
+ function getdata() {
     const response = service.get("batch");
     response.then((res) => {
       const batchcodee = res.data.reduce((ace, batch) => {
@@ -66,17 +53,19 @@ export const AddLectureCoverage = () => {
 
   useEffect(() => {
     getHours();
-
   }, [batchCode]);
 
   useEffect(() => {
     calculateTimeDifference();
-  },);
+    calculateRemHours()
+    
+  });
 
   function calculateRemHours() {
     if (seconds && duration) {
       const ms = seconds - duration;
       setUpdateremHours (ms);
+      console.log(ms);
     }
     console.log(seconds);
   }
@@ -85,7 +74,7 @@ export const AddLectureCoverage = () => {
 
   const getHours = () => {
     const id = batchCode;
-
+    console.log(id);
     const response = service.get(`assignbatch/assigncode`, id);
     response
       .then((res) => {
@@ -176,15 +165,13 @@ export const AddLectureCoverage = () => {
       .then((res) => {
         console.log(res);
         alert("Coverage Added");
-
         const data = {
           remaining_hours:updateremHours
         }
-        const response1 = service.put(`assignbatch/bcode`,batchCode,data)
-        response1.then((res)=>{
-          console.log("Records Updated");
-        })
-        window.location.reload()
+        const response1 = service.put('assignbatch/bcode',batchCode,data)
+        response1.then(()=>{
+          console.log("updated");
+        }) 
       })
       .catch((error) => {
         alert(error.message)

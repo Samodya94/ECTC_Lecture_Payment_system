@@ -18,21 +18,13 @@ axiosInstance.interceptors.response.use(
         return response;
     },
     (err) => {
-        if (err.response.status === 400) {
-            throw new Error(err);
-        } else if (err.response.status === 401) {
-            throw new Error(err);
-        } else if (err.response === 403) {
-            throw new Error(err);
-        } else if (err.response.status === 404) {
-            throw new Error(err);
-        } else if (err.response === 408) {
-            throw new Error(err);
-        } else if (err.response.status === 409) {
-            throw new Error(err);
-        } else if (err.response.status === 500) {
-            throw new Error(err);
+        const errorResponse = err.response;
+
+        if (errorResponse && errorResponse.data && errorResponse.data.message) {
+            // If the server returns an error message, include it in the Error object
+            throw new Error(errorResponse.data.message);
         } else {
+            // If no specific error message from the server, throw the default error
             throw new Error(err);
         }
     },

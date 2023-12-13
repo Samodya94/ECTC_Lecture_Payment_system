@@ -19,6 +19,7 @@ export const EditCoverage = () => {
     const [seconds, setSeconds] = useState(0);
     const { lecturer } = useLecAuthContext();
     const [remHours, setRemHours] = useState();
+    
     const [updateremHours, setUpdateremHours] = useState(0)
     const [batches, setBatches] = useState([]);
     const [batchid, setBatchid] = useState();

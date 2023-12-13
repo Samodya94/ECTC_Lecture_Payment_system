@@ -165,6 +165,6 @@ module.exports = {
     getAssignedBatchById,
     getAssignedByLecture,
     getAssignedBatchCode,
-    getAssignedBatchByLecIdBatchCode,
-    putAssignBatchbyBatchCode
+    putAssignBatchbyBatchCode,
+    getAssignedBatchByLecIdBatchCode
 };

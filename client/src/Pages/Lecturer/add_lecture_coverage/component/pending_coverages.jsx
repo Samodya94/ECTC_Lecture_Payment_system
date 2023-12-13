@@ -17,8 +17,6 @@ export const PendingCoverages = ({refresh, triggerRefresh}) => {
     getdata();
   }, [lecturer,refresh]);
 
-  
-
   function getdata(){
     const response = service.get("batch");
     response.then((res)=>{

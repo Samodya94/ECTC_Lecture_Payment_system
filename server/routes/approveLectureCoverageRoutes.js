@@ -8,6 +8,7 @@ const { createCoverage,
     getCoverageNotApproved,
     getCoverageApproved,
     getLecCoverageNotApproved,
+    getSelectedCoverageByLecIdAndBatchCode,
     getCoverageNotApprovedByMonth,
     getCoverageApprovedByLecturer,
     getCoverageHistory,
@@ -27,6 +28,8 @@ router.get('/notapprovedbymonth/:lecid', getCoverageNotApprovedByMonth);
 router.get('/leccoverageHistory/:lecid', getCoverageHistory);
 router.get('/notapprovedbymonth/:lecid', getCoverageNotApprovedByMonth);
 router.get('/:lecid/:batchcode/:month/:year/:paymentStatus', getCoverageByLecIdAndBatchCode);
+router.get('/:lecid/:batchcode', getSelectedCoverageByLecIdAndBatchCode)
+router.get('/:lecid/:month/:year', getCoverageByLecIdAndBatchCode);
 router.get('/pay/paymentnotapproved', getPaymentNotApproved);
 router.get('/pay/paymentpending', getPaymentPending);
 

@@ -76,6 +76,7 @@ const LandingPage = () => {
 
           {/* Admin Routes */}
           <Route path="approve-payments" element={<ApprovePayments />} />
+          <Route path="approve-payments/view-coverages/:id" element={<ApprovePaymentCoverages />} />
           <Route path="manage-courses" element={<ManageCourses />} />
           <Route path="manage-lecturers" element={<ManageLecturers />} />
           <Route path="manage-batches" element={<ManageBatches />} />
@@ -100,6 +101,7 @@ const LandingPage = () => {
           <Route path="approve-payments-finance" element={<ApprovePaymentsFinance />} />
           <Route path="approve-payments-finance/view-coverages/:id" element={<ApprovePaymentCoverages />} />
           <Route path="rollback-payments" element={<RollbackPayments />} />
+          <Route path="rollback-payments/view-coverages/:id" element={<ApprovePaymentCoverages />} />
         </Routes>
       </div>
     </div>

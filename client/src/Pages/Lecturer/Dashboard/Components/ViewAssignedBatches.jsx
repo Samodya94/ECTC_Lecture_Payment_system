@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLecAuthContext } from "../../../../hooks/useLecAuthContext";
-import Service from "../../../../utilities/httpService";
+import Service from "../../../../utilities/Service";
 
 export const ViewAssignedLecturers = () => {
   const { lecturer } = useLecAuthContext();
@@ -20,8 +20,10 @@ export const ViewAssignedLecturers = () => {
   }, [lecturer]);
 
   function getBatch() {
+   if(lecturer){
     const response = service.get("batch");
     response.then((res) => {
+      console.log(res.data);
       const batchcodee = res.data.reduce((ace, batch)=>{
         ace[batch._id] = batch.batchCode;
         return ace;
@@ -38,6 +40,7 @@ export const ViewAssignedLecturers = () => {
       setBatched(batched);
       setBatchedEnd(batchedEnd);
     });
+   }
   }
 
   const getLecturer = async (e) => {
@@ -112,7 +115,7 @@ export const ViewAssignedLecturers = () => {
                 <td>{batch.course}</td>
                 <td>{batchcodes[batch.batchCode]}</td>
                 <td>{batch.rate}</td>
-                <td>{batch.hours}</td>
+                <td>{formatDuration(batch.hours)}</td>
                 <td>{formatDuration(batch.remaining_hours)}</td>
               </tr>
             ))}

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Service from "../../../../utilities/httpService";
+import Service from "../../../../utilities/Service";
 import { useLecAuthContext } from "../../../../hooks/useLecAuthContext";
 
 export const ViewApprovedLecCov = () => {
@@ -53,7 +53,7 @@ export const ViewApprovedLecCov = () => {
   
   return (
     <div className="assign_batches">
-      <h1>Pending Lectures</h1>
+      <h1>Approved Lecture Coverages</h1>
       <table className="table table-striped">
         <thead className=" table-dark">
           <tr>

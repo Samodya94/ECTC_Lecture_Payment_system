@@ -50,7 +50,7 @@ const getPaymentPending = asyncHandler(async (req, res) => {
 
 //get all status = Approved
 const getPaymentApproved = asyncHandler(async (req, res) => {
-    const payment = await Payment.find({ status: "Approved", adminStatus: "Approved" });
+    const payment = await Payment.find({ status: "Approved" });
     res.status(200).json(payment);
 });
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Service from "../../../../utilities/Service";
+import Service from "../../../../utilities/httpService";
 import { useLecAuthContext } from "../../../../hooks/useLecAuthContext";
 
 export const PendingLecture = () => {
@@ -71,7 +71,7 @@ export const PendingLecture = () => {
   };
   return (
     <div className="assign_batches">
-      <h1>Approval Pending Lectures for {currentMonth} of {currentYear}</h1>
+      <h1>Pending Lectures for {currentMonth} of {currentYear}</h1>
       <table className="table table-striped">
         <thead className=" table-dark">
           <tr>

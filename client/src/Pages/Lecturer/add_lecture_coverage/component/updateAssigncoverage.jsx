@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import Service from "../../../../utilities/httpService";
+import Service from "../../../../utilities/Service";
 
 export const UpdateAssigncoverage = () => {
   const [batchCode, setBatchCode] = useState("");

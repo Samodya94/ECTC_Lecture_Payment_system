@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 import { PendingCoverages } from "./component/pending_coverages";
 import { RejectedCoverages } from "./component/rejected_coverages";
 import { useLecAuthContext } from "../../../hooks/useLecAuthContext";
-import { startOfMonth, addDays, isBefore } from 'date-fns';
-import Service from "../../../utilities/httpService";
+import Service from "../../../utilities/Service";
 import { useNavigate } from "react-router";
 
 // import './lec.css'
@@ -47,13 +46,15 @@ export const AddLectureCoverage = () => {
  function getdata() {
     const response = service.get("batch");
     response.then((res) => {
+      console.log(res.data);
       const batchcodee = res.data.reduce((ace, batch) => {
         ace[batch._id] = batch.batchCode;
         return ace;
         
       }, {});
       setAssgBatches(batchcodee);
-    });
+    
+  });
   }
 
   useEffect(() => {
@@ -74,7 +75,7 @@ export const AddLectureCoverage = () => {
 
 const getHours = () => {
     const id = batchCode;
-    const response = service.get(`assignbatch/assigncode`, id);
+    const response = service.get(`assignbatch/assigncode/${id}`);
     response
       .then((res) => {
         const ms = res.data.remaining_hours;

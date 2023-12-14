@@ -1,5 +1,5 @@
 import { useState,useEffect } from "react";
-import Service from "../../../../utilities/httpService";
+import Service from "../../../../utilities/Service";
 import { useLecAuthContext } from "../../../../hooks/useLecAuthContext";
 
 

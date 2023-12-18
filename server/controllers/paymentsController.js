@@ -115,7 +115,6 @@ const exportPayments = asyncHandler(async (req, res) => {
     const batchCodes = await Promise.all(batchPromises);
 
     const lecturerName = await getLecturer(lecturerId);
-    console.log(lecturerName);
 
     const worksheet = workbook.addWorksheet(`${lecturerName}`);
 

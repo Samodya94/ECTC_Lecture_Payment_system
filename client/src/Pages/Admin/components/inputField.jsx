@@ -11,7 +11,6 @@ const InputField = ({ lable, placeholder, setValue, style, value }) => {
         <input
           type="text"
           className={styles.inputField}
-          id="courseName"
           placeholder={placeholder}
           onChange={(e) => setValue(e.target.value)}
           value={value}

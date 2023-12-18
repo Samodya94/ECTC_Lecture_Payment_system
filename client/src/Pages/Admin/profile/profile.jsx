@@ -9,10 +9,11 @@ import styles from "./profile.module.css";
 import InputField from "../components/inputField";
 import PrimaryButton from "../components/primaryButton";
 import InputFieldDis from "../components/inputFieldDis";
-import InputNumField from "../components/inputNumField";
+import InputPasswordField from "../components/inputPasswordField";
 
 const Profile = () => {
     const userName = Cookies.get("username");
+    const token = Cookies.get("token");
 
     const service = useMemo(() => new Service(), []);
 
@@ -21,21 +22,11 @@ const Profile = () => {
     const [email, setEmail] = useState("");
     const [branch, setBranch] = useState("");
     const [userLevel, setUserLevel] = useState("");
+    const [id, setId] = useState("");
 
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [error, setError] = useState("");
-
-    const [initialDataLoaded, setInitialDataLoaded] = useState(false);
-
-    const [userData, setUserData] = useState({
-        username: "",
-        fullname: "",
-        email: "",
-        branch: "",
-        userLevel: "",
-    });
 
     useEffect(() => {
         async function loadUserData() {
@@ -47,14 +38,7 @@ const Profile = () => {
                 setEmail(udata.email);
                 setBranch(udata.branch);
                 setUserLevel(udata.userLevel);
-                setUserData({
-                    username: udata.username,
-                    fullname: udata.fullname,
-                    email: udata.email,
-                    branch: udata.branch,
-                    userLevel: udata.userLevel,
-                });
-                setInitialDataLoaded(true);
+                setId(udata._id);
             } catch (message) {
                 alert(message);
             }
@@ -65,28 +49,63 @@ const Profile = () => {
     const handleChangePassword = async (e) => {
         e.preventDefault();
 
+        //check if the all the fields are filled
+        if (!oldPassword || !newPassword || !confirmPassword) {
+            alert("Please fill all the fields");
+            return;
+        }
         // Check if the new password and confirm password match
         if (newPassword !== confirmPassword) {
             alert("New password and confirm password must match");
             return;
         }
 
-        try {
-            const response = await service.post("users/change-password", {
-                oldPassword,
-                newPassword,
-                username,
-            });
+        const response = await fetch("http://localhost:8000/api/users/change-password", {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+                username: username,
+                oldPassword: oldPassword,
+                newPassword: newPassword,
+            })
 
-            const json = await response.json()
-            setError(json.msg)
-            console.log(json.msg)
+        })
+
+        const json = await response.json()
+
+        if (!response.ok) {
+            alert(json.msg)
         }
-        catch (msg) {
-            setError(msg)
+        if (response.ok) {
+            alert(json.msg)
         }
 
     };
+
+    const newUser = {
+        username: username,
+        fullname: fullname,
+        email: email,
+        branch: branch,
+        userLevel: userLevel,
+    };
+
+    //create new payment function
+    function editUser(e) {
+        e.preventDefault();
+        const response = service.put(`users`, id, newUser);
+        response.then((res) => {
+            alert("User Details Updated");
+            window.location.reload();
+        }).catch((err) => {
+            console.log(err);
+        })
+    }
+
 
 
     return (
@@ -94,17 +113,18 @@ const Profile = () => {
             <div className={styles.container}>
                 <div className={styles.subContainer}>
                     <p className={styles.heading}>Profile</p>
-                    <form onSubmit={''}>
+                    <form onSubmit={editUser}>
                         <InputFieldDis
                             lable={"Username"}
                             placeholder={"Enter Username"}
                             value={username}
                             style={{ width: "300px" }}
                         />
-                        <InputFieldDis
+                        <InputField
                             lable={"Full Name"}
                             placeholder={"Enter Full Name"}
                             value={fullname}
+                            setValue={setFullname}
                             style={{ width: "300px" }}
                         />
                         <InputFieldDis
@@ -145,19 +165,19 @@ const Profile = () => {
                 <div className={styles.subContainer}>
                     <p className={styles.heading}>Change Password</p>
                     <form onSubmit={handleChangePassword}>
-                        <InputField
+                        <InputPasswordField
                             lable={"Old Password"}
                             placeholder={"Enter Old Password"}
                             setValue={setOldPassword}
                             style={{ width: "300px" }}
                         />
-                        <InputField
+                        <InputPasswordField
                             lable={"New Password"}
                             placeholder={"Enter New Password"}
                             setValue={setNewPassword}
                             style={{ width: "300px" }}
                         />
-                        <InputField
+                        <InputPasswordField
                             lable={"Confirm Password"}
                             placeholder={"Enter Confirm Password"}
                             setValue={setConfirmPassword}

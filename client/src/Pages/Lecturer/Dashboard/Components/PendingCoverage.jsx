@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Service from "../../../../utilities/httpService";
+import Service from "../../../../utilities/Service";
 import { useLecAuthContext } from "../../../../hooks/useLecAuthContext";
 
 export const PendingLecture = () => {
@@ -53,7 +53,6 @@ export const PendingLecture = () => {
       const respone = service.get("coverage/notapprovedbymonth", lecid);
       respone
         .then((res) => {
-          console.log(res.data);
           setCoverages(res.data);
         })
         .catch((error) => {
@@ -72,9 +71,9 @@ export const PendingLecture = () => {
   };
   return (
     <div className="assign_batches">
-      <h1>Pending Lectures for {currentMonth} of {currentYear}</h1>
-      <table>
-        <thead>
+      <h1>Approval Pending Lectures for {currentMonth} of {currentYear}</h1>
+      <table className="table table-striped">
+        <thead className=" table-dark">
           <tr>
             <th>Course Name</th>
             <th>Batch Code</th>

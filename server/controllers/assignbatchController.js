@@ -66,9 +66,9 @@ const putAssignBatch = asyncHandler(async (req, res) => {
 });
 
 const putAssignBatchbyBatchCode = asyncHandler(async (req, res) => {
-    const {batchCode} = req.params;
+    const { batchCode } = req.params;
 
-    const abatch = await AssignedBatch.findOne({batchCode:batchCode});
+    const abatch = await AssignedBatch.findOne({ batchCode: batchCode });
 
     if (!abatch) {
         res.status(404);
@@ -113,10 +113,10 @@ const getAssignedBatchById = asyncHandler(async (req, res) => {
 });
 
 const getAssignedBatchCode = asyncHandler(async (req, res) => {
-    const {bcode} = req.params;
+    const { bcode } = req.params;
 
     const batchcode = await AssignedBatch.findOne({
-        batchCode:bcode
+        batchCode: bcode
     })
 
     if (!batchcode) {
@@ -126,7 +126,7 @@ const getAssignedBatchCode = asyncHandler(async (req, res) => {
 
     res.status(200).json(batchcode);
 
-    
+
 });
 
 const getAssignedByLecture = (req, res) => {
@@ -143,6 +143,20 @@ const getAssignedByLecture = (req, res) => {
         });
 };
 
+const getAssignedBatchByLecIdBatchCode = asyncHandler(async (req, res) => {
+    const { lecturerID, batchCode } = req.params;
+
+    const batch = await AssignedBatch.findOne({ lecturerID: lecturerID, batchCode: batchCode });
+
+    if (!batch) {
+        res.status(404);
+        throw new Error('Assigned Batch not found');
+    }
+
+    res.status(200).json(batch);
+}
+);
+
 module.exports = {
     AssignBatch,
     putAssignBatch,
@@ -151,5 +165,6 @@ module.exports = {
     getAssignedBatchById,
     getAssignedByLecture,
     getAssignedBatchCode,
-    putAssignBatchbyBatchCode
+    putAssignBatchbyBatchCode,
+    getAssignedBatchByLecIdBatchCode
 };

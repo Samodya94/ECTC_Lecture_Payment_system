@@ -27,7 +27,6 @@ export const ViewLog =()=>{
             
            const response = service.get('/leclog/recent',lecName)
            response.then((res)=>{
-            console.log(res.data)
             setLogs(res.data)
            })
         }else{
@@ -42,7 +41,6 @@ export const ViewLog =()=>{
 
             const response = service.get('lecturer',lecid);
             response.then((res)=>{
-                console.log(res.data);
                 setFirstName(res.data.firstName);
                 setLastName(res.data.lastName);
             })
@@ -55,7 +53,6 @@ export const ViewLog =()=>{
 
     const getdata = async () =>{
         const response = await axios.get(`https://ipapi.co/json/`)
-        console.log(response.data)
         setIp(response.data.ip)
         setCountry(response.data.country_name)
         setCity(response.data.city)
@@ -64,7 +61,7 @@ export const ViewLog =()=>{
     return(
         <div className="logDetails">
             <h1> View My Login Details</h1>
-            <div className="row mt-5 p-5">
+            <div className="row mt-5 p-3">
                 <div className="col-md-6 p-5">
                     <div className="log_datcard">
                     <div className="card-top">

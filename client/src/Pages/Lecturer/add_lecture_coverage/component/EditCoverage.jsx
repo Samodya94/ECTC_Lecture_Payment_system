@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLecAuthContext } from "../../../../hooks/useLecAuthContext";
-import Service from "../../../../utilities/httpService";
+import Service from "../../../../utilities/Service";
 import { useParams } from "react-router";
 
 export const EditCoverage = () => {
@@ -19,6 +19,7 @@ export const EditCoverage = () => {
     const [seconds, setSeconds] = useState(0);
     const { lecturer } = useLecAuthContext();
     const [remHours, setRemHours] = useState();
+    
     const [updateremHours, setUpdateremHours] = useState(0)
     const [batches, setBatches] = useState([]);
     const [batchid, setBatchid] = useState();

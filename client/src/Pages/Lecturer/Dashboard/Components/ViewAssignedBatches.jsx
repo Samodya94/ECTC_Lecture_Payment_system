@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLecAuthContext } from "../../../../hooks/useLecAuthContext";
-import Service from "../../../../utilities/httpService";
+import Service from "../../../../utilities/Service";
 
 export const ViewAssignedLecturers = () => {
   const { lecturer } = useLecAuthContext();
@@ -10,6 +10,8 @@ export const ViewAssignedLecturers = () => {
   const [batchcodes,setBatchcodes] = useState([]);
   const [batched, setBatched] = useState({});
   const [batchedEnd, setBatchedEnd] = useState({});
+  const [remHours, setRemHours] = useState([]);
+  
 
   useEffect(() => {
     getLecturer();
@@ -18,6 +20,7 @@ export const ViewAssignedLecturers = () => {
   }, [lecturer]);
 
   function getBatch() {
+   if(lecturer){
     const response = service.get("batch");
     response.then((res) => {
       console.log(res.data);
@@ -37,6 +40,7 @@ export const ViewAssignedLecturers = () => {
       setBatched(batched);
       setBatchedEnd(batchedEnd);
     });
+   }
   }
 
   const getLecturer = async (e) => {
@@ -46,12 +50,20 @@ export const ViewAssignedLecturers = () => {
       const response = service.get(`lecturer`, id);
       response
         .then((res) => {
-          console.log(res.data);
         })
         .catch((error) => {
           console.log(error, "Failed to Fetch Lecturer information");
         });
     }
+  };
+
+  const formatDuration = (milliseconds) => {
+    if (!milliseconds) {
+      return "No data available";
+    }
+    const hours = Math.floor(milliseconds / (60 * 60 * 1000));
+    const minutes = Math.floor((milliseconds % (60 * 60 * 1000)) / (60 * 1000));
+    return `${hours} hr ${minutes} min`;
   };
 
   const getAssignedBatches = (e) => {
@@ -61,7 +73,6 @@ export const ViewAssignedLecturers = () => {
       const response = service.get(`assignbatch/bylecture`, id);
       response
         .then((res) => {
-          console.log(res.data);
           setBatches(res.data);
         })
         .catch((error) => {
@@ -74,7 +85,7 @@ export const ViewAssignedLecturers = () => {
     <div className="assign_batches">
       <h1>Assigned Batches</h1>
       <table className="table table-bordered my-3">
-        <thead>
+        <thead className=" table-dark">
           <tr>
             <th>Batch Start Date</th>
             <th>Batch End Date</th>
@@ -104,8 +115,8 @@ export const ViewAssignedLecturers = () => {
                 <td>{batch.course}</td>
                 <td>{batchcodes[batch.batchCode]}</td>
                 <td>{batch.rate}</td>
-                <td>{batch.hours}</td>
-                <td>{batch.remaining_hours}</td>
+                <td>{formatDuration(batch.hours)}</td>
+                <td>{formatDuration(batch.remaining_hours)}</td>
               </tr>
             ))}
         </tbody>

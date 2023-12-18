@@ -8,6 +8,7 @@ import styles from "../adminSideNav.module.css";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
 import AutoStoriesOutlinedIcon from "@mui/icons-material/AutoStoriesOutlined";
+import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 
 const AdminNav = ({ expanded, setExpanded }) => {
   const [configurationExpanded, setConfigurationExpanded] = useState(false);
@@ -157,6 +158,19 @@ const AdminNav = ({ expanded, setExpanded }) => {
             </li>
           </ul>
         )}
+        <li
+          className={styles.li}
+          style={{ whiteSpace: "nowrap" }}
+          onClick={() => navigate("login-details")}
+        >
+          <span className={styles.liContainer}>
+            {/* Icon */}
+            <PersonOutlineOutlinedIcon />
+            {/* Display name when expanded */}
+            {expanded && <span className={styles.span}>View Logins</span>}
+          </span>
+        </li>
+
       </ul>
     </>
   );

@@ -87,6 +87,7 @@ table {
 
 .leclog_button {
     text-align: center;
+    text-decoration: none;
     padding: 0.5vh 1vw;
     color: #fff;
     font-size: 1.2rem;
@@ -94,6 +95,10 @@ table {
     font-weight: 600;
     font-family: 'Poppins', sans-serif;
     border-radius: 5px;
+}
+
+.backbtn{
+    padding: 0.72vh 1.1vw;
 }
 
 .cards {

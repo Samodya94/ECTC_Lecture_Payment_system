@@ -150,22 +150,6 @@ const TableComponent = ({ rows, columns }) => {
     return `${hours}h : ${minutes}m`;
   }
 
-  //get batch batchCode from coverage batchCode 
-  const [batched, setBatched] = React.useState({});
-
-  React.useEffect(() => {
-    const getBatch = async () => {
-      const response = await service.get("assignbatch");
-      const batches = response.data.reduce((acc, batch) => {
-        acc[batch._id] = batch.batchCode;
-        return acc;
-      }, {});
-      setBatched(batches);
-    };
-
-    getBatch();
-  }, [rows, service]);
-
   //get batch batchCode from batched batchCode
   const [batchCodes, setBatchCodes] = React.useState({});
 
@@ -181,6 +165,52 @@ const TableComponent = ({ rows, columns }) => {
 
     getBatchCode();
   }, [rows, service]);
+
+  //update batch details function
+
+  const updatePayment = (id) => {
+    const data = {
+      status: "Not Approved",
+    };
+    console.log("Data to be sent:", data);
+
+    const response = service.put(`coverage`, id, data);
+    response
+      .then((res) => {
+        alert("Coverage Rolledback Successfully");
+        window.location.reload();
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
+
+
+  const [paySt, setPaySt] = React.useState({});
+
+  React.useEffect(() => {
+    const getRate = async () => {
+      const response = await service.get("coverage");
+      const coverages = response.data.reduce((acc, coverage) => {
+        acc[coverage._id] = coverage.paymentStatus;
+        console.log("Payment Status:", acc);
+        return acc;
+      }, {});
+      setPaySt(coverages);
+    };
+
+    getRate();
+
+    rows.forEach((row) => {
+      if (!paySt[row._id]) {
+        getRate(row._id);
+      }
+    });
+  }
+    , [rows, service, paySt]);
+
+
+
 
   return (
     <>
@@ -235,7 +265,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {batchCodes[batched[row.batchCode]]}
+                  {batchCodes[row.batchCode]}
                 </TableCell>
                 <TableCell
                   style={{
@@ -286,6 +316,22 @@ const TableComponent = ({ rows, columns }) => {
                   align="left"
                 >
                   {row.lectureCoverage}
+                </TableCell>
+                <TableCell
+                  style={{
+                    width: 140,
+                    border: "1px solid #ccc",
+                    padding: "5px 16px",
+                  }}
+                  align="center"
+                >
+                  <button className={styles.regectBtn}
+                    onClick={() => {
+                      alert("Are you sure you want to roll back?")
+                      updatePayment(row._id);
+                    }}
+                    disabled={paySt[row._id] === "Pending" ? true : false}
+                  > Roll Back </button>
                 </TableCell>
               </TableRow>
             ))}

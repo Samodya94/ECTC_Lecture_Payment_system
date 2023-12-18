@@ -8,6 +8,7 @@ import styles from "../adminSideNav.module.css";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import ReceiptIcon from "@mui/icons-material/Receipt";
 import CreditScoreIcon from "@mui/icons-material/CreditScore";
+import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 
 const FinanceNav = ({ expanded, setExpanded }) => {
   const [payReportsExpanded, setPayReportsExpanded] = useState(false);
@@ -127,6 +128,18 @@ const FinanceNav = ({ expanded, setExpanded }) => {
             </li>
           </ul>
         )}
+        <li
+          className={styles.li}
+          style={{ whiteSpace: "nowrap" }}
+          onClick={() => navigate("login-details")}
+        >
+          <span className={styles.liContainer}>
+            {/* Icon */}
+            <PersonOutlineOutlinedIcon />
+            {/* Display name when expanded */}
+            {expanded && <span className={styles.span}>View Logins</span>}
+          </span>
+        </li>
       </ul>
     </>
   );

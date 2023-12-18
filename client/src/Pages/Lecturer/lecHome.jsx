@@ -21,9 +21,11 @@ import { MarkAttendance } from "./Students/MarkAttendance";
 import { useLecAuthContext } from "../../hooks/useLecAuthContext"; 
 import { useLecLogout } from "../../hooks/useLecLogout";
 import  LectureLogin  from "./Login/LectureLogin";
-import Service from "../../utilities/httpService";
+import { UpdateAssigncoverage } from "./add_lecture_coverage/component/updateAssigncoverage";
+import Service from "../../utilities/Service";
 import { EditCoverage } from "./add_lecture_coverage/component/EditCoverage";
 import { ViewLog } from "./Viewlog/ViewLog";
+import { AddCoverages } from "./add_lecture_coverage/component/AddCoverages";
 
 
 function LecHome() {
@@ -102,11 +104,13 @@ function LecHome() {
               <Route path="/lec-login" element={!lecturer ?<LectureLogin/> : <Navigate to=""/>}/>
               <Route path="dash" element={<Dashboard/>} />
               <Route path="add_coverage" element={<AddLectureCoverage/>} />
+              <Route path="add_coverages" element={<AddCoverages/>}/>
               <Route path="edit_coverage/:lecid" element={<EditCoverage/>}/>
               <Route path="change_password" element={<ChangePassword/>}/>
               <Route path="Coverage_History" element={<Coverage_History/>}/>
               <Route path="lec_pay_history" element={<Lec_Payment_History/>}/>
               <Route path="mark_attendance" element={<MarkAttendance/>}/>
+              <Route path="update_assignid/:id" element={<UpdateAssigncoverage/>}/>
               <Route path="view_log" element={<ViewLog/>}/>
             </Routes>
           </div>

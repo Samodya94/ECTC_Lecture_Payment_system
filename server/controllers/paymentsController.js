@@ -50,7 +50,19 @@ const getPaymentPending = asyncHandler(async (req, res) => {
 
 //get all status = Approved
 const getPaymentApproved = asyncHandler(async (req, res) => {
-    const payment = await Payment.find({ status: "Approved" });
+    const payment = await Payment.find({ status: "Approved", adminStatus: "Approved" });
+    res.status(200).json(payment);
+});
+
+//get all rollback payments
+const getPaymentRollback = asyncHandler(async (req, res) => {
+    const payment = await Payment.find({ status: "Approved", adminStatus: "Not Approved" });
+    res.status(200).json(payment);
+});
+
+//get all payments adminStatus = Not Approved
+const getPaymentAdminNotApproved = asyncHandler(async (req, res) => {
+    const payment = await Payment.find({ adminStatus: "Not Approved" });
     res.status(200).json(payment);
 });
 
@@ -72,7 +84,9 @@ module.exports = {
     createPayment,
     getPaymentPending,
     getPaymentsByLecturer,
-    getPaymentApproved
+    getPaymentApproved,
+    getPaymentRollback,
+    getPaymentAdminNotApproved
 };
 
 

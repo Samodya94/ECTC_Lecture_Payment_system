@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { PendingCoverages } from "./component/pending_coverages";
 import { RejectedCoverages } from "./component/rejected_coverages";
 import { useLecAuthContext } from "../../../hooks/useLecAuthContext";
-import Service from "../../../utilities/httpService";
+import Service from "../../../utilities/Service";
+import { useNavigate } from "react-router";
 
 // import './lec.css'
 export const AddLectureCoverage = () => {
@@ -13,7 +14,6 @@ export const AddLectureCoverage = () => {
   const [stime, setStime] = useState("");
   const [etime, setEtime] = useState("");
   const [course, setCourse] = useState("");
-  const [batchid, setBatchid] = useState("");
   const [duration, setDuratuion] = useState("");
   const [date, setDate] = useState("");
   const [coverage, setCoverage] = useState("");
@@ -23,11 +23,12 @@ export const AddLectureCoverage = () => {
   const [updateremHours, setUpdateremHours] = useState(0);
   const [batches, setBatches] = useState([]);
   const [assgbatch, setAssgBatches] = useState([]);
-
+  
 
   const [refreshPendingCoverages, setRefreshPendingCoverages] = useState(false);
   const [refreshRejectedCoverages, setRefreshRejectedCoverages] = useState(false);
   const service = new Service();
+  const navigate = useNavigate() 
 
   useEffect(() => {
     getLecturer();
@@ -35,58 +36,46 @@ export const AddLectureCoverage = () => {
     calculateTimeDifference();
     getdata();
     calculateRemHours()
-  }, [lecturer, refreshPendingCoverages]);
+  }, [lecturer,refreshPendingCoverages]);
 
-  useEffect(() => {
-    getPendingCoverages();
-  }, [refreshPendingCoverages]);
+  useEffect(()=>{
+    triggerRefresh();
+  },[])
 
-  const getPendingCoverages = () => {
-    try {
 
-      const response = service.get("coverage/lecnotApproved", lecturer.id);
-      const updatedCoverages = response.data;
-      setCoverage(updatedCoverages);
-
-    } catch (error) {
-      console.error("Error fetching pending coverages:", error);
-    }
-  };
-
-  function getdata() {
+ function getdata() {
     const response = service.get("batch");
     response.then((res) => {
+      console.log(res.data);
       const batchcodee = res.data.reduce((ace, batch) => {
         ace[batch._id] = batch.batchCode;
         return ace;
+        
       }, {});
       setAssgBatches(batchcodee);
-    });
+    
+  });
   }
 
   useEffect(() => {
     getHours();
-
   }, [batchCode]);
 
   useEffect(() => {
     calculateTimeDifference();
-  },);
+    calculateRemHours()  
+  });
 
   function calculateRemHours() {
     if (seconds && duration) {
       const ms = seconds - duration;
       setUpdateremHours (ms);
     }
-    console.log(seconds);
   }
 
-
-
-  const getHours = () => {
+const getHours = () => {
     const id = batchCode;
-
-    const response = service.get(`assignbatch/assigncode`, id);
+    const response = service.get(`assignbatch/assigncode/${id}`);
     response
       .then((res) => {
         const ms = res.data.remaining_hours;
@@ -151,7 +140,9 @@ export const AddLectureCoverage = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
+    const handleSubmit = async (e) => {
+
+    navigate('../add_coverages');
     e.preventDefault();
     
     
@@ -176,15 +167,14 @@ export const AddLectureCoverage = () => {
       .then((res) => {
         console.log(res);
         alert("Coverage Added");
-
         const data = {
           remaining_hours:updateremHours
         }
-        const response1 = service.put(`assignbatch/bcode`,batchCode,data)
-        response1.then((res)=>{
-          console.log("Records Updated");
-        })
-        window.location.reload()
+        const response1 = service.put('assignbatch/bcode',batchCode,data)
+        response1.then(()=>{
+          console.log("updated");
+          navigate('../add_coverages');
+        }) 
       })
       .catch((error) => {
         alert(error.message)
@@ -194,6 +184,8 @@ export const AddLectureCoverage = () => {
 
   const triggerRefresh = () => {
     setRefreshPendingCoverages((prev) => !prev);
+    setRefreshPendingCoverages((prev) => !prev);
+    setRefreshRejectedCoverages((prev) => !prev);
   };
 
   return (
@@ -237,6 +229,8 @@ export const AddLectureCoverage = () => {
             </div>
           </div>
         </div>
+          
+        
         <div className="row m-auto">
           <div className="col-md-6 ">
             <div className="input_fields">
@@ -301,7 +295,7 @@ export const AddLectureCoverage = () => {
             <div className="input_fields my-2">
               <button className="btn btn-primary">Add Coverage</button>
             </div>
-            &nbsp; {duration && duration}
+            &nbsp;
           </div>
         </div>
       </form>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Service from "../../../../utilities/httpService";
+import Service from "../../../../utilities/Service";
 import { useLecAuthContext } from "../../../../hooks/useLecAuthContext";
 
 export const ViewApprovedLecCov = () => {
@@ -7,11 +7,10 @@ export const ViewApprovedLecCov = () => {
   const { lecturer } = useLecAuthContext();
   const service = new Service();
   const [batched, setBatched] = useState({});
-
+  
   useEffect(() => {
     getViewCoverage();
     getBatch();
-    getdata();
   }, [lecturer]);
 
   function getBatch() {
@@ -26,16 +25,7 @@ export const ViewApprovedLecCov = () => {
     });
   }
 
-  function getdata(){
-    const response = service.get("batch");
-    response.then((res)=>{
-      const batchcode = res.data.reduce((ace, batch)=>{
-        ace[batch._id] = batch.batchCode;
-        return ace;
-      },{})
-      setAssgBatches(batchcode);
-    })
-  }
+  
 
   const getViewCoverage = () => {
     if (lecturer) {
@@ -43,7 +33,6 @@ export const ViewApprovedLecCov = () => {
       const respone = service.get("coverage/approved", lecid);
       respone
         .then((res) => {
-          console.log(res.data);
           setCoverages(res.data);
         })
         .catch((error) => {
@@ -64,9 +53,9 @@ export const ViewApprovedLecCov = () => {
   
   return (
     <div className="assign_batches">
-      <h1>Pending Lectures</h1>
-      <table>
-        <thead>
+      <h1>Approved Lecture Coverages</h1>
+      <table className="table table-striped">
+        <thead className=" table-dark">
           <tr>
             <th>Course Name</th>
             <th>Batch Code</th>

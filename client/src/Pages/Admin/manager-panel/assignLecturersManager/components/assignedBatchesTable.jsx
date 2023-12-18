@@ -140,6 +140,14 @@ const TableComponent = ({ rows, columns }) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
+  function calculateDuration(duration) {
+    const hours = Math.floor(duration / 3600000);
+    const minutes = Math.floor((duration % 3600000) / 60000);
+
+    return `${hours}h : ${minutes}m`;
+  }
+
   return (
     <>
       <TableContainer
@@ -223,7 +231,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {row.hours + "h : 00m"}
+                  {calculateDuration(row.hours)}
                 </TableCell>
                 <TableCell
                   style={{
@@ -233,7 +241,7 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="left"
                 >
-                  {row.hours + "h : 00m"}
+                  {calculateDuration(row.remaining_hours)}
                 </TableCell>
                 <TableCell
                   style={{

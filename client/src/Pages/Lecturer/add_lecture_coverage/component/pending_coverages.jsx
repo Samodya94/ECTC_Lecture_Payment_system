@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import Service from "../../../../utilities/httpService";
+import Service from "../../../../utilities/Service";
 import { useLecAuthContext } from "../../../../hooks/useLecAuthContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { FaTrashCan } from "react-icons/fa6"
 import { FaEdit } from "react-icons/fa"
@@ -11,13 +11,12 @@ export const PendingCoverages = ({refresh, triggerRefresh}) => {
   const { lecturer } = useLecAuthContext();
   const service = new Service();
   const [assgbatches, setAssgBatches] = useState([]);
+  const navigate = useNavigate();
   useEffect(() => {
     getViewCoverage();
     formatDuration();
     getdata();
   }, [lecturer,refresh]);
-
-  
 
   function getdata(){
     const response = service.get("batch");
@@ -45,15 +44,9 @@ export const PendingCoverages = ({refresh, triggerRefresh}) => {
   };
 
   const removeCoverage= async (id) =>{
-   
-    const response = service.delete('coverage',id)
+
+    navigate(`../update_assignid/${id}`)
     
-    response.then(()=>{
-      alert("Record Deleted successfully")
-      triggerRefresh()
-    }).catch((err)=>{
-      console.log(err);
-    })
   }
 
   const formatDuration = (milliseconds) => {

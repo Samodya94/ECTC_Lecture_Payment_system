@@ -22,18 +22,20 @@ const tableColumns = [
 
 const tableColumns1 = [
   "Lecturer Name",
-  "Branch",
   "Course Name",
   "Batch Code",
-  "Pay Month",
-  "Pay Rate",
+  "Month",
+  "Total Hours",
+  "Payment Rate",
+  "Total Payment",
+  "Action",
 ];
 
 const AddPayments = () => {
   const [selectedMonth, setSelectedMonth] = useState("");
   const [selectedYear, setSelectedYear] = useState("");
   const [approvedCoverages, setApprovedCoverages] = useState([]);
-  const [pendingCoverages, setPendingCoverages] = useState([]);
+  const [pendingPayment, setPendingPayment] = useState([]);
   const service = useMemo(() => new Service(), []);
 
   const getApprovedCoverages = useCallback(async () => {
@@ -49,18 +51,20 @@ const AddPayments = () => {
     getApprovedCoverages();
   }, [getApprovedCoverages]);
 
-  const getPendingCoverages = useCallback(async () => {
+  const getPendingPayments = useCallback(async () => {
     try {
-      const response = await service.get("/coverage/pay/paymentpending");
-      setPendingCoverages(response.data);
+      const response = await service.get("/payment/pendingpayment");
+      setPendingPayment(response.data);
     } catch (error) {
       console.log(error);
     }
-  }, [service]);
+  }
+    , [service]);
 
   useEffect(() => {
-    getPendingCoverages();
-  }, [getPendingCoverages]);
+    getPendingPayments();
+  }, [getPendingPayments]);
+
 
 
   const handleDateChange = (event) => {
@@ -77,7 +81,7 @@ const AddPayments = () => {
     e.preventDefault();
     if (selectedMonth === "" && selectedYear === "") {
       getApprovedCoverages();
-      getPendingCoverages();
+      getPendingPayments();
     }
     else {
       const response = approvedCoverages.filter((item) => {
@@ -87,13 +91,13 @@ const AddPayments = () => {
         return month === parseInt(selectedMonth) && year === parseInt(selectedYear);
       });
       setApprovedCoverages(response);
-      const response1 = pendingCoverages.filter((item) => {
-        const date = new Date(item.date);
+      const response1 = pendingPayment.filter((item) => {
+        const date = new Date(item.month);
         const month = date.getMonth() + 1;
         const year = date.getFullYear();
         return month === parseInt(selectedMonth) && year === parseInt(selectedYear);
       });
-      setPendingCoverages(response1);
+      setPendingPayment(response1);
     }
   };
 
@@ -102,7 +106,7 @@ const AddPayments = () => {
     setSelectedMonth("");
     setSelectedYear("");
     getApprovedCoverages();
-    getPendingCoverages();
+    getPendingPayments();
   };
 
   return (
@@ -129,7 +133,7 @@ const AddPayments = () => {
           {selectedYear ? ` - ${selectedYear} / ${selectedMonth}` : ""}
         </p>
         <div>
-          <PendingTableComponent columns={tableColumns1} rows={pendingCoverages} />
+          <PendingTableComponent columns={tableColumns1} rows={pendingPayment} />
         </div>
       </div>
     </>

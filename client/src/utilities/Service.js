@@ -1,6 +1,7 @@
 import axios from "axios";
-import Cookies from "js-cookie";
-const token = Cookies.get('token');
+
+const lecturer = JSON.parse(localStorage.getItem('lecturer'))
+const token = lecturer.token;
 
 const headers = {
     Accept: "application/json",
@@ -9,7 +10,7 @@ const headers = {
 };
 
 const axiosInstance = axios.create({
-    baseURL: "http://localhost:8000/api/",
+    baseURL: "http://localhost:8000/api/LecturerRoute",
     headers,
 });
 

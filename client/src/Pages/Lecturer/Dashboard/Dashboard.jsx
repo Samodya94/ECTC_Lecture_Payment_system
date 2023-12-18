@@ -6,7 +6,7 @@ import { ViewApprovedLecCov } from "./Components/ViewApprovedLecCov";
 import { PendingLecture } from "./Components/PendingCoverage";
 
 import { useLecAuthContext } from "../../../hooks/useLecAuthContext";
-import Service from "../../../utilities/httpService";
+import Service from "../../../utilities/Service";
 
 export const Dashboard = () => {
   const [details, setDetails] = useState();
@@ -37,7 +37,6 @@ export const Dashboard = () => {
       const response = service.get(`assignbatch/bylecture`, id);
       response
         .then((res) => {
-          console.log(res.data);
           setBatches(res.data);
           setNoofBatches(res.data.length)
         })
@@ -53,7 +52,6 @@ export const Dashboard = () => {
       const respone = service.get("coverage/notapprovedbymonth", lecid);
       respone
         .then((res) => {
-          console.log(res.data);
           setPenCoverage(res.data);
           setPendingCove(res.data.length)
         })
@@ -69,7 +67,6 @@ export const Dashboard = () => {
       const respone = service.get("coverage/approved", lecid);
       respone
         .then((res) => {
-          console.log(res.data);
           setApprovedCove(res.data.length)
         })
         .catch((error) => {

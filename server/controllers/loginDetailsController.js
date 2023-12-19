@@ -28,8 +28,18 @@ const getLogByUser = asyncHandler(async (req, res) => {
     res.status(200).json(loginDetail)
 })
 
+const getRecentLogByUser = asyncHandler(async (req, res) => {
+    const username = req.params.username;
+    const loginDetail = await LoginDetails.find({ username: username })
+        .sort({ createdAt: -1 })
+        .limit(10);
+
+    res.status(200).json(loginDetail);
+});
+
 module.exports = {
     createLog,
     getLoginDetails,
-    getLogByUser
+    getLogByUser,
+    getRecentLogByUser
 }

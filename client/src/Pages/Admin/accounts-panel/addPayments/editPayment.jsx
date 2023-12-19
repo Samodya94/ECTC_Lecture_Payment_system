@@ -128,6 +128,7 @@ const EditPayment = () => {
         document: document,
         paymentDate: paidDate,
         status: "Not Approved",
+        adminStatus: "Not Approved",
     }
 
     //create new payment function

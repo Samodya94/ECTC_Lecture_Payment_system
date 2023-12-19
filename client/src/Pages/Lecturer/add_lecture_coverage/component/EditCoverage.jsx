@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLecAuthContext } from "../../../../hooks/useLecAuthContext";
-import Service from "../../../../utilities/Service";
+import Service from "../../../../utilities/httpService";
 import { useParams } from "react-router";
 
 export const EditCoverage = () => {

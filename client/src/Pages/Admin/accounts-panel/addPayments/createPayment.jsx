@@ -130,6 +130,7 @@ const CreatePayment = () => {
         document: document,
         paymentDate: new Date(),
         status: "Not Approved",
+        adminStatus: "Not Approved",
     }
 
     //create new payment function

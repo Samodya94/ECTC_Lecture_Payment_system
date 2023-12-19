@@ -3,6 +3,17 @@ import { React, useState, useCallback, useEffect, useMemo } from "react";
 import Service from "../../../utilities/httpService";
 import Cookies from "js-cookie";
 
+import TableComponent from "./components/loginDetailsTable";
+
+import styles from "./loginDetails.module.css";
+
+const tableColumns = [
+    "IP Address",
+    "Location",
+    "Date",
+    "Time",
+];
+
 const LoginDetails = () => {
     const [loginDetails, setLoginDetails] = useState([]);
 
@@ -11,7 +22,7 @@ const LoginDetails = () => {
     const service = useMemo(() => new Service(), []);
 
     const getLoginDetails = useCallback(() => {
-        const response = service.get(`loginDetails/${username}`);
+        const response = service.get(`loginDetails/recent/${username}`);
         response
             .then((res) => {
                 setLoginDetails(res.data);
@@ -36,37 +47,15 @@ const LoginDetails = () => {
 
 
     return (
-
-        <div className="container">
-            <div className="row">
-                <div className="col-12">
-                    <h1 className="text-center">Login Details</h1>
-                    <br />
-                    <table className="table table-hover">
-                        <thead className="thead-dark">
-                            <tr>
-                                <th scope="col">IP Address</th>
-                                <th scope="col">Location</th>
-                                <th scope="col">Date</th>
-                                <th scope="col">Time</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {loginDetails.map((loginDetail) => (
-                                <tr key={loginDetail._id}>
-                                    <td>{loginDetail.ipaddress}</td>
-                                    <td>{loginDetail.country + ' ,' + loginDetail.city}</td>
-                                    <td>{loginDetail.createdAt.slice(0, 10)}</td>
-                                    <td>{addHours(loginDetail.createdAt)}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+        <>
+            <div className={styles.container}>
+                <p className={styles.heading}>Recent Login Details</p>
+                <div>
+                    <TableComponent columns={tableColumns} rows={loginDetails} />
                 </div>
             </div>
-        </div>
-    )
+        </>
+    );
 };
 
 export default LoginDetails;
-

@@ -1,16 +1,15 @@
 import React from "react";
 
 // Styles
-import styles from "./styles/inputField.module.css";
+import styles from "./styles/passwordFiled.module.css";
 
-const InputFieldDis = ({ lable, placeholder, setValue, style, value }) => {
+const InputPasswordField = ({ lable, placeholder, setValue, style, value }) => {
     return (
         <>
             <div className={styles.container}>
                 <label className={styles.lable}>{lable}:</label>
                 <input
-                    type="text"
-                    disabled
+                    type="password"
                     className={styles.inputField}
                     placeholder={placeholder}
                     onChange={(e) => setValue(e.target.value)}
@@ -22,4 +21,4 @@ const InputFieldDis = ({ lable, placeholder, setValue, style, value }) => {
     );
 };
 
-export default InputFieldDis;
+export default InputPasswordField;

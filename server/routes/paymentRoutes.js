@@ -8,7 +8,8 @@ const { getPayments,
     getPaymentsByLecturer,
     getPaymentApproved,
     getPaymentRollback,
-    getPaymentAdminNotApproved } = require('../controllers/paymentsController');
+    getPaymentAdminNotApproved,
+    exportPayments } = require('../controllers/paymentsController');
 
 router.post('/', createPayment).get('/', getPayments);
 router.put('/:id', putPayment);
@@ -17,7 +18,8 @@ router.get('/approvedpayment', getPaymentApproved);
 router.get('/rollbackpayment', getPaymentRollback);
 router.get('/admin/notapproved', getPaymentAdminNotApproved);
 router.get('/:id', getPaymentById);
-router.get('/pay/:lecid', getPaymentsByLecturer)
+router.get('/pay/:lecid', getPaymentsByLecturer);
+router.get('/report/export', exportPayments);
 
 
 

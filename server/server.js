@@ -17,7 +17,7 @@ app.use(cors());
 //Admin Dashborad routes
 app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/branch', require('./routes/branchRoutes'));
-app.use('/api/batch',lecturerUser, require('./routes/batchRoutes'));
+app.use('/api/batch', require('./routes/batchRoutes'));
 app.use('/api/course', require('./routes/courseRoutes'));
 app.use('/api/lecturer', require('./routes/lecturerRoutes'));
 app.use('/api/coverage', require('./routes/approveLectureCoverageRoutes'));
@@ -33,7 +33,6 @@ app.use('/api/LecturerRoute/assignbatch', lecturerUser, require('./routes/lectur
 app.use('/api/LecturerRoute/batch',lecturerUser, require('./routes/lecturerRoutes/batchRoutes'));
 app.use('/api/LectRoute/login',require('./routes/lecturerRoutes/lectLoginRoute'))
 app.use('/api/LectRoute/login',require('./routes/lecturerRoutes/lectLoginRoute'))
-
 
 app.use(errorHandler);
 

@@ -1,5 +1,9 @@
 const asyncHandler = require('express-async-handler');
 const Payment = require('../model/Payments')
+const Batch = require('../model/batchModel')
+const Lecturer = require('../model/lecturerModel')
+const excelJS = require("exceljs");
+
 
 //get all
 const getPayments = asyncHandler(async (req, res) => {
@@ -50,7 +54,7 @@ const getPaymentPending = asyncHandler(async (req, res) => {
 
 //get all status = Approved
 const getPaymentApproved = asyncHandler(async (req, res) => {
-    const payment = await Payment.find({ status: "Approved", adminStatus: "Approved" });
+    const payment = await Payment.find({ status: "Approved" });
     res.status(200).json(payment);
 });
 
@@ -75,7 +79,84 @@ const getPaymentsByLecturer = asyncHandler(async (req, res) => {
     })
 
     res.status(200).json(payment)
-})
+});
+
+const exportPayments = asyncHandler(async (req, res) => {
+    const { lecturerId, batchcode, month } = req.query;
+
+    // Build the filter object based on provided parameters
+    const filter = {};
+    if (lecturerId) filter.lecturerId = lecturerId;
+    if (batchcode) filter.batchcode = batchcode;
+    if (month) filter.month = month;
+
+    // Use the filter object in the Payment.find() query
+    const payments = await Payment.find(filter);
+    const workbook = new excelJS.Workbook();
+
+    function calculateDuration(duration) {
+        const hours = Math.floor(duration / 3600000);
+        const minutes = Math.floor((duration % 3600000) / 60000);
+
+        return `${hours}h : ${minutes}m`;
+    }
+
+    const getLecturer = async (_id) => {
+        const lecturer = await Lecturer.findById(_id);
+        return lecturer.firstName + " " + lecturer.lastName;
+    };
+
+    const getBatch = async (_id) => {
+        const batch = await Batch.findById(_id);
+        return batch.batchCode;
+    };
+
+    const batchPromises = payments.map((payment) => getBatch(payment.batchcode));
+    const batchCodes = await Promise.all(batchPromises);
+
+    const lecturerName = await getLecturer(lecturerId);
+
+    const worksheet = workbook.addWorksheet(`${lecturerName}`);
+
+    worksheet.columns = [
+        { header: "Course Name", key: "coursename", width: 15 },
+        { header: "Batch Code", key: "batchcode", width: 15 },
+        { header: "Month", key: "month", width: 15 },
+        { header: "Total Hours", key: "totalhours", width: 15 },
+        { header: "Payment Rate", key: "paymentrate", width: 15 },
+        { header: "Paid Amount", key: "paidamount", width: 15 },
+        { header: "Payment Date", key: "paymentDate", width: 15 },
+    ];
+
+    payments.forEach((payment, index) => {
+        const batchname = batchCodes[index];
+        worksheet.addRow(
+            {
+                coursename: payment.coursename,
+                batchcode: batchname,
+                month: payment.month,
+                totalhours: calculateDuration(payment.totalhours),
+                paymentrate: payment.paymentrate,
+                paidamount: payment.paidamount,
+                paymentDate: payment.paymentDate,
+            },
+            "n"
+        );
+    });
+
+    const buffer = await workbook.xlsx.writeBuffer();
+    res.send(buffer);
+    const fileType =
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+    const fileExtension = ".xlsx";
+    const fileName = "Payments";
+    res.setHeader(
+        "Content-Disposition",
+        "attachment; filename=" + fileName + fileExtension
+    );
+    res.type(fileType);
+
+});
 
 module.exports = {
     getPayments,
@@ -86,7 +167,8 @@ module.exports = {
     getPaymentsByLecturer,
     getPaymentApproved,
     getPaymentRollback,
-    getPaymentAdminNotApproved
+    getPaymentAdminNotApproved,
+    exportPayments
 };
 
 

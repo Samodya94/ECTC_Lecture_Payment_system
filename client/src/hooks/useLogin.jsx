@@ -47,8 +47,6 @@ export const useLogin = () => {
 
                 };
 
-                console.log(newLog);
-
                 const response2 = service.post('loginDetails/', newLog);
             }
             getdata();

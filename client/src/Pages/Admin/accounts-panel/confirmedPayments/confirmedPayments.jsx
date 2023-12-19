@@ -1,4 +1,6 @@
-import { React, useState } from "react";
+import { React, useState, useEffect, useMemo } from "react";
+import axios from 'axios';
+import Service from "../../../../utilities/httpService";
 
 // Styles
 import styles from "./confirmedPayments.module.css";
@@ -9,64 +11,122 @@ import PrimaryButton from "../../components/primaryButton";
 import MonthSelector from "../../components/monthSelectorField";
 
 const ConfirmedPayments = () => {
-  const [lecturerName, setLecturerName] = useState("");
+  const [lecturerId, setLecturerId] = useState("");
   const [batch, setBatch] = useState("");
   const [selectedMonth, setSelectedMonth] = useState("");
-  const [selectedYear, setSelectedYear] = useState("");
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const service = useMemo(() => new Service(), []);
+
+  //get lecturer name list from lecturer collection
+  useEffect(() => {
+    const respone = service.get(`lecturer/`)
+    respone.then((res) => {
+      setLecturerList(res.data);
+    }).catch((err) => {
+      alert(err);
+    })
+  }, [service]);
+
+  const [lecturerList, setLecturerList] = useState([]);
+
+  const lecturerListAll = lecturerList.map((item) => {
+    return { _id: item._id, name: item.firstName + " " + item.lastName };
+  });
+
+
+  useEffect(() => {
+    const respone = service.get(`batch/`)
+    respone.then((res) => {
+      setBatchList(res.data);
+    }).catch((err) => {
+      alert(err);
+    })
+  }, [service]);
+
+  const [batchList, setBatchList] = useState([]);
+
+  const batchListAll = batchList.map((item) => {
+    return { _id: item._id, name: item.batchCode };
+  });
 
   const handleDateChange = (event) => {
-    const selectedValue = event.target.value;
-
-    // Extracting month and year from the selected date
-    const [year, month] = selectedValue.split("-");
-
-    setSelectedMonth(month);
-    setSelectedYear(year);
+    setSelectedMonth(event.target.value);
   };
 
   const handleLecturerChange = (e) => {
-    setLecturerName(e.target.value);
+    setLecturerId(e.target.value);
   };
 
   const handleBatchChange = (e) => {
     setBatch(e.target.value);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form Submitted, and values are:");
-    console.log(lecturerName, batch, selectedMonth, selectedYear);
-    alert("Check console for values");
+  async function getLecturerName(lecturerid) {
+    try {
+      let lecturerName = "";
+      lecturerList.forEach((item) => {
+        if (item._id === lecturerid) {
+          lecturerName = item.firstName + " " + item.lastName;
+        }
+      });
+      return lecturerName;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  const handleDownload = async (e) => {
+    e.preventDefault(); // Prevent the default form submission behavior
+
+    const lname = await getLecturerName(lecturerId);
+
+    try {
+      setIsLoading(true);
+      const response = await axios.get('http://localhost:8000/api/payment/report/export', {
+        responseType: 'blob',
+        params: {
+          lecturerId: lecturerId,
+          batchcode: batch,
+          month: selectedMonth,
+        },
+      });
+
+      const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = `${lname}_Payment.xlsx`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+    } catch (error) {
+      console.error('Error downloading file:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const lecturerList = [
-    { _id: "1", name: "Asha Madushani" },
-    { _id: "2", name: "Dammika Priyasad" },
-    { _id: "3", name: "Charith Athulgala" },
-  ];
 
-  const batchList = [
-    { _id: "1", name: "CPITA/K/79 - Sat (Anura)" },
-    { _id: "2", name: "CPITA/K/79 - Sat (Anura)" },
-    { _id: "3", name: "CPITA/K/79 - Sat (Anura)" },
-  ];
 
   return (
     <>
       <div className={styles.container}>
         <div className={styles.subContainer}>
           <p className={styles.heading}>Confirmed Lecturer Payments</p>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleDownload}>
             <DropdownField
               lable={"Lecturer"}
-              list={lecturerList}
+              list={lecturerListAll}
               handleOptionChange={handleLecturerChange}
-              selectedBranch={lecturerName}
+              selectedBranch={lecturerId}
               style={{ width: "318px" }}
             />
             <DropdownField
               lable={"Batch"}
-              list={batchList}
+              list={batchListAll}
               handleOptionChange={handleBatchChange}
               selectedBranch={batch}
               style={{ width: "318px" }}
@@ -88,6 +148,7 @@ const ConfirmedPayments = () => {
                   marginTop: "20px",
                 }}
               />
+              {isLoading ? 'Downloading...' : ''}
             </div>
           </form>
         </div>

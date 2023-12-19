@@ -6,7 +6,7 @@ import { ViewApprovedLecCov } from "./Components/ViewApprovedLecCov";
 import { PendingLecture } from "./Components/PendingCoverage";
 
 import { useLecAuthContext } from "../../../hooks/useLecAuthContext";
-import Service from "../../../utilities/Service";
+import Service from "../../../utilities/httpService";
 
 export const Dashboard = () => {
   const [details, setDetails] = useState();

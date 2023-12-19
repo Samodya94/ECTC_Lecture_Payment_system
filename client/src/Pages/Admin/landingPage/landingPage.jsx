@@ -10,6 +10,7 @@ import styles from "./landingPage.module.css";
 import Header from "../header/header";
 import AdminSideNav from "../sidenav/adminSideNav";
 import AdminDashboard from "../dashboard/adminDashboard";
+import Profile from "../profile/profile";
 
 // Common components for Admin & Manager
 import ManageCourses from "../admin-panel/manageCoursesAdmin/manageCourses";
@@ -22,6 +23,7 @@ import LoginDetails from "../login-details/LoginDetails";
 // User Level == admin components
 import ApprovePayments from "../admin-panel/approvePaymentsAdmin/approvePayments";
 import ManageUsers from "../admin-panel/manageUsersAdmin/manageUsers";
+import AllLoginDetails from "../admin-panel/viewLoginsAdmin/LoginDetails";
 
 // User Level == manager components
 import ApproveLectures from "../manager-panel/approveLecturesManager/approveLectures";
@@ -37,6 +39,7 @@ import AddPayments from "../accounts-panel/addPayments/addPayments";
 import FinalizedPayments from "../accounts-panel/finalizedPayments/finalizedPayments";
 import CreatePayment from "../accounts-panel/addPayments/createPayment";
 import EditPayment from "../accounts-panel/addPayments/editPayment";
+import ApprovedLecCoverages from "../accounts-panel/approvedLecCoverages/approvedLecCoverages";
 
 // User Level == finance components
 import ApprovePaymentsFinance from "../finance-panel/approvePayments/approvePayments";
@@ -73,6 +76,7 @@ const LandingPage = () => {
           {/* Common Routes */}
           <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="login-details" element={<LoginDetails />} />
+          <Route path="profile" element={<Profile />} />
 
           {/* Admin Routes */}
           <Route path="approve-payments" element={<ApprovePayments />} />
@@ -83,6 +87,8 @@ const LandingPage = () => {
           <Route path="manage-batches/update/:id" element={<UpdateBatches />} />
           <Route path="manage-branches" element={<AddBranches />} />
           <Route path="manage-users" element={<ManageUsers />} />
+          <Route path="all-login-details" element={<AllLoginDetails />} />
+
 
           {/* Manager Routes */}
           <Route path="approve-lectures" element={<ApproveLectures />} />
@@ -96,6 +102,7 @@ const LandingPage = () => {
           <Route path="add-payments/edit-payment/:id" element={<EditPayment />} />
           <Route path="confirmed-payments" element={<ConfirmedPayments />} />
           <Route path="finalized-payments" element={<FinalizedPayments />} />
+          <Route path="approved-lecture-coverages" element={<ApprovedLecCoverages />} />
 
           {/* Finance Routes */}
           <Route path="approve-payments-finance" element={<ApprovePaymentsFinance />} />

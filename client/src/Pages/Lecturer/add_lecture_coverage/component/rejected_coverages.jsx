@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Service from "../../../../utilities/Service";
+import Service from "../../../../utilities/httpService";
 import { useLecAuthContext } from "../../../../hooks/useLecAuthContext";
 import { Link, useNavigate } from "react-router-dom";
 

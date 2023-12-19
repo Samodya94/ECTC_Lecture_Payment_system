@@ -1,0 +1,32 @@
+@import url("../../../constants/fonts.css");
+
+.container {
+    font-family: var(--heading);
+    padding: 1.5rem 1rem;
+}
+
+.heading {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #293e56;
+    margin: 0;
+    margin-bottom: 1.5rem;
+}
+
+.searchContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.button {
+    height: fit-content;
+    background-color: #5a84ae;
+    border: none;
+    padding: 8px 20px;
+    margin-left: 20px;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+}

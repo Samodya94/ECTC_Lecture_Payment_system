@@ -22,7 +22,7 @@ import { useLecAuthContext } from "../../hooks/useLecAuthContext";
 import { useLecLogout } from "../../hooks/useLecLogout";
 import  LectureLogin  from "./Login/LectureLogin";
 import { UpdateAssigncoverage } from "./add_lecture_coverage/component/updateAssigncoverage";
-import Service from "../../utilities/Service";
+import Service from "../../utilities/httpService";
 import { EditCoverage } from "./add_lecture_coverage/component/EditCoverage";
 import { ViewLog } from "./Viewlog/ViewLog";
 import { AddCoverages } from "./add_lecture_coverage/component/AddCoverages";

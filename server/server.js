@@ -17,7 +17,7 @@ app.use(cors());
 //Admin Dashborad routes
 app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/branch', require('./routes/branchRoutes'));
-app.use('/api/batch',lecturerUser, require('./routes/batchRoutes'));
+app.use('/api/batch', require('./routes/batchRoutes'));
 app.use('/api/course', require('./routes/courseRoutes'));
 app.use('/api/lecturer', require('./routes/lecturerRoutes'));
 app.use('/api/coverage', require('./routes/approveLectureCoverageRoutes'));
@@ -27,11 +27,10 @@ app.use('/api/lecLog', require('./routes/leclogRoutes'));
 app.use('/api/loginDetails', require('./routes/loginDetailsRoutes'));
 
 //Lecturer Routes
-app.use('/api/LecturerRoute/coverage', lecturerUser, require('./routes/lecturerRoutes/approveLectureCoverageRoutes'));
-app.use('/api/LecturerRoute/lecturer', lecturerUser, require('./routes/lecturerRoutes/lecturerRoutes'));
-app.use('/api/LecturerRoute/assignbatch', lecturerUser, require('./routes/lecturerRoutes/AssignBatchesRoutes'));
-app.use('/api/LecturerRoute/batch',lecturerUser, require('./routes/lecturerRoutes/batchRoutes'));
-app.use('/api/LectRoute/login',require('./routes/lecturerRoutes/lectLoginRoute'))
+app.use('/api/Lecturer/course', lecturerUser, require('./routes/courseRoutes'));
+app.use('/api/lecturer', lecturerUser, require('./routes/lecturerRoutes'));
+app.use('/api/coverage', lecturerUser, require('./routes/approveLectureCoverageRoutes'));
+app.use('/api/assignbatch', lecturerUser, require('./routes/AssignBatchesRoutes'));
 
 app.use(errorHandler);
 

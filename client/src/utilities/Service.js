@@ -1,7 +1,12 @@
 import axios from "axios";
 
 const lecturer = JSON.parse(localStorage.getItem('lecturer'))
-const token = lecturer.token;
+let token = "";
+
+if(lecturer){
+    token = lecturer.token;
+}
+
 
 const headers = {
     Accept: "application/json",

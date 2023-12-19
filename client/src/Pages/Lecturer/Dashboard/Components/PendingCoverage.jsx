@@ -18,7 +18,7 @@ export const PendingLecture = () => {
     getViewCoverage();
     getBatch();
     getdata();
-  }, [lecturer]);
+  },[]);
 
   function getdata(){
     const response = service.get("batch");

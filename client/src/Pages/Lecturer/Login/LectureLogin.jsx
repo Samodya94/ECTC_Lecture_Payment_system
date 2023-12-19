@@ -4,7 +4,7 @@ import logo from '../../../assets/logo.jpg'
 import { useNavigate } from "react-router";
 import { useLecLogin } from "../../../hooks/useLecLogin";
 import axios from "axios";
-import Service from "../../../utilities/httpService";
+import Service from "../../../utilities/Service";
 import { Link } from "react-router-dom";
 
 const LectureLogin =()=>{
@@ -22,8 +22,6 @@ const LectureLogin =()=>{
         e.preventDefault()
     
         await login(username,password)
-
-
         const data = {
             lecUsername:username,
             ipaddress:ip,

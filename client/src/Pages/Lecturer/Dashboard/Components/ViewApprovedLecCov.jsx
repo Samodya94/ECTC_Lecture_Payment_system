@@ -11,7 +11,7 @@ export const ViewApprovedLecCov = () => {
   useEffect(() => {
     getViewCoverage();
     getBatch();
-  }, [lecturer]);
+  },[]);
 
   function getBatch() {
     const response = service.get("batch");

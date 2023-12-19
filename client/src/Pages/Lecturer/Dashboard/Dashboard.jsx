@@ -26,9 +26,7 @@ export const Dashboard = () => {
     getViewCoverage();
     getApprovedCoverage();
     
-  }, [lecturer]);
-
-  
+  },[]);
 
   const getAssignedBatches = (e) => {
     if (lecturer) {

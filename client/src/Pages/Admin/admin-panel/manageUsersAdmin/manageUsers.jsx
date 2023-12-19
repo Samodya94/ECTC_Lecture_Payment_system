@@ -27,7 +27,7 @@ const ManageUsers = () => {
   const [email, setEmail] = useState("");
   const [userLevel, setUserLevel] = useState("");
   const [username, setUsername] = useState("");
-  
+
   //const [profileImage, setProfileImage] = useState(null);
 
   const [search, setSearch] = useState("");
@@ -51,7 +51,7 @@ const ManageUsers = () => {
     return { _id: item.branchName, name: item.branchName };
   });
 
-  
+
   const userLevels = [
     { _id: "Admin", name: "Admin" },
     { _id: "Manager", name: "Manager" },
@@ -97,15 +97,6 @@ const ManageUsers = () => {
     setUserLevel(e.target.value);
   };
 
-  // End
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form Submitted, and values are:");
-    console.log(fullName, email, branch, username, userLevel);
-    alert("Check console for values");
-  };
-
   //new user 
   const newUser = {
     fullname: fullName,
@@ -134,7 +125,7 @@ const ManageUsers = () => {
           <p className={styles.heading}>Manage Users</p>
           <form onSubmit={createUser}>
             <div className={styles.formContainer}>
-             
+
               <div>
                 <div className={styles.inputContainer}>
                   <TwoRowInput

@@ -35,6 +35,8 @@ function LecHome() {
   
   const { lecturer } = useLecAuthContext();
 
+
+
   function toggleMenu() {
     if (toggle === "show") {
       setToggle("hide");
@@ -48,7 +50,7 @@ function LecHome() {
   },[])
 
   const getLecturer = () =>{
-    if(lecturer){
+    
       const id = lecturer.id
     const response = service.get(`lecturer`,id)
 
@@ -58,7 +60,7 @@ function LecHome() {
       }).catch((error) =>{
         console.log(error)
       })
-    }
+   
   }
 
   function handleLogout(e){

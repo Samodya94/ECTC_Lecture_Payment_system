@@ -17,7 +17,7 @@ export const ViewAssignedLecturers = () => {
     getLecturer();
     getAssignedBatches();
     getBatch();
-  }, [lecturer]);
+  },[]);
 
   function getBatch() {
     const response = service.get("batch");

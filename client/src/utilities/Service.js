@@ -15,7 +15,7 @@ const headers = {
 };
 
 const axiosInstance = axios.create({
-    baseURL: "http://localhost:8000/api/LecturerRoute",
+    baseURL: "http://4.247.171.89:4000/api/LecturerRoute",
     headers,
 });
 

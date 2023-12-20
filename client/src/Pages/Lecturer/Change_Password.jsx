@@ -23,7 +23,7 @@ export const ChangePassword = () => {
   
       try {
         const lecid = lecturer.id
-        const response = await axios.post('http://localhost:8000/api/lecturer/change-password', { oldPassword, newPassword, lecid });
+        const response = await axios.post('http://4.247.171.89:4000/apinpm/lecturer/change-password', { oldPassword, newPassword, lecid });
         setMsg("Password changed successfully")
         console.log(response.data); // Handle success
       } catch (err) {

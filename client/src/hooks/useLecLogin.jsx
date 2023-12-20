@@ -11,7 +11,7 @@ export const useLecLogin = () => {
         setIsLoading(true)
         setError(null)
 
-        const response = await fetch('http://localhost:8000/api/lecturer/login',{
+        const response = await fetch('http://4.247.171.89:4000/api/lecturer/login',{
             method: 'POST',
             headers: { 'Content-Type': 'application/json'},
             body: JSON.stringify({username, password})

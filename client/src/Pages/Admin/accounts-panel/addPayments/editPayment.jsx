@@ -12,6 +12,7 @@ import InputField from "../../components/inputField";
 import PrimaryButton from "../../components/primaryButton";
 import InputFieldDis from "../../components/inputFieldDis";
 import InputNumField from "../../components/inputNumField";
+import InputFieldDate from "../../components/inputFieldDate";
 
 const tableColumns = [
     "Course Name",
@@ -204,7 +205,7 @@ const EditPayment = () => {
                             style={{ width: "300px" }}
                         />
 
-                        <InputField
+                        <InputFieldDate
                             lable={"Payment Date"}
                             placeholder={"Enter Payment Date"}
                             value={paidDate.slice(0, 10)}

@@ -127,6 +127,10 @@ const ManageBatches = () => {
   //create new batch function
   function createBatch(e) {
     e.preventDefault();
+    if (batchCode === "" || course === "" || branch === "" || startDate === "" || endDate === "" || batchState === "") {
+      alert("Please fill all the fields");
+      return;
+    }
     const response = service.post(`batch/`, newBatch);
     response.then((res) => {
       alert("New Batch Added");

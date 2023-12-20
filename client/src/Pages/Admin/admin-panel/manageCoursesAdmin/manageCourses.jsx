@@ -61,6 +61,10 @@ const ManageCourses = () => {
   //create new course function
   function createCourse(e) {
     e.preventDefault();
+    if (courseName === "" || courseFee === "" || courseDuration === "") {
+      alert("Please fill all the fields");
+      return;
+    }
     const response = service.post(`course/`, newCourse);
     response.then((res) => {
       alert("New Course Added");

@@ -12,6 +12,7 @@ import InputField from "../../components/inputField";
 import PrimaryButton from "../../components/primaryButton";
 import InputFieldDis from "../../components/inputFieldDis";
 import InputNumField from "../../components/inputNumField";
+import InputFieldDate from "../../components/inputFieldDate";
 
 const tableColumns = [
     "Course Name",
@@ -38,6 +39,7 @@ const CreatePayment = () => {
     const [paymentAmount, setPaymentAmount] = useState(0);
     const [document, setDocument] = useState("");
     const [paymentStatus, setPaymentStatus] = useState("");
+    const [paymentDate, setPaymentDate] = useState("");
 
     const [initialDataLoaded, setInitialDataLoaded] = useState(false);
 
@@ -128,7 +130,7 @@ const CreatePayment = () => {
         paymentrate: paymentData.rate,
         paidamount: paymentAmount,
         document: document,
-        paymentDate: new Date(),
+        paymentDate: paymentDate,
         status: "Not Approved",
         adminStatus: "Not Approved",
     }
@@ -136,6 +138,10 @@ const CreatePayment = () => {
     //create new payment function
     function createPayment(e) {
         e.preventDefault();
+        if (paymentAmount === 0) {
+            alert("Please fill all the fields");
+            return;
+        }
         const response = service.post(`payment/`, newPayment);
         response.then((res) => {
             alert("New Payment Added");
@@ -219,16 +225,14 @@ const CreatePayment = () => {
                         <InputField
                             lable={"Document"}
                             placeholder={"Enter Document"}
-                            value={''}
                             setValue={setDocument}
                             style={{ width: "300px" }}
                         />
 
-                        <InputField
+                        <InputFieldDate
                             lable={"Payment Date"}
                             placeholder={"Enter Payment Date"}
-                            value={''}
-                            setValue={''}
+                            setValue={setPaymentDate}
                             style={{ width: "300px" }}
                         />
 

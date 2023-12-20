@@ -100,6 +100,10 @@ const ManageLecturers = () => {
   //create new lecturer function
   function createLecturer(e) {
     e.preventDefault();
+    if (nic === "" || username === "" || firstName === "" || lastName === "" || email === "" || phone === "" || branch === "") {
+      alert("Please fill all the fields");
+      return;
+    }
     const response = service.post(`lecturer/`, newLecturer);
     response.then((res) => {
       alert("New Lecturer Added");

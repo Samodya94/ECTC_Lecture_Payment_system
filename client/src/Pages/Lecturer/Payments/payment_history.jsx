@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Service from "../../../utilities/Service";
 import { useLecAuthContext } from "../../../hooks/useLecAuthContext";
 
@@ -9,6 +9,10 @@ export const Lec_Payment_History = () => {
   const [year, setYear] = useState('');
   const { lecturer } = useLecAuthContext()
   const service = new Service();
+
+  useEffect(()=>{
+    console.log(payments);
+  })
 
   const getpayment = async (e) =>{
 
@@ -23,12 +27,12 @@ export const Lec_Payment_History = () => {
       const lecid = lecturer.id
        
       console.log(newMonth);
-      const response = service.get(`payment/approvedPaymentsByLec/${lecid}/${newMonth}/${selectedYear}`)
+      const response = service.get(`payment/lecpayMonth/${lecid}/${newMonth}/${selectedYear}`)
         response.then((res)=>{
           console.log(res.data);
-          setPayments(res.data)
+          setPayments(res.data);
         }).catch((err)=>{
-          console.log(err)
+          console.log(err);
         })
        
     }
@@ -76,9 +80,20 @@ export const Lec_Payment_History = () => {
               </tr>
             </thead>
             <tbody>
-              
-            </tbody>
-          </table>
+      {payments.map((payment) => (
+        <tr key={payment._id}>
+          <td>{payment.coursename}</td>
+          <td>{payment.batchcode}</td>
+          <td>{payment.month}</td>
+          <td>{payment.totalhours}</td>
+          <td>{payment.paymentrate}</td>
+          <td>{payment.paidamount}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+  {payments.length === 0 && <p>No payment data available</p>}
+      
         </div>
       </div>
     );

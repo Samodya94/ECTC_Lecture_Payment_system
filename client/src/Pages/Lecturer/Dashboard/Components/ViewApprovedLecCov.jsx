@@ -25,8 +25,6 @@ export const ViewApprovedLecCov = () => {
     });
   }
 
-  
-
   const getViewCoverage = () => {
     if (lecturer) {
       const lecid = lecturer.id;
@@ -49,7 +47,6 @@ export const ViewApprovedLecCov = () => {
     const minutes = Math.floor((milliseconds % (60 * 60 * 1000)) / (60 * 1000));
     return `${hours} hr ${minutes} min`;
   };
-
   
   return (
     <div className="assign_batches">

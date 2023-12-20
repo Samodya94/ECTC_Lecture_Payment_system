@@ -5,14 +5,26 @@ import { useLecAuthContext } from "../../../hooks/useLecAuthContext";
 export const Lec_Payment_History = () => {
 
   const [payments, setPayments] = useState([])
+  const [assgbatches, setAssgBatches] = useState([]);
   const [month,setMonth] = useState('');
   const [year, setYear] = useState('');
   const { lecturer } = useLecAuthContext()
   const service = new Service();
 
   useEffect(()=>{
-    console.log(payments);
-  })
+    getdata();
+  },[payments])
+
+  function getdata(){
+    const response = service.get("batch");
+    response.then((res)=>{
+      const batchcode = res.data.reduce((ace, batch)=>{
+        ace[batch._id] = batch.batchCode;
+        return ace;
+      },{})
+      setAssgBatches(batchcode);
+    })
+  }
 
   const getpayment = async (e) =>{
 
@@ -83,9 +95,9 @@ export const Lec_Payment_History = () => {
       {payments.map((payment) => (
         <tr key={payment._id}>
           <td>{payment.coursename}</td>
-          <td>{payment.batchcode}</td>
+          <td>{assgbatches[payment.batchcode]}</td>
           <td>{payment.month}</td>
-          <td>{payment.totalhours}</td>
+          <td>{formatDuration(payment.totalhours)}</td>
           <td>{payment.paymentrate}</td>
           <td>{payment.paidamount}</td>
         </tr>

@@ -10,6 +10,7 @@ import styles from "./manageBatches.module.css";
 import InputField from "../../components/inputField";
 import PrimaryButton from "../../components/primaryButton";
 import DropdownField from "../../components/dropdownField";
+import InputFieldDate from "../../components/inputFieldDate";
 
 const UpdateBatches = () => {
   const navigate = useNavigate();
@@ -179,14 +180,14 @@ const UpdateBatches = () => {
               handleOptionChange={handleBranchChange}
               style={{ width: "318px" }}
             />
-            <InputField
+            <InputFieldDate
               lable={"Start Date"}
               placeholder={"Enter Start Date"}
               value={startDate.slice(0, 10)}
               setValue={setStartDate}
               style={{ width: "300px" }}
             />
-            <InputField
+            <InputFieldDate
               lable={"End Date"}
               placeholder={"Enter End Date"}
               value={endDate.slice(0, 10)}

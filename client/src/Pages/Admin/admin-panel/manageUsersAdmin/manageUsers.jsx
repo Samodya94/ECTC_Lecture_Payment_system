@@ -110,6 +110,10 @@ const ManageUsers = () => {
   //create new batch function
   function createUser(e) {
     e.preventDefault();
+    if (fullName === "" || email === "" || branch === "" || username === "" || userLevel === "") {
+      alert("Please fill all the fields");
+      return;
+    }
     const response = service.post(`users/`, newUser);
     response.then((res) => {
       alert("New User Added");

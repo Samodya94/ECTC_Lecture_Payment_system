@@ -170,7 +170,6 @@ const AssignLecturers = () => {
 
   function createAssignBatch(e) {
     e.preventDefault();
-
     // Move the calls inside the function
     const lecturerNic = getLecturerNic(lecturerName);
     const course = getCourse(batchCode);
@@ -190,6 +189,11 @@ const AssignLecturers = () => {
           remaining_hours: noOfHours * 3600000,
           hourly_pay: hourlyPay,
         };
+
+        if (lecturerName === "" || batchCode === "" || paymentRate === "" || noOfHours === 0 || (paymentRate === "Hourly Rate" && hourlyPay === 0)) {
+          alert("Please fill all the fields");
+          return;
+        }
 
         const response = service.post(`assignbatch/`, newAssignBatch);
         response

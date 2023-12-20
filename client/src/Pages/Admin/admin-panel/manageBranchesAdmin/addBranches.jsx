@@ -1,4 +1,4 @@
-import { React, useState,useCallback,useEffect,useMemo } from "react";
+import { React, useState, useCallback, useEffect, useMemo } from "react";
 
 // Styles
 import styles from "./addBranches.module.css";
@@ -20,7 +20,7 @@ const AddBranches = () => {
   const [branchName, setBranchName] = useState("");
 
   const [search, setSearch] = useState("");
-  const[branches, setBranches] = useState([]);
+  const [branches, setBranches] = useState([]);
   const service = useMemo(() => new Service(), []);
 
 
@@ -34,14 +34,6 @@ const AddBranches = () => {
       );
       setBranches(filteredBranches);
     }
-  };
-
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form Submitted, and values are:");
-    console.log(branchName);
-    alert("Check console for values");
   };
 
   const getBranches = useCallback(() => {
@@ -63,13 +55,17 @@ const AddBranches = () => {
   //new branch 
   const newBranch = {
     branchName: branchName,
-    
+
 
   };
 
   //create new branch function
   function createBranch(e) {
     e.preventDefault();
+    if (branchName === "") {
+      alert("Please fill all the fields");
+      return;
+    }
     const response = service.post(`branch/`, newBranch);
     response.then((res) => {
       alert("New Branch Added");

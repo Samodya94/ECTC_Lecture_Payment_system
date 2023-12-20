@@ -33,6 +33,7 @@ app.use('/api/LecturerRoute/assignbatch', lecturerUser, require('./routes/lectur
 app.use('/api/LecturerRoute/batch',lecturerUser, require('./routes/lecturerRoutes/batchRoutes'));
 app.use('/api/LectRoute/login',require('./routes/lecturerRoutes/lecturerRoutes'));
 app.use('/api/LecturerRoute/lecLog',require('./routes/lecturerRoutes/lecturerlogRoutes'));
+app.use('/api/LecturerRoute/payment',lecturerUser,require('./routes/lecturerRoutes/paymentRoutes'));
 
 app.use(errorHandler);
 

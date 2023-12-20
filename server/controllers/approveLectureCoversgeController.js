@@ -193,12 +193,6 @@ const getCoverageHistory = asyncHandler(async (req, res) => {
   const currentMonth = req.params.currentMonth
   const currentYear = req.params.currentYear
 
-
-
-
-
-  // Check if it's December (12), in which case the next month is January of the next year
-
   const startDate = new Date(`${currentYear}-${currentMonth}-01T00:00:00.000Z`);
   const lastDayOfMonth = new Date(currentYear, currentMonth, 0).getDate();
   const endDate = new Date(

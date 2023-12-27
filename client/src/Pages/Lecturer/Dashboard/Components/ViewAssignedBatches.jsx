@@ -112,7 +112,7 @@ export const ViewAssignedLecturers = () => {
                 <td>{batch.course}</td>
                 <td>{batchcodes[batch.batchCode]}</td>
                 <td>{batch.rate}</td>
-                <td>{batch.hours}</td>
+                <td>{formatDuration(batch.hours)}</td>
                 <td>{formatDuration(batch.remaining_hours)}</td>
               </tr>
             ))}

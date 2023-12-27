@@ -18,7 +18,7 @@ const createCoverage = asyncHandler(async (req, res) => {
     lectureCoverage,
   } = req.body;
 
-  try {
+  
     // Custom validation to check for overlapping time intervals
     const existingCoverage = await Coverage.findOne({
       lectureid,
@@ -53,7 +53,7 @@ const createCoverage = asyncHandler(async (req, res) => {
     // Additional custom validation for ensuring duration > 0
     if (duration <= 0) {
       res.status(400);
-      throw new Error("Duration must be greater than 0");
+      throw new Error("Invalid Time Range");
     }
 
     // Create coverage if validation passes
@@ -79,12 +79,7 @@ const createCoverage = asyncHandler(async (req, res) => {
       date: coverage.date,
       lectureCoverage: coverage.lectureCoverage,
     });
-  } catch (error) {
-    console.error(error.message);
-
-    res.status(500).json({ error: error.message });
-
-  }
+  
 });
 
 const deleteCoverage = asyncHandler(async (req, res) => {
@@ -110,12 +105,20 @@ const putCoverage = asyncHandler(async (req, res) => {
     req.params.id,
     req.body,
     {
-      new: true,
+      coverageID: coverage._id,
+      lectureid: coverage.lectureid,
+      courseName: coverage.courseName,
+      batchCode: coverage.batchCode,
+      startTime: coverage.startTime,
+      endTime: coverage.endTime,
+      duration: coverage.duration,
+      date: coverage.date,
+      lectureCoverage: coverage.lectureCoverage,
     }
   );
 
   res.status(200).json(updatedCoverage);
-  console.log(updatedCoverage);
+  console.log(coverage);
 });
 
 //get all status = Not Approved
@@ -131,12 +134,17 @@ const getCoverageById = asyncHandler(async (req, res) => {
 });
 
 const getLecCoverageNotApproved = asyncHandler(async (req, res) => {
-  const lecid = req.params.lecid;
+  try {
+    const lecid = req.params.lecid;
   const coverage = await Coverage.find({
     status: "Not Approved",
     lectureid: lecid,
   });
   res.status(200).json(coverage);
+  console.log(coverage);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 const getLecCoverageRejected = asyncHandler(async (req, res) => {

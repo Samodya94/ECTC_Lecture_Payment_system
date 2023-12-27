@@ -3,11 +3,10 @@ const express = require('express');
 const { check } = require('express-validator');
 const router = express.Router();
 
-const { getLecturerById, loginLecturer,changePassword } = require('../../controllers/lecturerController');
+const { getLecturerById, changePassword } = require('../../controllers/lecturerController');
 
 
 router.get('/:id', getLecturerById);
-router.post('/login',loginLecturer);
 router.post('/change-password',
 [
   check('oldPassword', 'Old password is required').notEmpty(),

@@ -28,10 +28,11 @@ axiosInstance.interceptors.response.use(
 
         if (errorResponse && errorResponse.data && errorResponse.data.message) {
             // If the server returns an error message, include it in the Error object
-            throw new Error(errorResponse.data.message);
+            throw new Error("errorResponse.data.message");
+            console.log(err);
         } else {
             // If no specific error message from the server, throw the default error
-            throw new Error(err);
+            throw new Error("err");
         }
     },
 );

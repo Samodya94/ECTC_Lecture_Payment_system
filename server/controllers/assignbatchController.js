@@ -85,14 +85,12 @@ const putAssignBatchbyBatchCode = asyncHandler(async (req, res) => {
 
 const deleteAssignedBatch = asyncHandler(async (req, res) => {
     const abatch = await AssignedBatch.findById(req.params.id);
-
     if (!abatch) {
         res.status(404);
         throw new Error('Batch not found');
     }
 
     await abatch.deleteOne();
-
     res.status(200).json({ id: req.params.id });
 });
 
@@ -118,15 +116,11 @@ const getAssignedBatchCode = asyncHandler(async (req, res) => {
     const batchcode = await AssignedBatch.findOne({
         batchCode: bcode
     })
-
     if (!batchcode) {
         res.status(404);
         throw new Error('Assigned Batch not found');
     }
-
     res.status(200).json(batchcode);
-
-
 });
 
 const getAssignedByLecture = (req, res) => {
@@ -135,7 +129,6 @@ const getAssignedByLecture = (req, res) => {
     const patient = AssignedBatch.find({ lecturerID: lecturerID });
     patient
         .then((data) => {
-            console.log(data);
             res.status(200).json(data);
         })
         .catch((error) => {
@@ -152,7 +145,6 @@ const getAssignedBatchByLecIdBatchCode = asyncHandler(async (req, res) => {
         res.status(404);
         throw new Error('Assigned Batch not found');
     }
-
     res.status(200).json(batch);
 }
 );

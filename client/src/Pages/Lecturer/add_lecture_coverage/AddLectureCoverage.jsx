@@ -172,12 +172,11 @@ const getHours = () => {
         const response1 = service.put('assignbatch/bcode',batchCode,data)
         response1.then(()=>{
           console.log("updated");
-          navigate('../add_coverages');
+          
         }) 
       })
       .catch((error) => {
         alert(error.message)
-        console.error("Error with adding data:", error);
       });
   };
 
@@ -203,6 +202,7 @@ const getHours = () => {
                 onChange={(e) => {
                   setLecName(e.target.value);
                 }}
+                required
               />
             </div>
           </div>
@@ -216,6 +216,7 @@ const getHours = () => {
                   setBatchCode(e.target.value);
                   calculateRemHours()
                 }}
+                required
               >
                 <option> --Select Batch-- </option>
                 {batches.map((batch) => (
@@ -242,6 +243,7 @@ const getHours = () => {
                   setStime(e.target.value);
                   calculateRemHours()
                 }}
+                required
               />
             </div>
           </div>
@@ -256,6 +258,7 @@ const getHours = () => {
                   setEtime(e.target.value);
                   calculateRemHours()
                 }}
+                required
               />
             </div>
           </div>
@@ -271,6 +274,7 @@ const getHours = () => {
                 onChange={(e) => {
                   setDate(e.target.value);
                 }}
+                required
               />
             </div>
           </div>
@@ -284,8 +288,9 @@ const getHours = () => {
                 onChange={(e) => {
                   setCoverage(e.target.value);
                 }}
+                required
               >
-                {stime}
+               
               </textarea>
             </div>
           </div>

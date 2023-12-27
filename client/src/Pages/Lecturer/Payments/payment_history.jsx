@@ -41,7 +41,6 @@ export const Lec_Payment_History = () => {
       console.log(newMonth);
       const response = service.get(`payment/lecpayMonth/${lecid}/${newMonth}/${selectedYear}`)
         response.then((res)=>{
-          console.log(res.data);
           setPayments(res.data);
         }).catch((err)=>{
           console.log(err);
@@ -99,7 +98,7 @@ export const Lec_Payment_History = () => {
           <td>{payment.month}</td>
           <td>{formatDuration(payment.totalhours)}</td>
           <td>{payment.paymentrate}</td>
-          <td>{payment.paidamount}</td>
+          <td>Rs.{payment.paidamount}</td>
         </tr>
       ))}
     </tbody>

@@ -5,42 +5,47 @@ import { useParams } from "react-router";
 
 export const EditCoverage = () => {
 
-    const [lecName, setLecName] = useState("");
-    const [fname, setFname] = useState("");
-    const [lname, setLname] = useState("");
-    const [batchCode, setBatchCode] = useState("");
-    const [stime, setStime] = useState("");
-    const [etime, setEtime] = useState("");
-    const [course, setCourse] = useState("");
-    const [duration, setDuration] = useState("")
-    const [nDuration,setnDuration] = useState('')
-    const [date, setDate] = useState("");
-    const [coverage, setCoverage] = useState("");
-    const [seconds, setSeconds] = useState(0);
-    const { lecturer } = useLecAuthContext();
-    const [remHours, setRemHours] = useState();
-    
-    const [updateremHours, setUpdateremHours] = useState(0)
-    const [batches, setBatches] = useState([]);
-    const [batchid, setBatchid] = useState();
-    const [assgbatch, setAssgBatches] = useState([]);
-    const service = new Service();
+  const [fname, setFname] = useState("");
+  const [lname, setLname] = useState("");
+  const [batchCode, setBatchCode] = useState("");
+  const [stime, setStime] = useState("");
+  const [etime, setEtime] = useState("");
+  const [course, setCourse] = useState("");
+  const [duration, setDuration] = useState("")
+  const [nDuration, setnDuration] = useState('')
+  const [date, setDate] = useState("");
+  const [coverage, setCoverage] = useState("");
+  const { lecturer } = useLecAuthContext();
+  const [remHours, setRemHours] = useState();
 
-    const { lecid } = useParams()
+  const [updateremHours, setUpdateremHours] = useState(0)
+  const [batches, setBatches] = useState([]);
+  const [batchid, setBatchid] = useState();
+  const [assgbatch, setAssgBatches] = useState([]);
+  const service = new Service();
+
+  const { lecid } = useParams()
 
   useEffect(() => {
     getLecturer();
-    getAssignedBatches();
-    getBatch();
+    GetCoverage();
     getdata();
     GetCoverage();
-  },[]);
+    getAssignedBatches();
 
-  useEffect(()=>{
+  }, []);
+
+  useEffect(() => {
     calculateTimeDifference();
-  },[stime,etime])
+    getBatch();
+    calculateNewRemHours();
+  })
 
- 
+  useEffect(() => {
+
+  }, [stime, etime])
+
+
 
   function getdata() {
     const response = service.get("batch");
@@ -64,17 +69,23 @@ export const EditCoverage = () => {
         (timeDiffInMillis % (1000 * 60 * 60)) / (1000 * 60)
       );
       const ms = duration - timeDiffInMillis
-      setnDuration(timeDiffInMillis);
+      setnDuration(ms);
       console.log(ms)
     }
   };
+
+  const calculateNewRemHours = () => {
+    const ms = parseInt(remHours, 10) + parseInt(nDuration)
+    setUpdateremHours(ms)
+    console.log(remHours);
+  }
 
 
 
   const getLecturer = (e) => {
     if (lecturer) {
       const id = lecturer.id;
-        
+
       const response = service.get(`lecturer/${id}`);
       response
         .then((res) => {
@@ -89,27 +100,27 @@ export const EditCoverage = () => {
 
   const GetCoverage = () => {
     if (lecturer) {
-        const response = service.get(`coverage`, lecid);
-        response
-          .then((res) => {
-            console.log(res.data);
-            setBatchCode(res.data.batchCode)
-            setCourse(res.data.courseName)
-            setStime(res.data.startTime)
-            setEtime(res.data.endTime)
-            setDate(res.data.date)
-            setDuration(res.data.duration)
-            setCoverage(res.data.lectureCoverage)
-          })
-          .catch((error) => {
-            console.log(error, "Failed to Fetch Coverage information");
-          });
-      }
+      const response = service.get(`coverage`, lecid);
+      response
+        .then((res) => {
+          console.log(res.data);
+          setBatchCode(res.data.batchCode)
+          setCourse(res.data.courseName)
+          setStime(res.data.startTime)
+          setEtime(res.data.endTime)
+          setDate(res.data.date)
+          setDuration(res.data.duration)
+          setCoverage(res.data.lectureCoverage)
+        })
+        .catch((error) => {
+          console.log(error, "Failed to Fetch Coverage information");
+        });
+    }
   };
 
-  const getBatch = ()=>{
-    const response = service.get("batch",batchCode);
-    response.then((res)=>{
+  const getBatch = () => {
+    const response = service.get("batch", batchCode);
+    response.then((res) => {
       console.log(res.data.batchCode);
       setBatchid(res.data.batchCode);
     })
@@ -124,6 +135,7 @@ export const EditCoverage = () => {
         .then((res) => {
           console.log(res.data);
           setBatches(res.data);
+          setRemHours(res.data.remaining_hours)
         })
         .catch((error) => {
           console.log(error, "Failed to Fetch information");
@@ -137,7 +149,13 @@ export const EditCoverage = () => {
     if (lecturer) {
       const id = lecid;
       const data = {
-        
+        courseName: course,
+        batchCode: batchCode,
+        startTime: stime,
+        endTime: etime,
+        duration: duration,
+        date: date,
+        lectureCoverage: coverage,
       };
       const response = service.put(`coverage`, id, data);
       response
@@ -171,12 +189,12 @@ export const EditCoverage = () => {
               Lecture Name :
               <input
                 className="form-control mb-3"
-                value={fname+" "+lname }
+                value={fname + " " + lname}
                 readOnly
               />
             </div>
           </div>
-         
+
           <div className="col-md-6">
             <div className="input_fields ">
               Select Batch :{batchid}
@@ -205,8 +223,8 @@ export const EditCoverage = () => {
                 className="form-control mb-3"
                 type="time"
                 value={stime}
-                onChange={(e)=>{
-                    setStime(e.target.value)
+                onChange={(e) => {
+                  setStime(e.target.value)
                 }}
               />
             </div>
@@ -219,7 +237,7 @@ export const EditCoverage = () => {
                 type="time"
                 value={etime}
                 onChange={(e) => {
-                    setEtime(e.target.value)
+                  setEtime(e.target.value)
                 }}
               />
             </div>
@@ -233,8 +251,8 @@ export const EditCoverage = () => {
                 className="form-control mb-3"
                 type="date"
                 value={formatDate(date)}
-                onChange={(e) =>{
-                    setDate(e.target.value)
+                onChange={(e) => {
+                  setDate(e.target.value)
                 }}
               />
             </div>
@@ -246,13 +264,13 @@ export const EditCoverage = () => {
                 className="form-control mb-2"
                 rows={2}
                 value={coverage}
-                onChange={(e) =>{
-                    setCoverage(e.target.value)
+                onChange={(e) => {
+                  setCoverage(e.target.value)
                 }}
               >
-             
+
               </textarea>
-             
+
             </div>
           </div>
           <div className="col-md-6"></div>

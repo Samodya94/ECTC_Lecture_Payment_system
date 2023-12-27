@@ -55,8 +55,8 @@ export const useLogin = () => {
 
             Cookies.set('user', JSON.stringify(json), { expires: 7 })
             Cookies.set('username', json.username, { expires: 7 })
-            Cookies.set('userLevel', json.userLevel, { expires: 7, secure: true })
-            Cookies.set('token', json.token, { expires: 7, secure: true })
+            Cookies.set('userLevel', json.userLevel, { expires: 7 })
+            Cookies.set('token', json.token, { expires: 7 })
             dispatch({ type: 'LOGIN', payload: json })
 
             setIsLoading(false)

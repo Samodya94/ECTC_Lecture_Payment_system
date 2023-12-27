@@ -86,7 +86,6 @@ const ManageBatches = () => {
     }
   };
 
-  // Handling the dropdown fields
   const handleBranchChange = (e) => {
     setBranch(e.target.value);
   };

@@ -60,7 +60,7 @@ const Profile = () => {
             return;
         }
 
-        const response = await fetch("http://localhost:8000/api/users/change-password", {
+        const response = await fetch("http://4.247.171.89:4000/api/users/change-password", {
             method: "POST",
             headers: {
                 Accept: "application/json",

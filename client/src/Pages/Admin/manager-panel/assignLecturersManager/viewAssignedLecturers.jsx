@@ -148,6 +148,15 @@ const ViewAssignedLecturers = () => {
           hours: hours * 3600000,
         };
 
+        if (lecturerName === "" || batchCode === "" || rate === "" || hours === 0) {
+          alert("Please fill all the fields");
+          return;
+        }
+        if (hours < 0) {
+          alert("No of hours should be positive");
+          return;
+        }
+
         const response = service.put(`assignbatch`, id, assignBatch);
         response
           .then((res) => {

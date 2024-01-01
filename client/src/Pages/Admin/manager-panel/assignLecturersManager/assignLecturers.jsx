@@ -194,6 +194,10 @@ const AssignLecturers = () => {
           alert("Please fill all the fields");
           return;
         }
+        if (noOfHours < 0) {
+          alert("No of hours should be positive");
+          return;
+        }
 
         const response = service.post(`assignbatch/`, newAssignBatch);
         response
@@ -203,6 +207,7 @@ const AssignLecturers = () => {
           })
           .catch((err) => {
             console.log(err);
+            alert(err.message);
           });
       })  // Catch any errors
       .catch((err) => {

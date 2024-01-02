@@ -25,11 +25,12 @@ export const ChangePassword = () => {
         const lecid = lecturer.id
         const response = await axios.post('http://4.247.171.89:4000/api/lecturer/change-password', { oldPassword, newPassword, lecid });
         setMsg("Password changed successfully")
+        setError("");
         console.log(response.data); // Handle success
-      } catch (err) {
+      } catch (error) {
         setMsg("");
-         setError(err.message); // Handle error
-          console.log(err.message)
+        setError(error.response?.data.error || 'An unexpected error occurred'); // Handle error
+        console.error(error.response?.data.error || 'An unexpected error occurred');
       }
    }
   };
@@ -55,7 +56,7 @@ export const ChangePassword = () => {
         className='form-control'
         type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
       </div>
-      {msg && <div className='error'>{msg}</div>}
+      {msg && <div className='message'>{msg}</div>}
       {error && <div className='error'>{error}</div>}
       <div className="m-2"><button className="btn btn-primary" type="submit">Change Password</button></div>
     </form>

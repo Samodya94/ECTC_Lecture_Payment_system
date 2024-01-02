@@ -303,6 +303,7 @@ const TableComponent = ({ rows, columns }) => {
                   align="center"
                 >
                   <button className={styles.viewBtn}
+                    onClick={() => window.open(row.document, "_blank")}
                   > View </button>
                 </TableCell>
                 <TableCell

@@ -104,6 +104,16 @@ const ManageLecturers = () => {
       alert("Please fill all the fields");
       return;
     }
+    //if phone number is not 10 digits or not a number
+    if (phone.length !== 10 || isNaN(phone)) {
+      alert("Please enter a valid phone number");
+      return;
+    }
+    //if email is not valid
+    if (!email.includes("@") || !email.includes(".") || email.split(".")[1].split(".")[0].length < 1) {
+      alert("Please enter a valid email address");
+      return;
+    }
     const response = service.post(`lecturer/`, newLecturer);
     response.then((res) => {
       alert("New Lecturer Added");

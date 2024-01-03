@@ -195,7 +195,11 @@ const AssignLecturers = () => {
           return;
         }
         if (noOfHours < 0) {
-          alert("No of hours should be positive");
+          alert("Enter a valid no of hours");
+          return;
+        }
+        if (paymentRate === "Hourly Rate" & hourlyPay < 0) {
+          alert("Enter a valid hourly pay");
           return;
         }
 

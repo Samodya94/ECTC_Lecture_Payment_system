@@ -199,7 +199,6 @@ const TableComponent = ({ rows, columns }) => {
     const getRate = async (lectureid, batchCode) => {
       const response = await service.get(`assignbatch/bylecture/${lectureid}/${batchCode}`);
       const rate = response.data.rate;
-      console.log(rate)
       setAssignBatch((prevNames) => ({
         ...prevNames,
         [batchCode]: rate,

@@ -83,6 +83,18 @@ const ConfirmedPayments = () => {
     const lname = await getLecturerName(lecturerId);
 
     try {
+      if (lecturerId === "") {
+        alert("Please select a lecturer");
+        return;
+      }
+      if (batch === "") {
+        alert("Please select a batch");
+        return;
+      }
+      if (selectedMonth === "") {
+        alert("Please select a month");
+        return;
+      }
       setIsLoading(true);
       const response = await axios.get('http://4.247.171.89:4000/api/payment/report/export', {
         responseType: 'blob',
@@ -104,6 +116,7 @@ const ConfirmedPayments = () => {
 
     } catch (error) {
       console.error('Error downloading file:', error);
+      alert("Error downloading file");
     } finally {
       setIsLoading(false);
     }

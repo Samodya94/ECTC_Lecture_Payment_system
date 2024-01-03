@@ -142,6 +142,16 @@ const CreatePayment = () => {
             alert("Please fill all the fields");
             return;
         }
+        if (paymentAmount < 1) {
+            alert("Enter a valid payment amount");
+            return;
+        }
+        //if paymentdate is not entered set it to current date and payment date is around 30 days from current date
+        if (paymentDate === "") {
+            const today = new Date();
+            setPaymentDate(today);
+        }
+
         const response = service.post(`payment/`, newPayment);
         response.then((res) => {
             alert("New Payment Added");

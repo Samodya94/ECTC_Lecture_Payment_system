@@ -114,6 +114,10 @@ const ManageUsers = () => {
       alert("Please fill all the fields");
       return;
     }
+    if (!email.includes("@") || !email.includes(".") || email.split(".")[1].split(".")[0].length < 1) {
+      alert("Please enter a valid email address");
+      return;
+    }
     const response = service.post(`users/`, newUser);
     response.then((res) => {
       alert("New User Added");

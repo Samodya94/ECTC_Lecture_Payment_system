@@ -6,6 +6,7 @@ import styles from "./manageCourses.module.css";
 // Components
 import TableComponent from "./components/coursesTable";
 import InputField from "../../components/inputField";
+import InputNumField from "../../components/inputNumField"
 import PrimaryButton from "../../components/primaryButton";
 import SearchField from "../../components/searchField";
 import Service from "../../../../utilities/httpService";
@@ -65,6 +66,15 @@ const ManageCourses = () => {
       alert("Please fill all the fields");
       return;
     }
+    if (courseFee < 1) {
+      alert("Enter a valid course fee");
+      return;
+    }
+    if (courseDuration < 1) {
+      alert("Enter a valid course duration");
+      return;
+    }
+
     const response = service.post(`course/`, newCourse);
     response.then((res) => {
       alert("New Course Added");
@@ -87,13 +97,13 @@ const ManageCourses = () => {
               setValue={setCourseName}
               style={{ width: "300px" }}
             />
-            <InputField
+            <InputNumField
               lable={"Course Fee (RS)"}
               placeholder={"Enter Course Fee"}
               setValue={setCourseFee}
               style={{ width: "300px" }}
             />
-            <InputField
+            <InputNumField
               lable={"Course Duration (Months)"}
               placeholder={"Enter Course Duration"}
               setValue={setCourseDuration}

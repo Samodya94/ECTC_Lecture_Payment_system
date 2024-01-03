@@ -173,7 +173,6 @@ const TableComponent = ({ rows, columns }) => {
       const response = await service.get("coverage");
       const coverages = response.data.reduce((acc, coverage) => {
         acc[coverage._id] = coverage.paymentStatus;
-        console.log("Payment Status:", acc);
         return acc;
       }, {});
       setPaySt(coverages);

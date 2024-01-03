@@ -10,13 +10,13 @@ import MonthSelector from "./components/monthSelectorField";
 
 const tableColumns = [
   "Lecturer Name",
-  "Course Name",
+  "Course",
   "Batch Code",
   "Date",
   "Start Time",
   "End Time",
   "Total Hours",
-  "Lecture Coverage",
+  "Coverages",
   "Action",
 ];
 

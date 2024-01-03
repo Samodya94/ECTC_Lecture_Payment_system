@@ -224,7 +224,13 @@ const TableComponent = ({ rows, columns }) => {
               {columns.map((column, index) => (
                 <TableCell
                   key={index}
-                  style={{ border: "1px solid #ccc", padding: "8px 16px" }}
+                  style={{
+                    border: "1px solid #ccc",
+                    padding: "8px 16px",
+                    // Apply width to the first column
+                    width: index === 0 ? "14.5%" : index === 7 ? "14.5%" : index === 8 ? "11%" : "auto",
+
+                  }}
                 >
                   <span className={styles.tHead}>{column}</span>
                 </TableCell>

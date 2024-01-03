@@ -130,7 +130,10 @@ const TableComponent = ({ rows, columns }) => {
                             {columns.map((column, index) => (
                                 <TableCell
                                     key={index}
-                                    style={{ border: "1px solid #ccc", padding: "8px 16px" }}
+                                    style={{
+                                        border: "1px solid #ccc", padding: "8px 16px",
+                                        width: index === 0 ? "14.5%" : index === 1 ? "30%" : "auto",
+                                    }}
                                 >
                                     <span className={styles.tHead}>{column}</span>
                                 </TableCell>

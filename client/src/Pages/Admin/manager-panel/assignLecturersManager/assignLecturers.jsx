@@ -20,7 +20,7 @@ const tableColumns = [
   "Batch Code",
   "Pay Rate",
   "Total Hours",
-  "Remaining Hours",
+  "Remaining",
   "Action",
 ];
 

@@ -17,9 +17,9 @@ const tableColumns = [
   "Username",
   "NIC",
   "Email",
-  "Phone Number",
+  "Phone",
   "Branch",
-  "Registered Date",
+  "Reg Date",
   "Action",
 ];
 
@@ -114,6 +114,12 @@ const ManageLecturers = () => {
       alert("Please enter a valid email address");
       return;
     }
+    //if nic has max 12 characters
+    if (nic.length > 12) {
+      alert("Please enter a valid NIC");
+      return;
+    }
+
     const response = service.post(`lecturer/`, newLecturer);
     response.then((res) => {
       alert("New Lecturer Added");

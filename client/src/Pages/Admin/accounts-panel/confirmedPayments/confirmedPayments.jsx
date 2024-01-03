@@ -84,7 +84,7 @@ const ConfirmedPayments = () => {
 
     try {
       setIsLoading(true);
-      const response = await axios.get('http://localhost:8000/api/payment/report/export', {
+      const response = await axios.get('http://4.247.171.89:4000/api/payment/report/export', {
         responseType: 'blob',
         params: {
           lecturerId: lecturerId,

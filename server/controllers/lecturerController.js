@@ -141,11 +141,21 @@ const putLecturer = asyncHandler(async (req, res) => {
 const changePassword = async (req, res) => {
   const { oldPassword, newPassword, lecid } = req.body;
 
+  if (!oldPassword || !newPassword || !lecid) {
+    const error = new Error("All fields must be filled");
+    console.error(error);
+    res.status(400).json({ error: error.message });
+    return;
+  }
+
   const lecturer = await Lecturer.findById({ _id: lecid });
   const isMatch = await bcrypt.compare(oldPassword, lecturer.password);
   console.log("Change Password", oldPassword, newPassword, lecturer.password);
   if (!isMatch) {
-    return res.status(400).json({ msg: "Invalid old password" });
+    const error = new Error("Invalid old password");
+    console.error(error);
+    res.status(400).json({ error: error.message });
+    return;
   }
 
   // Hash the new password

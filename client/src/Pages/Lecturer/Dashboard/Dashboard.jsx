@@ -52,6 +52,7 @@ export const Dashboard = () => {
         .then((res) => {
           setPenCoverage(res.data);
           setPendingCove(res.data.length)
+          console.log(res.data);
         })
         .catch((error) => {
           console.log(error);

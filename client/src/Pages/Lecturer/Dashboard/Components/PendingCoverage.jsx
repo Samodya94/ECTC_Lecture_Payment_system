@@ -54,6 +54,7 @@ export const PendingLecture = () => {
       respone
         .then((res) => {
           setCoverages(res.data);
+          console.log(res.data);
         })
         .catch((error) => {
           console.log(error);

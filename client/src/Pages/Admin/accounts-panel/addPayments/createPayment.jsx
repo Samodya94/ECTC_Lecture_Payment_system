@@ -179,7 +179,6 @@ const CreatePayment = () => {
     }
 
 
-
     return (
         <>
             <div className={styles.container}>
@@ -234,7 +233,7 @@ const CreatePayment = () => {
 
                         <InputField
                             lable={"Document"}
-                            placeholder={"Enter Document"}
+                            placeholder={"Enter Link"}
                             setValue={setDocument}
                             style={{ width: "300px" }}
                         />

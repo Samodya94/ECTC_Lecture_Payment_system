@@ -216,7 +216,12 @@ const TableComponent = ({ rows, columns }) => {
               {columns.map((column, index) => (
                 <TableCell
                   key={index}
-                  style={{ border: "1px solid #ccc", padding: "8px 16px" }}
+                  style={{
+                    border: "1px solid #ccc",
+                    padding: "8px 16px",
+                    width: index === 0 ? "14.5%" : index === 7 ? "14.5%" : index === 8 ? "11%" : "auto",
+                  }}
+
                 >
                   <span className={styles.tHead}>{column}</span>
                 </TableCell>
@@ -322,6 +327,7 @@ const TableComponent = ({ rows, columns }) => {
                       updateApproveCoverage(row._id)
                     }
                   > Approve </button>
+                  <br />
                   <button className={styles.regectBtn}
                     onClick={() =>
                       rejectApproveCoverage(row._id)

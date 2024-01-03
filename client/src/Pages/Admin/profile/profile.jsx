@@ -97,6 +97,15 @@ const Profile = () => {
     //create new payment function
     function editUser(e) {
         e.preventDefault();
+        if (fullname === "" || email === "" || branch === "" || username === "" || userLevel === "") {
+            alert("Please fill all the fields");
+            return;
+        }
+
+        if (!email.includes("@") || !email.includes(".") || email.split(".")[1].split(".")[0].length < 1) {
+            alert("Please enter a valid email address");
+            return;
+        }
         const response = service.put(`users`, id, newUser);
         response.then((res) => {
             alert("User Details Updated");

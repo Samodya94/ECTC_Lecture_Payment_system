@@ -7,6 +7,7 @@ import styles from "./assignLecturers.module.css";
 // Components
 import InputFieldDis from "../../components/inputFieldDis";
 import InputField from "../../components/inputField";
+import InputNumField from "../../components/inputNumField";
 import PrimaryButton from "../../components/primaryButton";
 import DropdownField from "../../components/dropdownField";
 
@@ -19,6 +20,7 @@ const ViewAssignedLecturers = () => {
   const [batchCode, setBatchCode] = useState("");
   const [rate, setRate] = useState("");
   const [hours, setHours] = useState("");
+  const [hourly_pay, setHourlyPay] = useState(0);
 
   const service = useMemo(() => new Service(), []);
 
@@ -122,6 +124,8 @@ const ViewAssignedLecturers = () => {
         setCourse(res.data.course);
         setRate(res.data.rate);
         setHours(calculateDuration(res.data.hours));
+        setHourlyPay(res.data.hourly_pay);
+
       }).catch((err) => {
         alert(err);
       });
@@ -146,6 +150,7 @@ const ViewAssignedLecturers = () => {
           batchCode: batchCode,
           rate: rate,
           hours: hours * 3600000,
+          hourly_pay: hourly_pay,
         };
 
         if (lecturerName === "" || batchCode === "" || rate === "" || hours === 0) {
@@ -154,6 +159,10 @@ const ViewAssignedLecturers = () => {
         }
         if (hours < 0) {
           alert("No of hours should be positive");
+          return;
+        }
+        if (rate === "Hourly Rate" & hourly_pay < 0) {
+          alert("Enter a valid hourly pay");
           return;
         }
 
@@ -212,13 +221,23 @@ const ViewAssignedLecturers = () => {
             style={{ width: "318px" }}
           />
 
-          <InputField
+          <InputNumField
             lable={"No of Hours"}
             placeholder={"Enter No of Hours"}
             value={hours}
             setValue={setHours}
             style={{ width: "300px" }}
           />
+          {rate === "Hourly Rate" && (
+            <InputNumField
+              lable={"Hourly Pay"}
+              placeholder={"Enter Hourly Pay"}
+              value={hourly_pay}
+              setValue={setHourlyPay}
+              style={{ width: "300px" }}
+            />
+          )}
+
           <div
             style={{
               display: "flex",

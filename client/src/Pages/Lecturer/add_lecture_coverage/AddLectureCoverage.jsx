@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { PendingCoverages } from "./component/pending_coverages";
 import { RejectedCoverages } from "./component/rejected_coverages";
 import { useLecAuthContext } from "../../../hooks/useLecAuthContext";
-import { startOfMonth, addDays, isBefore } from 'date-fns';
 import Service from "../../../utilities/httpService";
 import { useNavigate } from "react-router";
 

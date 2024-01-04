@@ -110,6 +110,19 @@ const getAssignedBatchById = asyncHandler(async (req, res) => {
     res.status(200).json(batch);
 });
 
+const getAssignedBatchBybCode = asyncHandler(async (req, res) => {
+    const batchCode= req.params.batchcode
+    const batch = await AssignedBatch.findone({batchCode:batchCode});
+
+    if (!batch) {
+        res.status(404);
+        throw new Error('Assigned Batch not found');
+    }
+
+    res.status(200).json(batch);
+});
+
+
 const getAssignedBatchCode = asyncHandler(async (req, res) => {
     const { bcode } = req.params;
 

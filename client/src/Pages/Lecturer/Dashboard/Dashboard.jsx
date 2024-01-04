@@ -114,7 +114,7 @@ export const Dashboard = () => {
         </div>
         <div className="col-md-4">
           <div className="card">
-            <div className="card_title">Approval Pending Lectures for<br></br><b>{currentMonth} {currentYear}</b></div>
+            <div className="card_title">Approved Lectures - <b>{currentMonth} {currentYear}</b></div>
             <div className="card_contet">
               {pendingCove<10? "0"+pendingCove: pendingCove}
               <div className="card-bottom" onClick={ViewPending}>
@@ -125,7 +125,7 @@ export const Dashboard = () => {
         </div>
         <div className="col-md-4">
           <div className="card">
-            <div className="card_title">Approved Lectures </div>
+            <div className="card_title">Approval Pending Lectures</div>
             <div className="card_contet p-2"> 
               {approvedCove < 10 ? "0"+approvedCove:approvedCove}
               <div className="card-bottom" onClick={ViewApproved}>

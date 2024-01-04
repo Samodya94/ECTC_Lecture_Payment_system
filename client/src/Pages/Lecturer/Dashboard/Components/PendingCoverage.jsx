@@ -72,7 +72,7 @@ export const PendingLecture = () => {
   };
   return (
     <div className="assign_batches">
-      <h1>Pending Lectures for {currentMonth} of {currentYear}</h1>
+      <h1>Approved Coverages for {currentMonth} of {currentYear}</h1>
       <table className="table table-striped">
         <thead className=" table-dark">
           <tr>

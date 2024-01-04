@@ -180,7 +180,7 @@ const getCoverageNotApprovedByMonth = asyncHandler(async (req, res) => {
   );
 
   const coverage = await Coverage.find({
-    status: "Not Approved",
+    status: "Approved",
     lectureid: lecid,
     date: {
       $exists: true,
@@ -224,7 +224,7 @@ const getCoverageApprovedByLecturer = asyncHandler(async (req, res) => {
   const lecid = req.params.lecid;
 
   const coverage = await Coverage.find({
-    status: "Approved",
+    status: "Not Approved",
     lectureid: lecid,
   });
   res.status(200).json(coverage);

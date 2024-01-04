@@ -4,6 +4,7 @@ import Service from "../../../../utilities/httpService";
 
 export const UpdateAssigncoverage = () => {
   const [batchCode, setBatchCode] = useState("");
+  const [assId,setAssId] = useState();
   const [duration, setDuratuion] = useState();
   const [remHours, setRemHours] = useState();
   const [updateremHours, setUpdateremHours] = useState();
@@ -46,6 +47,7 @@ export const UpdateAssigncoverage = () => {
   const getId = () => {
     const responese = service.get(`coverage/${id}`);
     responese.then((res) => {
+      console.log(res.data.batchCode);
       setBatchCode(res.data.batchCode);
       setDuratuion(res.data.duration);
     });
@@ -55,11 +57,13 @@ export const UpdateAssigncoverage = () => {
     const responese = service.get("assignbatch/assigncode", batchCode);
     responese.then((res) => {
       console.log(res.data);
+      setAssId(res.data._id);
       setRemHours(res.data.remaining_hours);
     });
   };
 
   const updateAssignBatch = () => {
+    
     const data = {
       remaining_hours: updateremHours,
     };

@@ -1,6 +1,5 @@
 const express = require('express');
 const dotenv = require('dotenv').config();
-const { errorHandler } = require('./middleware/errorMiddleware');
 const { protectUser, lecturerUser } = require('./middleware/authMiddleware');
 const cors = require('cors');
 const port = process.env.PORT || 5001;
@@ -35,19 +34,7 @@ app.use('/api/LectRoute/login',require('./routes/lecturerRoutes/lectLoginRoute')
 app.use('/api/LecturerRoute/lecLog',require('./routes/lecturerRoutes/lecturerlogRoutes'));
 app.use('/api/LecturerRoute/payment',lecturerUser,require('./routes/lecturerRoutes/paymentRoutes'));
 
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-  
-    // Check if the error is an instance of mongoose CastError (invalid ObjectId)
-    if (err.name === 'CastError') {
-      return res.status(400).json({ error: 'Invalid ID' });
-    }
-  
-    // Handle other types of errors
-    res.status(500).json({ error: 'Internal Server Error' });
-  });
 
-app.use(errorHandler);
 app.listen(port, () => {
     console.log(`Server started on port ${port}`);
 });

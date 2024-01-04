@@ -197,13 +197,21 @@ const TableComponent = ({ rows, columns }) => {
 
   React.useEffect(() => {
     const getRate = async (lectureid, batchCode) => {
-      const response = await service.get(`assignbatch/bylecture/${lectureid}/${batchCode}`);
-      const rate = response.data.rate;
-      console.log(rate)
-      setAssignBatch((prevNames) => ({
-        ...prevNames,
-        [batchCode]: rate,
-      }));
+      try {
+        const response = await service.get(`assignbatch/bylecture/${lectureid}/${batchCode}`);
+        const rate = response.data.rate;
+        setAssignBatch((prevNames) => ({
+          ...prevNames,
+          [batchCode]: rate,
+        }));
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setAssignBatch((prevNames) => ({
+          ...prevNames,
+          [batchCode]: "Not available", // Set an empty string or handle the error as needed
+        }));
+      }
+
 
     };
 

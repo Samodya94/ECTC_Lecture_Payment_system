@@ -216,7 +216,12 @@ const TableComponent = ({ rows, columns }) => {
               {columns.map((column, index) => (
                 <TableCell
                   key={index}
-                  style={{ border: "1px solid #ccc", padding: "8px 16px" }}
+                  style={{
+                    border: "1px solid #ccc",
+                    padding: "8px 16px",
+                    width: index === 0 ? "14.5%" : index === 7 ? "14.5%" : index === 8 ? "11%" : "auto",
+                  }}
+
                 >
                   <span className={styles.tHead}>{column}</span>
                 </TableCell>
@@ -318,13 +323,20 @@ const TableComponent = ({ rows, columns }) => {
                   align="center"
                 >
                   <button className={styles.approveBtn}
-                    onClick={() =>
-                      updateApproveCoverage(row._id)
+                    onClick={() => {
+                      window.confirm("Are you sure you want to Approve this Coverage?")
+                        ? updateApproveCoverage(row._id)
+                        : alert("Approve Cancelled");
+                    }
                     }
                   > Approve </button>
+                  <br />
                   <button className={styles.regectBtn}
-                    onClick={() =>
-                      rejectApproveCoverage(row._id)
+                    onClick={() => {
+                      window.confirm("Are you sure you want to Approve this Coverage?")
+                        ? rejectApproveCoverage(row._id)
+                        : alert("Cancelled");
+                    }
                     }> Decline </button>
                 </TableCell>
               </TableRow>

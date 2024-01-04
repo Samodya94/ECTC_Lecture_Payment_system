@@ -224,7 +224,13 @@ const TableComponent = ({ rows, columns }) => {
               {columns.map((column, index) => (
                 <TableCell
                   key={index}
-                  style={{ border: "1px solid #ccc", padding: "8px 16px" }}
+                  style={{
+                    border: "1px solid #ccc",
+                    padding: "8px 16px",
+                    // Apply width to the first column
+                    width: index === 0 ? "14.5%" : index === 7 ? "14.5%" : index === 8 ? "11%" : "auto",
+
+                  }}
                 >
                   <span className={styles.tHead}>{column}</span>
                 </TableCell>
@@ -325,13 +331,23 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="center"
                 >
-                  <button className={styles.regectBtn}
-                    onClick={() => {
-                      alert("Are you sure you want to roll back?")
-                      updatePayment(row._id);
-                    }}
-                    disabled={paySt[row._id] === "Pending" ? true : false}
-                  > Roll Back </button>
+                  {paySt[row._id] === "Not Approved" && (
+                    <button className={styles.regectBtn}
+                      onClick={() => {
+                        window.confirm("Are you sure you want to Roll Back this Coverage?")
+                          ? updatePayment(row._id)
+                          : alert("Roll Back Cancelled");
+
+                      }}
+                    > Roll Back </button>
+                  )}
+                  {paySt[row._id] === "Pending" && (
+                    <button className={styles.disabledBtn}
+                      onClick={() => {
+                        alert("Cannot Roll Back Approved Coverage. Payment already done.")
+                      }}
+                    >Disabled</button>
+                  )}
                 </TableCell>
               </TableRow>
             ))}

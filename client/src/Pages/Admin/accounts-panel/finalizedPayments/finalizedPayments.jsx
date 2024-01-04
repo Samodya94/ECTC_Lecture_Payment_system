@@ -11,14 +11,14 @@ import MonthSelector from "../../components/monthSelectorField";
 import Service from "../../../../utilities/httpService";
 
 const tableColumns = [
-  "Lecturer Name",
-  "Course Name",
-  "Batch Code",
+  "Lecturer",
+  "Course",
+  "Batch",
   "Month",
-  "Total Hours",
-  "Payment Rate",
-  "Pay Amount",
-  "Documents",
+  "Hours",
+  "PayRate",
+  "Payment",
+  "Document",
 ];
 
 const FinalizedPayments = () => {

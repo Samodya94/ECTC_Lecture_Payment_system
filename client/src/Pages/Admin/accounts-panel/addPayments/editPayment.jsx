@@ -135,6 +135,14 @@ const EditPayment = () => {
     //create new payment function
     function editPayment(e) {
         e.preventDefault();
+        if (paymentAmount === "") {
+            alert("Please fill all the fields");
+            return;
+        }
+        if (paymentAmount < 1) {
+            alert("Enter a valid payment amount");
+            return;
+        }
         const response = service.put(`payment`, id, newPayment);
         response.then((res) => {
             alert("Payment Updated");

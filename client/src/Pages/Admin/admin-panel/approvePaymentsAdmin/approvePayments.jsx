@@ -10,15 +10,15 @@ import Service from "../../../../utilities/httpService";
 import TableComponent from "./components/coverageTable";
 
 const tableColumns = [
-  "Lecturer Name",
-  "Course Name",
-  "Batch Code",
+  "Lecturer",
+  "Course",
+  "Batch",
   "Month",
   "Total Hours",
-  "Payment Rate",
-  "Total Payment",
-  "Lecture Coverages",
-  "Documents",
+  "PayRate",
+  "Payment",
+  "Coverages",
+  "Document",
   "Action",
 ];
 

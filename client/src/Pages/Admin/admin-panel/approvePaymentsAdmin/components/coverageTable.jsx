@@ -201,7 +201,7 @@ const TableComponent = ({ rows, columns }) => {
                   key={index}
                   style={{
                     border: "1px solid #ccc", padding: "8px 16px",
-                    width: index === 0 ? "14.5%" : index === 2 ? "9%" : index === 3 ? "8%" : index === 7 ? "9%" : index === 8 ? "9%" : index === 9 ? "10.5%" : "auto",
+                    width: index === 0 ? "14%" : index === 2 ? "9%" : index === 3 ? "8%" : index === 7 ? "9%" : index === 8 ? "9%" : index === 9 ? "10.5%" : "auto",
                   }}
                 >
                   <spna className={styles.tHead}>{column}</spna>

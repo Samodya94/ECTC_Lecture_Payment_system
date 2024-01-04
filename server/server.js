@@ -35,6 +35,7 @@ app.use('/api/LecturerRoute/lecLog',require('./routes/lecturerRoutes/lecturerlog
 app.use('/api/LecturerRoute/payment',lecturerUser,require('./routes/lecturerRoutes/paymentRoutes'));
 
 
+
 app.listen(port, () => {
-    console.log(`Server started on port ${port}`);
+  console.log(`Server started on port ${port}`);
 });

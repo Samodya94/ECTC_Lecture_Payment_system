@@ -180,7 +180,7 @@ const TableComponent = ({ rows, columns }) => {
                   key={index}
                   style={{
                     border: "1px solid #ccc", padding: "8px 16px",
-                    width: index === 0 ? "14.5%" : index === 1 ? "10%" : index === 2 ? "10%" : index === 3 ? "10%" : index === 4 ? "10%" : "auto",
+                    width: index === 0 ? "14.5%" : index === 1 ? "14.5%" : index === 2 ? "10%" : index === 3 ? "10%" : index === 4 ? "10%" : "auto",
                   }}
                 >
                   <span className={styles.tHead}>{column}</span>

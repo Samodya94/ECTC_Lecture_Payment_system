@@ -2,8 +2,8 @@ const asyncHandler = require('express-async-handler');
 const AssignedBatch = require('../model/assignbatchmodel');
 
 const AssignBatch = asyncHandler(async (req, res) => {
-    const { lecturerID, lecturerNic, lecturerName, course, batchCode, rate, hours, remaining_hours, hourly_pay } = req.body;
-    console.log(lecturerID, lecturerNic, lecturerName, course, batchCode, rate, hours, remaining_hours, hourly_pay);
+    const { lecturerID, lecturerNic, lecturerName, course, batchCode, rate, hours, remaining_hours, hourly_pay, end_date } = req.body;
+    console.log(lecturerID, lecturerNic, lecturerName, course, batchCode, rate, hours, remaining_hours, hourly_pay), end_date;
 
     if (!lecturerID || !lecturerNic || !lecturerName || !course || !batchCode || !rate || !hours || !remaining_hours) {
         res.status(400);
@@ -27,6 +27,7 @@ const AssignBatch = asyncHandler(async (req, res) => {
         hours,
         remaining_hours,
         hourly_pay,
+        end_date
     });
 
     if (abatch) {
@@ -41,6 +42,7 @@ const AssignBatch = asyncHandler(async (req, res) => {
             hours: abatch.hours,
             remaining_hours: abatch.hours,
             hourly_pay: abatch.hourly_pay,
+            end_date: abatch.end_date
         });
     } else {
         res.status(400);

@@ -104,9 +104,9 @@ const ManageLecturers = () => {
       alert("Please fill all the fields");
       return;
     }
-    //if phone number is not 10 digits or not a number
-    if (phone.length !== 10 || isNaN(phone)) {
-      alert("Please enter a valid phone number");
+    //if nic has max 12 characters
+    if (nic.length > 12 || nic.length < 10 || (nic.length === 10 && !nic.includes("v" || "v" || "x" || "X"))) {
+      alert("Please enter a valid NIC");
       return;
     }
     //if email is not valid
@@ -114,9 +114,9 @@ const ManageLecturers = () => {
       alert("Please enter a valid email address");
       return;
     }
-    //if nic has max 12 characters
-    if (nic.length > 12) {
-      alert("Please enter a valid NIC");
+    //if phone number is not 10 digits or not a number
+    if (phone.length !== 10 || isNaN(phone)) {
+      alert("Please enter a valid phone number");
       return;
     }
 

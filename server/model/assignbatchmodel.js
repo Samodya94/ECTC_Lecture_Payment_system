@@ -41,6 +41,11 @@ const assignBatchSchema = mongoose.Schema({
     hourly_pay: {
         type: Number,
     },
+    end_date: {
+        type: Date,
+        required: false,
+    },
+
 },
     {
         timestamps: true,

@@ -331,13 +331,23 @@ const TableComponent = ({ rows, columns }) => {
                   }}
                   align="center"
                 >
-                  <button className={styles.regectBtn}
-                    onClick={() => {
-                      alert("Are you sure you want to roll back?")
-                      updatePayment(row._id);
-                    }}
-                    disabled={paySt[row._id] === "Pending" ? true : false}
-                  > Roll Back </button>
+                  {paySt[row._id] === "Not Approved" && (
+                    <button className={styles.regectBtn}
+                      onClick={() => {
+                        window.confirm("Are you sure you want to Roll Back this Coverage?")
+                          ? updatePayment(row._id)
+                          : alert("Roll Back Cancelled");
+
+                      }}
+                    > Roll Back </button>
+                  )}
+                  {paySt[row._id] === "Pending" && (
+                    <button className={styles.disabledBtn}
+                      onClick={() => {
+                        alert("Cannot Roll Back Approved Coverage. Payment already done.")
+                      }}
+                    >Disabled</button>
+                  )}
                 </TableCell>
               </TableRow>
             ))}

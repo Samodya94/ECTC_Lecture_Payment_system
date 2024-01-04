@@ -318,8 +318,11 @@ const TableComponent = ({ rows, columns }) => {
                   align="center"
                 >
                   <button className={styles.approveBtn}
-                    onClick={() =>
-                      updatePayment(row._id)
+                    onClick={() => {
+                      window.confirm("Are you sure you want to Approve this Payment?")
+                        ? updatePayment(row._id)
+                        : alert("Cancelled");
+                    }
                     }
                   > Approve </button>
                 </TableCell>

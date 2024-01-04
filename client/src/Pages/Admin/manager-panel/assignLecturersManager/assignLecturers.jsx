@@ -274,13 +274,14 @@ const AssignLecturers = () => {
               style={{ width: "300px" }}
             />
 
-            <InputNumFieldDis
-              lable={"Hourly Pay"}
-              placeholder={"Enter Hourly Pay"}
-              setValue={setHourlyPay}
-              style={{ width: "300px" }}
-              disabled={paymentRate === "Hourly Rate" ? false : true}
-            />
+            {paymentRate === "Hourly Rate" && (
+              <InputNumFieldDis
+                lable={"Hourly Pay"}
+                placeholder={"Enter Hourly Pay"}
+                setValue={setHourlyPay}
+                style={{ width: "300px" }}
+              />
+            )}
 
             <div style={{ display: "flex", justifyContent: "center" }}>
               <PrimaryButton

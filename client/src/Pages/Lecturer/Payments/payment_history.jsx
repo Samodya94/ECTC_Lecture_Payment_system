@@ -103,7 +103,6 @@ export const Lec_Payment_History = () => {
       ))}
     </tbody>
   </table>
-  {payments.length === 0 && <p>No payment data available</p>}
       
         </div>
       </div>

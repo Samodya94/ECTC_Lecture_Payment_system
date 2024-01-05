@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { PendingCoverages } from "./component/pending_coverages";
 import { RejectedCoverages } from "./component/rejected_coverages";
 import { useLecAuthContext } from "../../../hooks/useLecAuthContext";
-import Service from "../../../utilities/httpService";
+import Service from "../../../utilities/Service";
 import { useNavigate } from "react-router";
 
 // import './lec.css'
@@ -159,7 +159,7 @@ const getHours = () => {
       date: date,
       lectureCoverage: coverage,
     };
-
+    console.log(batchCode)
     const respone = service.post("coverage", data);
     respone
       .then((res) => {

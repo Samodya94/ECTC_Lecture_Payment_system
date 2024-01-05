@@ -214,6 +214,7 @@ const getHours = () => {
                 onChange={(e) => {
                   setBatchCode(e.target.value);
                   calculateRemHours()
+                  console.log(batchCode);
                 }}
                 required
               >

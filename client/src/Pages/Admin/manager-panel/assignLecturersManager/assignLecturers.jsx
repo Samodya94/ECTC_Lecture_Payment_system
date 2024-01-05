@@ -127,23 +127,6 @@ const AssignLecturers = () => {
       console.log(err);
     }
   }
-
-  //get end date from batch code
-  async function getEndDate(batchCode) {
-    try {
-      let endDate = "";
-      batchCodeList.forEach((item) => {
-        if (item._id === batchCode) {
-          endDate = item.endDate;
-        }
-      });
-      return endDate;
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-
   const handleOptionChange = (e) => {
     setLecturer(e.target.value);
   };
@@ -189,8 +172,6 @@ const AssignLecturers = () => {
     // Move the calls inside the function
     const lecturerNic = getLecturerNic(lecturerName);
     const course = getCourse(batchCode);
-    const endDate = getEndDate(batchCode);
-    console.log(lecturerNic, course, endDate);
     const _id = getLecturerId(lecturerName);
 
     // Wait for both promises to resolve
@@ -206,7 +187,6 @@ const AssignLecturers = () => {
           hours: noOfHours * 3600000,
           remaining_hours: noOfHours * 3600000,
           hourly_pay: hourlyPay,
-          end_date: endDate,
         };
 
         if (lecturerName === "" || batchCode === "" || paymentRate === "" || noOfHours === 0 || (paymentRate === "Hourly Rate" && hourlyPay === 0)) {

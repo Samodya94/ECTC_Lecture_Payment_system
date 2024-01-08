@@ -32,7 +32,7 @@ axiosInstance.interceptors.response.use(
             console.log(err);
         } else {
             // If no specific error message from the server, throw the default error
-            throw new Error("err");
+            throw new Error(err.message);
         }
     },
 );

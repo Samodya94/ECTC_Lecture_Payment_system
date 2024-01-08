@@ -1,6 +1,5 @@
 const express = require('express');
 const dotenv = require('dotenv').config();
-const { errorHandler } = require('./middleware/errorMiddleware');
 const { protectUser, lecturerUser } = require('./middleware/authMiddleware');
 const cors = require('cors');
 const port = process.env.PORT || 5001;
@@ -29,13 +28,12 @@ app.use('/api/loginDetails', require('./routes/loginDetailsRoutes'));
 //Lecturer Routes
 app.use('/api/LecturerRoute/coverage', lecturerUser, require('./routes/lecturerRoutes/approveLectureCoverageRoutes'));
 app.use('/api/LecturerRoute/lecturer', lecturerUser, require('./routes/lecturerRoutes/lecturerRoutes'));
-app.use('/api/LecturerRoute/assignbatch', lecturerUser, require('./routes/lecturerRoutes/AssignBatchesRoutes'));
-app.use('/api/LecturerRoute/batch', lecturerUser, require('./routes/lecturerRoutes/batchRoutes'));
-app.use('/api/LectRoute/login', require('./routes/lecturerRoutes/lectLoginRoute'));
-app.use('/api/LecturerRoute/lecLog', require('./routes/lecturerRoutes/lecturerlogRoutes'));
-app.use('/api/LecturerRoute/payment', lecturerUser, require('./routes/lecturerRoutes/paymentRoutes'));
+app.use('/api/LecturerRoute/assignbatch', require('./routes/lecturerRoutes/AssignBatchesRoutes'));
+app.use('/api/LecturerRoute/batch',lecturerUser, require('./routes/lecturerRoutes/batchRoutes'));
+app.use('/api/LectRoute/login',require('./routes/lecturerRoutes/lectLoginRoute'));
+app.use('/api/LecturerRoute/lecLog',require('./routes/lecturerRoutes/lecturerlogRoutes'));
+app.use('/api/LecturerRoute/payment',lecturerUser,require('./routes/lecturerRoutes/paymentRoutes'));
 
-app.use(errorHandler);
 app.listen(port, () => {
   console.log(`Server started on port ${port}`);
 });

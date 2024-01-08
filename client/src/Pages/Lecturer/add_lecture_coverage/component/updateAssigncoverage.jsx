@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import Service from "../../../../utilities/httpService";
+import Service from "../../../../utilities/Service";
 
 export const UpdateAssigncoverage = () => {
   const [batchCode, setBatchCode] = useState("");
@@ -13,78 +13,68 @@ export const UpdateAssigncoverage = () => {
   const service = new Service();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    getId();
-  }, []);
 
+  useEffect(() => {
+    getId()
+  }, [])
   useEffect(() => {
     getAssignedBatches();
-  }, [batchCode]);
-
-  useEffect(() => {
-    setremHours();
-  }, [remHours]);
-
-  useEffect(() => {
     viewupdatedHours();
-  }, [updateremHours]);
+  }, [batchCode]);
+  const viewupdatedHours = () => {
 
-  useEffect(() => {}, []);
+    updateAssignBatch();
 
-  const setremHours = () => {
-    const ms = parseInt(remHours, 10) + parseInt(duration, 10);
-    setUpdateremHours(ms);
-    console.log(remHours);
-    console.log(ms);
   };
 
-  const viewupdatedHours = () => {
-    console.log(updateremHours);
-    updateAssignBatch();
+  const getAssignedBatches = () => {
+    if (batchCode) {
+      const responese = service.get("assignbatch/assigncode", batchCode);
+      responese.then((res) => {
+        console.log(res.data.remaining_hours);
+        setRemHours(res.data.remaining_hours);
+      });
+    }
   };
 
   const getId = () => {
     const responese = service.get(`coverage/${id}`);
     responese.then((res) => {
+      console.log(res.data.duration);
       setBatchCode(res.data.batchCode);
       setDuratuion(res.data.duration);
     });
   };
 
-  const getAssignedBatches = () => {
-    const responese = service.get("assignbatch/assigncode", batchCode);
-    responese.then((res) => {
-      console.log(res.data);
-      setRemHours(res.data.remaining_hours);
-    });
-  };
 
   const updateAssignBatch = () => {
-    const data = {
-      remaining_hours: updateremHours,
-    };
-    const response = service.put("assignbatch/bcode", batchCode, data);
-    response
-      .then(() => {
-        console.log("updated");
-        setStatus("Updated");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-
-    if (status === "Updated") {
-      navigate("../add_coverage");
-
-      const response = service.delete("coverage", id);
+    if (batchCode) {
+      const data = {
+        remaining_hours: updateremHours,
+      };
+      const response = service.put("assignbatch/bcode", batchCode, data);
       response
         .then(() => {
-          alert("Record Deleted successfully");
+          console.log("updated");
+          setStatus("Updated");
         })
-        .catch((err) => {
-          console.log(err);
+        .catch((error) => {
+          console.log(error);
         });
+
+      if (status === "Updated") {
+        const response = service.delete("coverage", id);
+        response
+          .then(() => {
+            alert("Record Deleted successfully");
+            navigate("../add_coverage");
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     }
+    //
   };
 
   return <div></div>;

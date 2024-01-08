@@ -105,7 +105,7 @@ const ManageLecturers = () => {
       return;
     }
     //if nic has max 12 characters
-    if (nic.length > 12 || nic.length < 10 || (nic.length === 10 && !nic.includes("v" || "v" || "x" || "X"))) {
+    if (nic.length > 12 || nic.length < 10 || (nic.length === 9 && !nic.includes("v" || "V" || "x" || "X"))) {
       alert("Please enter a valid NIC");
       return;
     }

@@ -127,7 +127,7 @@ const EditPayment = () => {
         paymentrate: rate,
         paidamount: paymentAmount,
         document: document,
-        paymentDate: paidDate,
+        paymentDate: paidDate? paidDate:new(Date),
         status: "Not Approved",
         adminStatus: "Not Approved",
     }
